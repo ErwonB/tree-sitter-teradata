@@ -669,63 +669,6 @@ ORDER BY id DESC;
           (direction
             (keyword_desc)))))))
 
-================================================================================
-Simple select with limit
-================================================================================
-
-SELECT id
-FROM my_table
-LIMIT 5;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (select
-      (keyword_select)
-      (select_expression
-        (term
-          value: (field
-            name: (identifier)))))
-    (from
-      (keyword_from)
-      (relation
-        (object_reference
-          name: (identifier)))
-      (limit
-        (keyword_limit)
-        (literal)))))
-
-================================================================================
-Simple select with offset
-================================================================================
-
-SELECT id
-FROM my_table
-LIMIT 5
-OFFSET 40;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (select
-      (keyword_select)
-      (select_expression
-        (term
-          value: (field
-            name: (identifier)))))
-    (from
-      (keyword_from)
-      (relation
-        (object_reference
-          name: (identifier)))
-      (limit
-        (keyword_limit)
-        (literal)
-        (offset
-          (keyword_offset)
-          (literal))))))
 
 ================================================================================
 Simple select with schema
@@ -1722,8 +1665,7 @@ Index hints
 
 SELECT id
 FROM my_table FORCE INDEX (long_index_identifier)
-LIMIT 1;
-
+;
 --------------------------------------------------------------------------------
 
 (program
@@ -1743,9 +1685,7 @@ LIMIT 1;
         (keyword_force)
         (keyword_index)
         index_name: (identifier))
-      (limit
-        (keyword_limit)
-        (literal)))))
+      )))
 
 ================================================================================
 Index hints (use)
@@ -1753,7 +1693,7 @@ Index hints (use)
 
 SELECT id
 FROM my_table USE INDEX (long_index_identifier)
-LIMIT 1;
+;
 
 --------------------------------------------------------------------------------
 
@@ -1774,9 +1714,7 @@ LIMIT 1;
         (keyword_use)
         (keyword_index)
         index_name: (identifier))
-      (limit
-        (keyword_limit)
-        (literal)))))
+      )))
 
 ================================================================================
 Union

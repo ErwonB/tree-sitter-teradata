@@ -1027,7 +1027,7 @@ Alter role assigns
 ================================================================================
 
 ALTER ROLE miriam CREATEROLE CREATEDB;
-ALTER ROLE rapunzel SUPERUSER NOLOGIN CONNECTION LIMIT 69;
+ALTER ROLE rapunzel SUPERUSER NOLOGIN ;
 
 --------------------------------------------------------------------------------
 
@@ -1046,9 +1046,7 @@ ALTER ROLE rapunzel SUPERUSER NOLOGIN CONNECTION LIMIT 69;
       (identifier)
       (identifier)
       (identifier)
-      (keyword_connection)
-      (keyword_limit)
-      (literal))))
+      )))
 
 ================================================================================
 Alter sequence restart

@@ -83,9 +83,9 @@ SET for = foo + 1, col2 = col1;
 update with multiple table references
 ================================================================================
 
-UPDATE items, month
-SET items.price=month.price
-WHERE items.id=month.item_id;
+UPDATE items, months
+SET items.price=months.price
+WHERE items.id=months.item_id;
 
 --------------------------------------------------------------------------------
 

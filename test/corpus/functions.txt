@@ -873,7 +873,6 @@ begin
         delta,
         centroid
       from ftable
-      limit 3
     ) as e
     group by h.alpha
   )
@@ -966,9 +965,7 @@ $function$
                       (relation
                         (object_reference
                           (identifier)))
-                      (limit
-                        (keyword_limit)
-                        (literal))))
+                      ))
                   (keyword_as)
                   (identifier))
                 (group_by

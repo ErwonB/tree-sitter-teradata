@@ -6,8 +6,7 @@ SELECT id
 FROM foo
 WHERE id < (
   SELECT id
-  FROM bar
-  LIMIT 1);
+  FROM bar);
 
 --------------------------------------------------------------------------------
 
@@ -41,6 +40,4 @@ WHERE id < (
               (relation
                 (object_reference
                   (identifier)))
-              (limit
-                (keyword_limit)
-                (literal)))))))))
+              )))))))

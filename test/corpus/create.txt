@@ -2011,7 +2011,6 @@ IN GROUP fairy, tale
 ADMIN grandma
 PASSWORD 'secret'
 VALID UNTIL '2022-01-01'
-CONNECTION LIMIT 42
 NOLOGIN
 INHERIT;
 
@@ -2037,9 +2036,6 @@ INHERIT;
       (literal)
       (keyword_valid)
       (keyword_until)
-      (literal)
-      (keyword_connection)
-      (keyword_limit)
       (literal)
       (identifier)
       (identifier))))

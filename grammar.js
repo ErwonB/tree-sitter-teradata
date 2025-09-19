@@ -63,6 +63,24 @@ module.exports = grammar({
       ),
     ),
 
+    keyword_top: _ => make_keyword("top"),
+    keyword_qualify: _ => make_keyword("qualify"),
+    keyword_macro: _ => make_keyword("macro"),
+    keyword_lock: _ => make_keyword("lock"),
+    keyword_access: _ => make_keyword("access"),
+    keyword_nonsequenced: _ => make_keyword("nonsequenced"),
+    keyword_transactiontime: _ => make_keyword("transactiontime"),
+    keyword_validtime: _ => make_keyword("validtime"),
+    keyword_nontemporal: _ => make_keyword("nontemporal"),
+    keyword_extract: _ => make_keyword("extract"),
+    keyword_year: _ => make_keyword("year"),
+    keyword_month: _ => make_keyword("month"),
+    keyword_week: _ => make_keyword("week"),
+    keyword_day: _ => make_keyword("day"),
+    keyword_dayofmonth: _ => make_keyword("dayofmonth"),
+    keyword_hour: _ => make_keyword("hour"),
+    keyword_minute: _ => make_keyword("minute"),
+    keyword_second: _ => make_keyword("second"),
     keyword_select: _ => make_keyword("select"),
     keyword_delete: _ => make_keyword("delete"),
     keyword_insert: _ => make_keyword("insert"),
@@ -98,8 +116,6 @@ module.exports = grammar({
     keyword_having: _ => make_keyword("having"),
     keyword_desc: _ => make_keyword("desc"),
     keyword_asc: _ => make_keyword("asc"),
-    keyword_limit: _ => make_keyword("limit"),
-    keyword_offset: _ => make_keyword("offset"),
     keyword_primary: _ => make_keyword("primary"),
     keyword_create: _ => make_keyword("create"),
     keyword_alter: _ => make_keyword("alter"),
@@ -213,6 +229,7 @@ module.exports = grammar({
     keyword_current: _ => make_keyword("current"),
     keyword_row: _ => make_keyword("row"),
     keyword_ties: _ => make_keyword("ties"),
+    keyword_percent: _ => make_keyword("percent"),
     keyword_others: _ => make_keyword("others"),
     keyword_only: _ => make_keyword("only"),
     keyword_unique: _ => make_keyword("unique"),
@@ -686,17 +703,22 @@ module.exports = grammar({
       $.keyword_end,
     ),
 
-    statement: $ => seq(
-      optional(seq(
-        $.keyword_explain,
-        optional($.keyword_analyze),
-        optional($.keyword_verbose),
-      )),
-      choice(
-        $._ddl_statement,
-        $._dml_write,
-        optional_parenthesis($._dml_read),
+    statement: $ => choice(
+      seq(
+        optional(seq(
+          $.keyword_explain,
+          optional($.keyword_analyze),
+          optional($.keyword_verbose),
+        )),
+        optional($.lock_clause),
+        optional($.temporal_modifier),
+        choice(
+          $._ddl_statement,
+          $._dml_write,
+          optional_parenthesis($._dml_read),
+        ),
       ),
+      $._show_statement,
     ),
 
     _ddl_statement: $ => choice(
@@ -744,7 +766,6 @@ module.exports = grammar({
         choice(
           $._select_statement,
           $.set_operation,
-          $._show_statement,
           $._unload_statement,
         ),
       ),
@@ -762,16 +783,12 @@ module.exports = grammar({
     _show_statement: $ => seq(
       $.keyword_show,
       choice(
-        $._show_create,
-        $.keyword_all, // Postgres
-        $._show_tables // trino/presto
+        $.keyword_table,
+        $.keyword_view,
+        $.keyword_macro,
+        $.keyword_function
       ),
-    ),
-
-    _show_tables: $ => seq(
-      $.keyword_tables,
-      optional(seq($.keyword_from, $._qualified_field)),
-      optional(seq($.keyword_like, $._expression))
+      $.object_reference,
     ),
 
     _show_create: $ => seq(
@@ -916,10 +933,37 @@ module.exports = grammar({
 
     select: $ => seq(
       $.keyword_select,
-      seq(
-        optional($.keyword_distinct),
-        $.select_expression,
+      choice(
+        seq($.keyword_distinct, $.select_expression),
+        seq($.top_clause, $.select_expression),
+        $.select_expression
       ),
+    ),
+
+    temporal_modifier: $ => choice(seq(
+          choice($.keyword_current, $.keyword_nonsequenced),
+          choice($.keyword_transactiontime, $.keyword_validtime)
+        ),
+        seq(
+          choice($.keyword_transactiontime, $.keyword_validtime),
+          seq($.keyword_as, $.keyword_of, optional($.keyword_timestamp), $.literal)
+        ),
+        ),
+
+    lock_clause: $ => seq(
+      $.keyword_lock,
+      choice(
+        seq($.keyword_row, $.keyword_for, $.keyword_access),
+        seq($.keyword_table, $.object_reference, $.keyword_for,
+          choice($.keyword_read, $.keyword_write, $.keyword_access)),
+        ),
+      ),
+
+    top_clause: $ => seq(
+      $.keyword_top,
+      field('top_value', alias($._integer, $.literal)),
+      optional($.keyword_percent),
+      optional(seq($.keyword_with, $.keyword_ties))
     ),
 
     select_expression: $ => seq(
@@ -965,7 +1009,6 @@ module.exports = grammar({
       $.object_reference,
       optional($.where),
       optional($.order_by),
-      optional($.limit),
     ),
 
     delete: $ => seq(
@@ -1490,8 +1533,6 @@ module.exports = grammar({
       ),
       seq(
         $.keyword_connection,
-        $.keyword_limit,
-        field("connection_limit", alias($._integer, $.literal))
       ),
       seq(
         optional($.keyword_encrypted),
@@ -1697,6 +1738,7 @@ module.exports = grammar({
     ),
 
     alter_table: $ => seq(
+      optional($.keyword_nontemporal),
       $.keyword_alter,
       $.keyword_table,
       optional($._if_exists),
@@ -2304,6 +2346,7 @@ module.exports = grammar({
     ),
 
     _insert_statement: $ => seq(
+      optional($.keyword_nontemporal),
       $.insert,
       optional($.returning),
     ),
@@ -2400,6 +2443,7 @@ module.exports = grammar({
     ),
 
     _update_statement: $ => seq(
+      optional($.keyword_nontemporal),
       $.update,
       optional($.returning),
     ),
@@ -2998,7 +3042,6 @@ module.exports = grammar({
                 choice($.keyword_separator, ','),
                 alias($._literal_string, $.literal)
               )),
-              optional($.limit),
             ),
           ),
         ),
@@ -3134,8 +3177,8 @@ module.exports = grammar({
       optional($.where),
       optional($.group_by),
       optional($.window_clause),
+      optional($.qualify),
       optional($.order_by),
-      optional($.limit),
     ),
 
     relation: $ => prec.right(
@@ -3304,6 +3347,11 @@ module.exports = grammar({
       $._expression,
     ),
 
+    qualify: $ => seq(
+      $.keyword_qualify,
+      $._expression,
+    ),
+
     order_by: $ => prec.right(seq(
       $.keyword_order,
       $.keyword_by,
@@ -3332,17 +3380,6 @@ module.exports = grammar({
           ),
         ),
       ),
-    ),
-
-    limit: $ => seq(
-      $.keyword_limit,
-      $.literal,
-      optional($.offset),
-    ),
-
-    offset: $ => seq(
-      $.keyword_offset,
-      $.literal,
     ),
 
     returning: $ => seq(
@@ -3374,7 +3411,23 @@ module.exports = grammar({
         $.between_expression,
         $.parenthesized_expression,
         $.object_id,
+        $.teradata_extract_date_expression,
       )
+    ),
+
+    teradata_extract_date_expression: $ => choice(
+    seq(choice($.keyword_year, $.keyword_dayofmonth, $.keyword_week, $.keyword_month),
+      "(",
+      $.identifier,
+      ")",
+      ),
+      seq($.keyword_extract,
+        "(",
+        choice($.keyword_year,$.keyword_month, $.keyword_day, $.keyword_hour, $.keyword_minute, $.keyword_second),
+        $.keyword_from,
+        $.identifier,
+        ")"
+        ),
     ),
 
     parenthesized_expression: $ => prec(2,

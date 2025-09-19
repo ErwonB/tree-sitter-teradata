@@ -35,10 +35,10 @@
 (marginalia) @comment
 
 ((literal) @number
-   (#match? @number "^[-+]?%d+$"))
+   (#match? @number "^[-+]?\\%d+$"))
 
 ((literal) @float
-  (#match? @float "^[-+]?%d*\.%d*$"))
+  (#match? @float "^[-+]?\\%d*\.\\%d*$"))
 
 (parameter) @parameter
 
@@ -137,8 +137,25 @@
   (keyword_without)
   (keyword_as)
   (keyword_having)
-  (keyword_limit)
-  (keyword_offset)
+  (keyword_qualify)
+  (keyword_top)
+  (keyword_percent)
+  (keyword_lock)
+  (keyword_macro)
+  (keyword_access)
+  (keyword_nonsequenced)
+  (keyword_transactiontime)
+  (keyword_validtime)
+  (keyword_nontemporal)
+  (keyword_extract)
+  (keyword_year)
+  (keyword_month)
+  (keyword_week)
+  (keyword_day)
+  (keyword_dayofmonth)
+  (keyword_hour)
+  (keyword_minute)
+  (keyword_second)
   (keyword_table)
   (keyword_tables)
   (keyword_key)

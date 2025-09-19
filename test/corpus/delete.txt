@@ -52,26 +52,6 @@ DELETE FROM ONLY my_table;
       (object_reference
         name: (identifier)))))
 
-================================================================================
-Delete table with limit
-================================================================================
-
-DELETE FROM my_table
-LIMIT 4;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (delete
-      (keyword_delete))
-    (from
-      (keyword_from)
-      (object_reference
-        name: (identifier))
-      (limit
-        (keyword_limit)
-        (literal)))))
 
 ================================================================================
 Delete table with order by
@@ -79,7 +59,7 @@ Delete table with order by
 
 DELETE FROM my_table
 ORDER BY id DESC
-LIMIT 4;
+;
 
 --------------------------------------------------------------------------------
 
@@ -99,9 +79,7 @@ LIMIT 4;
             name: (identifier))
           (direction
             (keyword_desc))))
-      (limit
-        (keyword_limit)
-        (literal)))))
+      )))
 
 ================================================================================
 Delete table with where
