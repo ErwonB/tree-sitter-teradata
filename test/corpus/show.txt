@@ -1,95 +1,47 @@
 ================================================================================
-SHOW CREATE TABLE
+macro
 ================================================================================
 
-SHOW CREATE TABLE mytable;
+show macro db.macro1;
+
+--------------------------------------------------------------------------------
+    (program
+      (statement
+        (keyword_show)
+        (keyword_macro)
+        (object_reference
+          (identifier)
+          (identifier))))
+
+================================================================================
+view
+================================================================================
+
+show view db.view1;
 
 --------------------------------------------------------------------------------
 
-(program
-  (statement
-    (keyword_show)
-    (keyword_create)
-    (keyword_table)
-    (object_reference
-      (identifier))))
-
+    (program
+      (statement
+        (keyword_show)
+        (keyword_view)
+        (object_reference
+          (identifier)
+          (identifier))))
 ================================================================================
-SHOW CREATE VIEW
+table
 ================================================================================
 
-SHOW CREATE VIEW myview;
-
+show table db.table1;
 --------------------------------------------------------------------------------
 
-(program
-  (statement
-    (keyword_show)
-    (keyword_create)
-    (keyword_view)
-    (object_reference
-      (identifier))))
+    (program
+      (statement
+        (keyword_show)
+        (keyword_table)
+        (object_reference
+          (identifier)
+          (identifier))))
 
-================================================================================
-SHOW CREATE SCHEMA
-================================================================================
 
-SHOW CREATE SCHEMA myschema;
 
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (keyword_show)
-    (keyword_create)
-    (keyword_schema)
-    (object_reference
-      (identifier))))
-
-================================================================================
-SHOW CREATE USER
-================================================================================
-
-SHOW CREATE USER einstein;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (keyword_show)
-    (keyword_create)
-    (keyword_user)
-    (object_reference
-      (identifier))))
-
-================================================================================
-SHOW ALL
-================================================================================
-
-SHOW ALL;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (keyword_show)
-    (keyword_all)))
-
-================================================================================
-SHOW TABLES with PATTERN
-================================================================================
-
-SHOW TABLES FROM tpch.tiny LIKE 'p%';
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (keyword_show)
-    (keyword_tables)
-    (keyword_from)
-    (object_reference
-      (identifier))
-    (identifier)
-    (keyword_like)
-    (literal)))

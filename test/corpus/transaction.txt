@@ -2,31 +2,31 @@
 Empty transaction
 ================================================================================
 
-BEGIN;
-COMMIT;
+bt;
+et;
 
 --------------------------------------------------------------------------------
 
 (program
   (transaction
-    (keyword_begin)
-    (keyword_commit)))
+    (keyword_bt)
+    (keyword_et)))
 
 ================================================================================
 Transaction begin and commit
 ================================================================================
 
-BEGIN;
+bt;
 ALTER TABLE my_table
   ADD COLUMN val3 VARCHAR(100) NOT NULL;
 UPDATE my_table SET val3 = 'new';
-COMMIT;
+et;
 
 --------------------------------------------------------------------------------
 
 (program
   (transaction
-    (keyword_begin)
+    (keyword_bt)
     (statement
       (alter_table
         (keyword_alter)
@@ -54,22 +54,22 @@ COMMIT;
           left: (field
             name: (identifier))
           right: (literal))))
-    (keyword_commit)))
+    (keyword_et)))
 
 ================================================================================
 Transaction begin and rollback
 ================================================================================
 
-BEGIN;
+bt;
 ALTER TABLE my_table
   ADD COLUMN val3 VARCHAR(100) NOT NULL;
-ROLLBACK;
+rollback;
 
 --------------------------------------------------------------------------------
 
 (program
   (transaction
-    (keyword_begin)
+    (keyword_bt)
     (statement
       (alter_table
         (keyword_alter)
@@ -89,10 +89,41 @@ ROLLBACK;
     (keyword_rollback)))
 
 ================================================================================
+Transaction begin and abort
+================================================================================
+
+bt;
+ALTER TABLE my_table
+  ADD COLUMN val3 VARCHAR(100) NOT NULL;
+abort;
+
+--------------------------------------------------------------------------------
+
+(program
+  (transaction
+    (keyword_bt)
+    (statement
+      (alter_table
+        (keyword_alter)
+        (keyword_table)
+        (object_reference
+          name: (identifier))
+        (add_column
+          (keyword_add)
+          (keyword_column)
+          (column_definition
+            name: (identifier)
+            type: (varchar
+              (keyword_varchar)
+              size: (literal))
+            (keyword_not)
+            (keyword_null)))))
+    (keyword_abort)))
+================================================================================
 Use explicit transaction keywords
 ================================================================================
 
-BEGIN TRANSACTION;
+bt;
 ALTER TABLE my_table
   ADD COLUMN val3 VARCHAR(100) NOT NULL;
 ROLLBACK TRANSACTION;
@@ -101,8 +132,7 @@ ROLLBACK TRANSACTION;
 
 (program
   (transaction
-    (keyword_begin)
-    (keyword_transaction)
+    (keyword_bt)
     (statement
       (alter_table
         (keyword_alter)

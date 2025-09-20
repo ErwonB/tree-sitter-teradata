@@ -207,8 +207,10 @@ module.exports = grammar({
     keyword_except: _ => make_keyword("except"),
     keyword_intersect: _ => make_keyword("intersect"),
     keyword_returning: _ => make_keyword("returning"),
+    keyword_bt: _ => make_keyword("bt"),
+    keyword_et: _ => make_keyword("et"),
+    keyword_abort: _ => make_keyword("abort"),
     keyword_begin: _ => make_keyword("begin"),
-    keyword_commit: _ => make_keyword("commit"),
     keyword_rollback: _ => make_keyword("rollback"),
     keyword_transaction: _ => make_keyword("transaction"),
     keyword_over: _ => make_keyword("over"),
@@ -660,11 +662,7 @@ module.exports = grammar({
     marginalia: _ => /\/\*[^*]*\*+(?:[^/*][^*]*\*+)*\//,
 
     transaction: $ => seq(
-      $.keyword_begin,
-      optional(
-        $.keyword_transaction,
-      ),
-      optional(';'),
+      seq($.keyword_bt, ';'),
       repeat(
         seq(
           $.statement,
@@ -678,17 +676,12 @@ module.exports = grammar({
     ),
 
     _commit: $ => seq(
-      $.keyword_commit,
-      optional(
-        $.keyword_transaction,
-      ),
+      $.keyword_et,
     ),
 
     _rollback: $ => seq(
-      $.keyword_rollback,
-      optional(
-        $.keyword_transaction,
-      ),
+      choice(seq($.keyword_rollback, optional( $.keyword_transaction,)),
+            $.keyword_abort),
     ),
 
     block: $ => seq(
