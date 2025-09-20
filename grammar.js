@@ -1766,7 +1766,6 @@ module.exports = grammar({
       ),
       optional($._if_not_exists),
       $.column_definition,
-      optional($.column_position),
     ),
 
     add_constraint: $ => seq(
@@ -1854,7 +1853,6 @@ module.exports = grammar({
       ),
       optional($._if_exists),
       $.column_definition,
-      optional($.column_position),
     ),
 
     change_column: $ => seq(
@@ -1865,15 +1863,6 @@ module.exports = grammar({
       optional($._if_exists),
       field('old_name', $.identifier),
       $.column_definition,
-      optional($.column_position),
-    ),
-
-    column_position: $ => choice(
-      $.keyword_first,
-      seq(
-        $.keyword_after,
-        field('col_name', $.identifier),
-      ),
     ),
 
     drop_column: $ => seq(
