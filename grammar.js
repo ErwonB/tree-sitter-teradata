@@ -233,7 +233,6 @@ module.exports = grammar({
     keyword_ties: _ => make_keyword("ties"),
     keyword_percent: _ => make_keyword("percent"),
     keyword_others: _ => make_keyword("others"),
-    keyword_only: _ => make_keyword("only"),
     keyword_unique: _ => make_keyword("unique"),
     keyword_foreign: _ => make_keyword("foreign"),
     keyword_references: _ => make_keyword("references"),
@@ -983,7 +982,6 @@ module.exports = grammar({
     _truncate_statement: $ => seq(
       $.keyword_truncate,
       optional($.keyword_table),
-      optional($.keyword_only),
       comma_list($.object_reference),
       optional($._drop_behavior),
     ),
@@ -996,9 +994,6 @@ module.exports = grammar({
 
     _delete_from: $ => seq(
       $.keyword_from,
-      optional(
-        $.keyword_only,
-      ),
       $.object_reference,
       optional($.where),
       optional($.order_by),
@@ -1112,7 +1107,7 @@ module.exports = grammar({
       ),
       choice(
         seq($.keyword_read, $.keyword_write),
-        seq($.keyword_read, $.keyword_only),
+        seq($.keyword_read),
       ),
       optional($.keyword_not),
       $.keyword_deferrable,
@@ -1444,7 +1439,6 @@ module.exports = grammar({
         ),
       ),
       $.keyword_on,
-      optional($.keyword_only),
       seq(
         $.object_reference,
         optional(
@@ -1735,7 +1729,6 @@ module.exports = grammar({
       $.keyword_alter,
       $.keyword_table,
       optional($._if_exists),
-      optional($.keyword_only),
       $.object_reference,
       choice(
         seq(
@@ -2588,7 +2581,6 @@ module.exports = grammar({
 
     update: $ => seq(
       $.keyword_update,
-      optional($.keyword_only),
       choice(
         $._mysql_update_statement,
         $._postgres_update_statement,
@@ -3154,9 +3146,6 @@ module.exports = grammar({
 
     from: $ => seq(
       $.keyword_from,
-      optional(
-        $.keyword_only,
-      ),
       comma_list($.relation, true),
       optional($.index_hint),
       repeat(

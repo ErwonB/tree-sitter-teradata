@@ -24,32 +24,6 @@ SET for = foo + 1;
           right: (literal))))))
 
 ================================================================================
-Simple update with ONLY
-================================================================================
-
-UPDATE ONLY my_table
-SET for = foo + 1;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (update
-      (keyword_update)
-      (keyword_only)
-      (relation
-        (object_reference
-          name: (identifier)))
-      (keyword_set)
-      (assignment
-        left: (field
-          name: (identifier))
-        right: (binary_expression
-          left: (field
-            name: (identifier))
-          right: (literal))))))
-
-================================================================================
 update with multiple assignments
 ================================================================================
 
@@ -244,7 +218,7 @@ WHERE b.a = a.uid;
             (identifier)))))))
 
 ================================================================================
-Postgres style update w/ join
+to be tested in teradata Postgres style update w/ join
 ================================================================================
 
 UPDATE table_a as a

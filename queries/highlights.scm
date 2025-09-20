@@ -199,7 +199,6 @@
   (keyword_begin)
   (keyword_rollback)
   (keyword_transaction)
-  (keyword_only)
   (keyword_like)
   (keyword_similar)
   (keyword_over)

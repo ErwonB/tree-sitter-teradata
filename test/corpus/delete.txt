@@ -35,25 +35,6 @@ DELETE FROM my_database.my_schema.my_table;
         name: (identifier)))))
 
 ================================================================================
-Delete whole table and only the whole table
-================================================================================
-
-DELETE FROM ONLY my_table;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (delete
-      (keyword_delete))
-    (from
-      (keyword_from)
-      (keyword_only)
-      (object_reference
-        name: (identifier)))))
-
-
-================================================================================
 Delete table with order by
 ================================================================================
 
