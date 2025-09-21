@@ -206,7 +206,6 @@ module.exports = grammar({
     keyword_some: _ => make_keyword("some"),
     keyword_except: _ => make_keyword("except"),
     keyword_intersect: _ => make_keyword("intersect"),
-    keyword_returning: _ => make_keyword("returning"),
     keyword_bt: _ => make_keyword("bt"),
     keyword_et: _ => make_keyword("et"),
     keyword_abort: _ => make_keyword("abort"),
@@ -989,7 +988,6 @@ module.exports = grammar({
     _delete_statement: $ => seq(
       $.delete,
       alias($._delete_from, $.from),
-      optional($.returning),
     ),
 
     _delete_from: $ => seq(
@@ -2323,7 +2321,6 @@ module.exports = grammar({
     _insert_statement: $ => seq(
       optional($.keyword_nontemporal),
       $.insert,
-      optional($.returning),
     ),
 
     insert: $ => seq(
@@ -2420,7 +2417,6 @@ module.exports = grammar({
     _update_statement: $ => seq(
       optional($.keyword_nontemporal),
       $.update,
-      optional($.returning),
     ),
 
     _merge_statement: $=> seq(
@@ -3351,11 +3347,6 @@ module.exports = grammar({
           ),
         ),
       ),
-    ),
-
-    returning: $ => seq(
-      $.keyword_returning,
-      $.select_expression,
     ),
 
     _expression: $ => prec(1,

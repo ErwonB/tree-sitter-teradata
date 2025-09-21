@@ -195,7 +195,6 @@
   (keyword_all)
   (keyword_any)
   (keyword_some)
-  (keyword_returning)
   (keyword_begin)
   (keyword_rollback)
   (keyword_transaction)
