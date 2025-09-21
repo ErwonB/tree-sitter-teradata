@@ -1,0 +1,32 @@
+{
+  "grammars": [
+    {
+      "name": "sql",
+      "camelcase": "SQL",
+      "scope": "source.sql",
+      "path": ".",
+      "file-types": [
+        "sql"
+      ],
+      "highlights": [
+        "queries/highlights.scm"
+      ]
+    }
+  ],
+  "metadata": {
+    "version": "0.3.8",
+    "license": "MIT",
+    "description": "Tree-sitter Grammar for SQL",
+    "authors": [
+      {
+        "name": "derek stride"
+      }
+    ],
+    "links": {
+      "repository": "git+https://github.com/ErwonB/tree-sitter-teradata.git"
+    }
+  },
+  "bindings": {
+    "c": true
+  }
+}
