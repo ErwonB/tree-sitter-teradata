@@ -75,6 +75,7 @@ module.exports = grammar({
     keyword_validtime: _ => make_keyword("validtime"),
     keyword_nontemporal: _ => make_keyword("nontemporal"),
     keyword_extract: _ => make_keyword("extract"),
+    keyword_translate: _ => make_keyword("translate"),
     keyword_year: _ => make_keyword("year"),
     keyword_month: _ => make_keyword("month"),
     keyword_day: _ => make_keyword("day"),
@@ -182,6 +183,7 @@ module.exports = grammar({
     keyword_default: _ => make_keyword("default"),
     keyword_cascade: _ => make_keyword("cascade"),
     keyword_restrict: _ => make_keyword("restrict"),
+    keyword_error: _ => make_keyword("error"),
     keyword_with: _ => make_keyword("with"),
     keyword_without: _ => make_keyword("without"),
     keyword_no: _ => make_keyword("no"),
@@ -3478,6 +3480,7 @@ module.exports = grammar({
         $.parenthesized_expression,
         $.object_id,
         $.extract_expression,
+        $.translate_expression,
       )
     ),
 
@@ -3486,6 +3489,16 @@ module.exports = grammar({
         choice($.keyword_year,$.keyword_month, $.keyword_day, $.keyword_hour, $.keyword_minute, $.keyword_second),
         $.keyword_from,
         field('from',$.identifier),
+        ")"
+    ),
+
+    translate_expression: $ => seq($.keyword_translate,
+        "(",
+        field('expression', $._expression),
+        $.keyword_using,
+        // field('encoding',$.identifier),
+        field('encoding',$.encoding_identifier),
+        optional(seq($.keyword_with, $.keyword_error)),
         ")"
     ),
 
@@ -3733,6 +3746,7 @@ module.exports = grammar({
     _identifier: _ => /[a-zA-Z_][0-9a-zA-Z_]*/,
     _interpolated_identifier1: _ => /\$\{[a-zA-Z_][0-9a-zA-Z_]*\}/,
     _interpolated_identifier: _ => /\$\{[a-zA-Z_][0-9a-zA-Z_]*\}_[a-zA-Z_][0-9a-zA-Z_]*/,
+    encoding_identifier: _ => /[a-zA-Z_][0-9a-zA-Z_]*_TO_[a-zA-Z_][0-9a-zA-Z_]*/,
 
   }
 

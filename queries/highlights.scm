@@ -19,6 +19,7 @@
   (keyword_array)
   (keyword_object_id)
   (keyword_extract)
+  (keyword_translate)
 ] @function.call
 
 (relation
@@ -151,6 +152,7 @@
   (keyword_order)
   (keyword_partition)
   (keyword_group)
+  (keyword_error)
   (keyword_with)
   (keyword_without)
   (keyword_collect)
