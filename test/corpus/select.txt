@@ -3045,3 +3045,24 @@ SELECT col1, col2, col3 into alpha, beta, gamma FROM my_table;
       (relation
         (object_reference
           name: (identifier))))))
+
+================================================================================
+dummy select with where clause
+================================================================================
+
+select 1 where 'plop' = 'plop';
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (literal))))
+        (where
+          (keyword_where)
+          (binary_expression
+            (literal)
+            (literal)))))

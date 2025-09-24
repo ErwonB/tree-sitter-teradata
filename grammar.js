@@ -863,17 +863,33 @@ module.exports = grammar({
       ),
     ),
 
-    _select_statement: $ => optional_parenthesis(
-      seq(
-        optional($.temporal_modifier),
-        $.select,
-        optional(
-          seq(
-            $.keyword_into,
-            $.select_expression,
+    //TODO refactor optional($.where) properly
+    _select_statement: $ => choice(
+      optional_parenthesis(
+        seq(
+          optional($.temporal_modifier),
+          $.select,
+          optional(
+            seq(
+              $.keyword_into,
+              $.select_expression,
+            ),
           ),
+          optional($.where),
         ),
-        optional($.from),
+      ),
+      optional_parenthesis(
+        seq(
+          optional($.temporal_modifier),
+          $.select,
+          optional(
+            seq(
+              $.keyword_into,
+              $.select_expression,
+            ),
+          ),
+          $.from
+        ),
       ),
     ),
 
