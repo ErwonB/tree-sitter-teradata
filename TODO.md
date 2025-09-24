@@ -1,4 +1,5 @@
-* adding sample
+* add sample
+* add interval
 * add join index
 * add select and consume
 * add select as json
