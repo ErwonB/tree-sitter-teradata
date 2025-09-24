@@ -964,7 +964,7 @@ module.exports = grammar({
     lock_clause: $ => choice(
       seq($.keyword_lock, $.keyword_row, $.keyword_for, $.keyword_access),
         repeat1(
-          seq($.keyword_lock, $.keyword_table, $.object_reference, $.keyword_for,
+          seq($.keyword_lock, choice($.keyword_table, $.keyword_view), $.object_reference, $.keyword_for,
             choice($.keyword_read, $.keyword_write, $.keyword_access)),
           ),
       ),
@@ -1012,6 +1012,7 @@ module.exports = grammar({
     _delete_from: $ => seq(
       $.keyword_from,
       $.object_reference,
+      optional(field('alias', $.object_reference)),
       optional($.where),
       optional($.order_by),
     ),

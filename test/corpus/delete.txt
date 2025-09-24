@@ -101,3 +101,62 @@ TRUNCATE TABLE employees CASCADE;
     (object_reference
       (identifier))
     (keyword_cascade)))
+
+================================================================================
+Delete table with alias
+================================================================================
+
+DELETE FROM db.table1 t
+WHERE t.field1 IN (
+    SELECT e.field1
+    FROM db.table2 e
+    )
+    and t.field2 = 'plop'
+;
+
+
+--------------------------------------------------------------------------------
+
+(program
+      (statement
+        (delete
+          (keyword_delete))
+        (from
+          (keyword_from)
+          (object_reference
+            (identifier)
+            (identifier))
+          (object_reference
+            (identifier))
+          (where
+            (keyword_where)
+            (binary_expression
+              (binary_expression
+                (field
+                  (object_reference
+                    (identifier))
+                  (identifier))
+                (keyword_in)
+                (subquery
+                  (select
+                    (keyword_select)
+                    (select_expression
+                      (term
+                        (field
+                          (object_reference
+                            (identifier))
+                          (identifier)))))
+                  (from
+                    (keyword_from)
+                    (relation
+                      (object_reference
+                        (identifier)
+                        (identifier))
+                      (identifier)))))
+              (keyword_and)
+              (binary_expression
+                (field
+                  (object_reference
+                    (identifier))
+                  (identifier))
+                (literal)))))))

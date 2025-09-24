@@ -22,6 +22,43 @@ select top 1 * from db.my_table;
               (identifier)
               (identifier))))))
 
+================================================================================
+lock table/view for access
+================================================================================
+
+lock view db.my_table for access
+lock table db.table2 for access
+select * from my_table;
+
+--------------------------------------------------------------------------------
+
+(program
+      (statement
+        (lock_clause
+          (keyword_lock)
+          (keyword_view)
+          (object_reference
+            (identifier)
+            (identifier))
+          (keyword_for)
+          (keyword_access)
+          (keyword_lock)
+          (keyword_table)
+          (object_reference
+            (identifier)
+            (identifier))
+          (keyword_for)
+          (keyword_access))
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (all_fields))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))))
 
 ================================================================================
 lock row for access
