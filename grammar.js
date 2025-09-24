@@ -63,6 +63,8 @@ module.exports = grammar({
       ),
     ),
 
+    keyword_collect: _ => make_keyword("collect"),
+    keyword_compress: _ => make_keyword("compress"),
     keyword_top: _ => make_keyword("top"),
     keyword_qualify: _ => make_keyword("qualify"),
     keyword_macro: _ => make_keyword("macro"),
@@ -75,9 +77,7 @@ module.exports = grammar({
     keyword_extract: _ => make_keyword("extract"),
     keyword_year: _ => make_keyword("year"),
     keyword_month: _ => make_keyword("month"),
-    keyword_week: _ => make_keyword("week"),
     keyword_day: _ => make_keyword("day"),
-    keyword_dayofmonth: _ => make_keyword("dayofmonth"),
     keyword_hour: _ => make_keyword("hour"),
     keyword_minute: _ => make_keyword("minute"),
     keyword_second: _ => make_keyword("second"),
@@ -96,6 +96,7 @@ module.exports = grammar({
     keyword_value: _ => make_keyword("value"),
     keyword_matched: _ => make_keyword("matched"),
     keyword_set: _ => make_keyword("set"),
+    keyword_multiset: _ => make_keyword("multiset"),
     keyword_from: _ => make_keyword("from"),
     keyword_left: _ => make_keyword("left"),
     keyword_right: _ => make_keyword("right"),
@@ -164,6 +165,7 @@ module.exports = grammar({
     keyword_using: _ => make_keyword("using"),
     keyword_use: _ => make_keyword("use"),
     keyword_index: _ => make_keyword("index"),
+    keyword_period: _ => make_keyword("period"),
     keyword_for: _ => make_keyword("for"),
     keyword_if: _ => make_keyword("if"),
     keyword_exists: _ => make_keyword("exists"),
@@ -196,6 +198,7 @@ module.exports = grammar({
     keyword_role: _ => make_keyword("role"),
     keyword_reset: _ => make_keyword("reset"),
     keyword_temp: _ => make_keyword("temp"),
+    keyword_global: _ => make_keyword("global"),
     keyword_temporary: _ => make_keyword("temporary"),
     keyword_unlogged: _ => make_keyword("unlogged"),
     keyword_logged: _ => make_keyword("logged"),
@@ -536,6 +539,7 @@ module.exports = grammar({
           $.keyword_date,
           $.keyword_datetime,
           $.keyword_datetime2,
+          seq(optional($.keyword_as), $.keyword_transactiontime),
           $.datetimeoffset,
           $.keyword_smalldatetime,
           $.time,
@@ -702,7 +706,6 @@ module.exports = grammar({
           optional($.keyword_verbose),
         )),
         optional($.lock_clause),
-        optional($.temporal_modifier),
         choice(
           $._ddl_statement,
           $._dml_write,
@@ -710,6 +713,7 @@ module.exports = grammar({
         ),
       ),
       $._show_statement,
+      $._collect_statement,
     ),
 
     _ddl_statement: $ => choice(
@@ -777,9 +781,24 @@ module.exports = grammar({
         $.keyword_table,
         $.keyword_view,
         $.keyword_macro,
-        $.keyword_function
+        $.keyword_function,
+        seq(choice($.keyword_stats, $.keyword_statistics), $.keyword_on),
       ),
       $.object_reference,
+    ),
+
+    _collect_statement: $ => seq(
+      $.keyword_collect,
+      choice($.keyword_stats, $.keyword_statistics),
+      choice(
+        seq($.keyword_on, $.object_reference, $.keyword_column, field('value', $._expression)),
+        seq(
+          $.keyword_column, '(', field('value', $._expression), ')',
+          repeat(seq(',', $.keyword_column, '(', field('value', $._expression), ')')),
+          $.keyword_on,
+          $.object_reference,
+          )
+        )
     ),
 
     _show_create: $ => seq(
@@ -835,6 +854,7 @@ module.exports = grammar({
 
     _select_statement: $ => optional_parenthesis(
       seq(
+        optional($.temporal_modifier),
         $.select,
         optional(
           seq(
@@ -941,13 +961,12 @@ module.exports = grammar({
         ),
         ),
 
-    lock_clause: $ => seq(
-      $.keyword_lock,
-      choice(
-        seq($.keyword_row, $.keyword_for, $.keyword_access),
-        seq($.keyword_table, $.object_reference, $.keyword_for,
-          choice($.keyword_read, $.keyword_write, $.keyword_access)),
-        ),
+    lock_clause: $ => choice(
+      seq($.keyword_lock, $.keyword_row, $.keyword_for, $.keyword_access),
+        repeat1(
+          seq($.keyword_lock, $.keyword_table, $.object_reference, $.keyword_for,
+            choice($.keyword_read, $.keyword_write, $.keyword_access)),
+          ),
       ),
 
     top_clause: $ => seq(
@@ -1057,6 +1076,10 @@ module.exports = grammar({
             $._temporary,
             $.keyword_unlogged,
             $.keyword_external,
+            $.keyword_multiset,
+            $.keyword_set,
+            $.keyword_volatile,
+            seq($.keyword_global, $.keyword_temporary),
           )
         ),
         $.keyword_table,
@@ -2569,10 +2592,22 @@ module.exports = grammar({
       choice(
         $._mysql_update_statement,
         $._postgres_update_statement,
+        $._teradata_update_statement,
       ),
     ),
 
-    _mysql_update_statement: $ => prec(0,
+    _teradata_update_statement: $ => prec(0,
+      seq(
+        $.object_reference,
+        $.keyword_from,
+        comma_list($.relation, true),
+        repeat($.join),
+        $._set_values,
+        optional($.where),
+      ),
+      ),
+
+    _mysql_update_statement: $ => prec(1,
       seq(
         comma_list($.relation, true),
         repeat($.join),
@@ -2581,7 +2616,7 @@ module.exports = grammar({
       ),
     ),
 
-    _postgres_update_statement: $ => prec(1,
+    _postgres_update_statement: $ => prec(2,
       seq(
         $.relation,
         $._set_values,
@@ -2716,7 +2751,37 @@ module.exports = grammar({
         '=',
         field('value', choice($.identifier, $._literal_string)),
       ),
+      $.primary_index_clause,
+      $.partition_by_clause,
+      seq($.keyword_no, $.keyword_primary, $.keyword_index),
     ),
+
+      primary_index_clause:$ => seq(
+        optional($.keyword_unique),
+        $.keyword_primary,
+        $.keyword_index,
+        optional($.object_reference),
+        '(',
+          seq(
+            field('value', $._expression),
+            repeat(seq(',', field('value', $._expression)))
+          ),
+        ')',
+      ),
+
+      partition_by_clause: $ => seq(
+        $.keyword_partition,
+        $.keyword_by,
+        '(',
+        seq(
+          field('partition_expression', $._expression),
+          repeat(seq(
+            ',',
+            field('partition_expression', $._expression)
+          ))
+        ),
+        ')'
+      ),
 
     column_definitions: $ => seq(
       '(',
@@ -2726,10 +2791,21 @@ module.exports = grammar({
     ),
 
     column_definition: $ => seq(
-      field('name', $._column),
+      choice($._derived_period,
+        field('name', $._column)),
       field('type', $._type),
       repeat($._column_constraint),
+      optional(
+        seq($.keyword_compress,
+          optional(seq('(', alias($._literal_string, $.literal),
+            repeat(seq(',', alias($._literal_string, $.literal))),
+            ')')))
+          ),
     ),
+
+    _derived_period: $ => seq($.keyword_period, $.keyword_for,
+          field('name', seq($._column, '(', $._column, ',', $._column, ')')),
+          ),
 
     _column_comment: $ => seq(
       $.keyword_comment,
@@ -3373,23 +3449,16 @@ module.exports = grammar({
         $.between_expression,
         $.parenthesized_expression,
         $.object_id,
-        $.teradata_extract_date_expression,
+        $.extract_expression,
       )
     ),
 
-    teradata_extract_date_expression: $ => choice(
-    seq(choice($.keyword_year, $.keyword_dayofmonth, $.keyword_week, $.keyword_month),
-      "(",
-      $.identifier,
-      ")",
-      ),
-      seq($.keyword_extract,
+    extract_expression: $ => seq($.keyword_extract,
         "(",
         choice($.keyword_year,$.keyword_month, $.keyword_day, $.keyword_hour, $.keyword_minute, $.keyword_second),
         $.keyword_from,
-        $.identifier,
+        field('from',$.identifier),
         ")"
-        ),
     ),
 
     parenthesized_expression: $ => prec(2,
@@ -3554,10 +3623,20 @@ module.exports = grammar({
                 field('operator', operator),
                 field('low', $._expression),
                 $.keyword_and,
-                field('high', $._expression)
+                field('high', $._expression),
+                optional($.each_clause),
             ))
         ),
     ),
+
+    each_clause: $ => seq(
+      $.keyword_each,
+      choice(
+        $.interval,
+        $.literal
+      )
+    ),
+
 
     not_in: $ => seq(
       $.keyword_not,
@@ -3619,9 +3698,14 @@ module.exports = grammar({
       $._double_quote_string,
       $._tsql_parameter,
       seq("`", $._identifier, "`"),
+      $._interpolated_identifier1,
+      $._interpolated_identifier,
     ),
     _tsql_parameter: $ => seq('@', $._identifier),
     _identifier: _ => /[a-zA-Z_][0-9a-zA-Z_]*/,
+    _interpolated_identifier1: _ => /\$\{[a-zA-Z_][0-9a-zA-Z_]*\}/,
+    _interpolated_identifier: _ => /\$\{[a-zA-Z_][0-9a-zA-Z_]*\}_[a-zA-Z_][0-9a-zA-Z_]*/,
+
   }
 
 });

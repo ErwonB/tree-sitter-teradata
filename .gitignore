@@ -12,3 +12,4 @@ package-lock.json
 /src/tree_sitter/
 /src/parser.c
 /src/*.json
+sql.so

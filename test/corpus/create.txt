@@ -2245,3 +2245,156 @@ CREATE TABLE foo (
           (keyword_on)
           (keyword_delete)
           (keyword_cascade))))))
+
+================================================================================
+Create table with COMPRESS column, PI and PPI
+================================================================================
+
+CREATE MULTISET TABLE db.table1
+(
+	field1               INTEGER NOT NULL ,
+    field2              INTEGER NOT NULL COMPRESS('PLOP', 'PLOPPY'),
+    field3 DATE NOT NULL,
+    field4 VARCHAR(100) not null,
+	BEGIN_TT TIMESTAMP(6) WITH TIME ZONE NOT NULL,
+	END_TT TIMESTAMP(6) WITH TIME ZONE NOT NULL,
+	PERIOD FOR PERIOD_TT  (BEGIN_TT, END_TT) as TRANSACTIONTIME
+)
+	PRIMARY INDEX
+	 (
+		field1, field2, field3
+	 )
+	 PARTITION BY (
+		CASE_N(END_TT =  TIMESTAMP '9999-12-31 23:59:59.999999+00:00', NO CASE),
+		RANGE_N(field3  BETWEEN DATE '2016-01-01' AND DATE '2999-01-01' EACH INTERVAL '1' MONTH ),
+		RANGE_N(field2  BETWEEN 0  AND 99999  EACH 1 )
+	);
+
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (create_table
+          (keyword_create)
+          (keyword_multiset)
+          (keyword_table)
+          (object_reference
+            (identifier)
+            (identifier))
+          (column_definitions
+            (column_definition
+              (identifier)
+              (int
+                (keyword_int))
+              (keyword_not)
+              (keyword_null))
+            (column_definition
+              (identifier)
+              (int
+                (keyword_int))
+              (keyword_not)
+              (keyword_null)
+              (keyword_compress)
+              (literal)
+              (literal))
+            (column_definition
+              (identifier)
+              (keyword_date)
+              (keyword_not)
+              (keyword_null))
+            (column_definition
+              (identifier)
+              (varchar
+                (keyword_varchar)
+                (literal))
+              (keyword_not)
+              (keyword_null))
+            (column_definition
+              (identifier)
+              (timestamp
+                (keyword_timestamp)
+                (literal)
+                (keyword_with)
+                (keyword_time)
+                (keyword_zone))
+              (keyword_not)
+              (keyword_null))
+            (column_definition
+              (identifier)
+              (timestamp
+                (keyword_timestamp)
+                (literal)
+                (keyword_with)
+                (keyword_time)
+                (keyword_zone))
+              (keyword_not)
+              (keyword_null))
+            (column_definition
+              (keyword_period)
+              (keyword_for)
+              (identifier)
+              (identifier)
+              (identifier)
+              (keyword_as)
+              (keyword_transactiontime)))
+          (table_option
+            (primary_index_clause
+              (keyword_primary)
+              (keyword_index)
+              (field
+                (identifier))
+              (field
+                (identifier))
+              (field
+                (identifier))))
+          (table_option
+            (partition_by_clause
+              (keyword_partition)
+              (keyword_by)
+              (invocation
+                (object_reference
+                  (identifier))
+                (term
+                  (binary_expression
+                    (field
+                      (identifier))
+                    (literal
+                      (identifier))))
+                (term
+                  (field
+                    (identifier))
+                  (identifier)))
+              (invocation
+                (object_reference
+                  (identifier))
+                (term
+                  (between_expression
+                    (field
+                      (identifier))
+                    (keyword_between)
+                    (literal
+                      (identifier))
+                    (keyword_and)
+                    (literal
+                      (identifier))
+                    (each_clause
+                      (keyword_each)
+                      (interval
+                        (keyword_interval))))
+                  (identifier)))
+              (invocation
+                (object_reference
+                  (identifier))
+                (term
+                  (between_expression
+                    (field
+                      (identifier))
+                    (keyword_between)
+                    (literal)
+                    (keyword_and)
+                    (literal)
+                    (each_clause
+                      (keyword_each)
+                      (literal))))))))))
+

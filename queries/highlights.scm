@@ -1,6 +1,10 @@
 (object_reference
   name: (identifier) @type)
 
+(object_reference
+  schema: (identifier) @type
+  name: (identifier) @type)
+
 (invocation
   (object_reference
     name: (identifier) @function.call))
@@ -14,6 +18,7 @@
   (keyword_brin)
   (keyword_array)
   (keyword_object_id)
+  (keyword_extract)
 ] @function.call
 
 (relation
@@ -21,6 +26,13 @@
 
 (field
   name: (identifier) @field)
+
+(column_definition
+  name: (identifier) @field)
+
+(list
+  (column
+    (identifier) @field))
 
 (term
   alias: (identifier) @variable)
@@ -81,6 +93,7 @@
  (keyword_materialized)
  (keyword_recursive)
  (keyword_temp)
+ (keyword_global)
  (keyword_temporary)
  (keyword_unlogged)
  (keyword_external)
@@ -125,6 +138,7 @@
   (keyword_value)
   (keyword_attribute)
   (keyword_set)
+  (keyword_multiset)
   (keyword_left)
   (keyword_right)
   (keyword_outer)
@@ -135,6 +149,8 @@
   (keyword_group)
   (keyword_with)
   (keyword_without)
+  (keyword_collect)
+  (keyword_compress)
   (keyword_as)
   (keyword_bt)
   (keyword_et)
@@ -150,12 +166,9 @@
   (keyword_transactiontime)
   (keyword_validtime)
   (keyword_nontemporal)
-  (keyword_extract)
   (keyword_year)
   (keyword_month)
-  (keyword_week)
   (keyword_day)
-  (keyword_dayofmonth)
   (keyword_hour)
   (keyword_minute)
   (keyword_second)
@@ -167,6 +180,7 @@
   (keyword_constraint)
   (keyword_force)
   (keyword_use)
+  (keyword_period)
   (keyword_for)
   (keyword_if)
   (keyword_exists)
