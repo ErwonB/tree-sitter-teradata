@@ -82,10 +82,14 @@ module.exports = grammar({
     keyword_minute: _ => make_keyword("minute"),
     keyword_second: _ => make_keyword("second"),
     keyword_select: _ => make_keyword("select"),
+    keyword_sel: _ => make_keyword("sel"),
     keyword_delete: _ => make_keyword("delete"),
+    keyword_del: _ => make_keyword("del"),
     keyword_insert: _ => make_keyword("insert"),
+    keyword_ins: _ => make_keyword("ins"),
     keyword_replace: _ => make_keyword("replace"),
     keyword_update: _ => make_keyword("update"),
+    keyword_upd: _ => make_keyword("upd"),
     keyword_truncate: _ => make_keyword("truncate"),
     keyword_merge: _ => make_keyword("merge"),
     keyword_show: _ => make_keyword("show"),
@@ -345,6 +349,7 @@ module.exports = grammar({
     keyword_new: _ => make_keyword("new"),
     keyword_referencing: _ => make_keyword("referencing"),
     keyword_statement: _ => make_keyword("statement"),
+    keyword_exec: _ => make_keyword("exec"),
     keyword_execute: _ => make_keyword("execute"),
     keyword_procedure: _ => make_keyword("procedure"),
     keyword_object_id: _ => make_keyword("object_id"),
@@ -390,6 +395,12 @@ module.exports = grammar({
     keyword_avro: _ => make_keyword("avro"),
     keyword_jsonfile: _ => make_keyword("jsonfile"),
 
+    // Teradata shortcut
+    _exec: $ => choice($.keyword_execute, $.keyword_exec),
+    _select: $ => choice($.keyword_select, $.keyword_sel),
+    _update: $ => choice($.keyword_update, $.keyword_upd),
+    _delete: $ => choice($.keyword_delete, $.keyword_del),
+    _insert: $ => choice($.keyword_insert, $.keyword_ins),
     // Operators
     is_not: $ => prec.left(seq($.keyword_is, $.keyword_not)),
     not_like: $ => seq($.keyword_not, $.keyword_like),
@@ -943,7 +954,7 @@ module.exports = grammar({
     ),
 
     select: $ => seq(
-      $.keyword_select,
+      $._select,
       choice(
         seq($.keyword_distinct, $.select_expression),
         seq($.top_clause, $.select_expression),
@@ -1018,7 +1029,7 @@ module.exports = grammar({
     ),
 
     delete: $ => seq(
-      $.keyword_delete,
+      $._delete,
       optional($.index_hint),
     ),
 
@@ -1642,16 +1653,16 @@ module.exports = grammar({
           seq($.keyword_when, wrapped_in_parenthesis($._expression)),
         ),
       ),
-      $.keyword_execute,
+      $._exec,
       choice($.keyword_function, $.keyword_procedure),
       $.object_reference,
       paren_list(field('parameter', $.term)),
     ),
 
     _create_trigger_event: $ => choice(
-      $.keyword_insert,
+      $._insert,
       seq(
-        $.keyword_update,
+        $._update,
         optional(
           seq(
             $.keyword_of,
@@ -1659,7 +1670,7 @@ module.exports = grammar({
           ),
         ),
       ),
-      $.keyword_delete,
+      $._delete,
       $.keyword_truncate,
     ),
 
@@ -2349,7 +2360,7 @@ module.exports = grammar({
 
     insert: $ => seq(
       choice(
-        $.keyword_insert,
+        $._insert,
         $.keyword_replace
       ),
       optional(
@@ -2395,7 +2406,7 @@ module.exports = grammar({
         choice(
           $.keyword_nothing,
           seq(
-            $.keyword_update,
+            $._update,
             $._set_values,
             optional($.where),
           ),
@@ -2407,7 +2418,7 @@ module.exports = grammar({
       $.keyword_on,
       $.keyword_duplicate,
       $.keyword_key,
-      $.keyword_update,
+      $._update,
       $.assignment_list,
     ),
 
@@ -2471,13 +2482,13 @@ module.exports = grammar({
       ),
       $.keyword_then,
       choice(
-        $.keyword_delete,
+        $._delete,
         seq(
-          $.keyword_update,
+          $._update,
           $._set_values,
         ),
         seq(
-          $.keyword_insert,
+          $._insert,
           $._insert_values
         ),
         optional($.where)
@@ -2589,7 +2600,7 @@ module.exports = grammar({
     ),
 
     update: $ => seq(
-      $.keyword_update,
+      $._update,
       choice(
         $._mysql_update_statement,
         $._postgres_update_statement,
@@ -2825,7 +2836,7 @@ module.exports = grammar({
         repeat(
           seq(
             $.keyword_on,
-            choice($.keyword_delete, $.keyword_update),
+            choice($._delete, $._update),
             choice(
               seq($.keyword_no, $.keyword_action),
               $.keyword_restrict,
@@ -2943,7 +2954,7 @@ module.exports = grammar({
           repeat(
             seq(
               $.keyword_on,
-              choice($.keyword_delete, $.keyword_update),
+              choice($._delete, $._update),
               choice(
                 seq($.keyword_no, $.keyword_action),
                 $.keyword_restrict,
