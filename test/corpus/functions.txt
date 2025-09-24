@@ -538,8 +538,6 @@ create or replace function public.fn()
   returns int
   language sql
   immutable
-  parallel safe
-  leakproof
   strict
   cost 100
   rows 1
@@ -566,11 +564,6 @@ return 1;
         (identifier))
       (function_volatility
         (keyword_immutable))
-      (function_safety
-        (keyword_parallel)
-        (keyword_safe))
-      (function_leakproof
-        (keyword_leakproof))
       (function_strictness
         (keyword_strict))
       (function_cost
@@ -590,8 +583,6 @@ create or replace function public.fn()
   as $$select 1$$
   language sql
   volatile
-  parallel restricted
-  not leakproof
   returns null on null input
   cost 100
   rows 1;
@@ -627,12 +618,6 @@ create or replace function public.fn()
         (identifier))
       (function_volatility
         (keyword_volatile))
-      (function_safety
-        (keyword_parallel)
-        (keyword_restricted))
-      (function_leakproof
-        (keyword_not)
-        (keyword_leakproof))
       (function_strictness
         (keyword_returns)
         (keyword_null)
@@ -1139,3 +1124,100 @@ $_$
         (literal)
         (keyword_end)
         (dollar_quote)))))
+
+================================================================================
+extract
+================================================================================
+
+select extract(day from current_date), extract(hour from current_timestamp)
+, extract(minute from current_timestamp), extract(second from current_timestamp);
+
+--------------------------------------------------------------------------------
+        (program
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (invocation
+                (object_reference
+                  (identifier))
+                (object_reference
+                  (identifier))
+                (keyword_from)
+                (term
+                  (field
+                    (identifier)))))
+            (term
+              (invocation
+                (object_reference
+                  (identifier))
+                (object_reference
+                  (identifier))
+                (keyword_from)
+                (term
+                  (field
+                    (identifier)))))
+            (term
+              (invocation
+                (object_reference
+                  (identifier))
+                (object_reference
+                  (identifier))
+                (keyword_from)
+                (term
+                  (field
+                    (identifier)))))
+            (term
+              (invocation
+                (object_reference
+                  (identifier))
+                (object_reference
+                  (identifier))
+                (keyword_from)
+                (term
+                  (field
+                    (identifier)))))))))
+
+================================================================================
+translate
+================================================================================
+
+select translate(cast('E' as char(1)) using KANJI1_KanjiEBCDIC_TO_UNICODE) as EXPSR_NATR_CD_TGT  from (select 1 x)  as a;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (invocation
+                (object_reference
+                  (identifier))
+                (cast
+                  (keyword_cast)
+                  (literal)
+                  (keyword_as)
+                  (char
+                    (keyword_char)
+                    (literal)))
+                (keyword_using)
+                (encoding_identifier))
+              (keyword_as)
+              (identifier))))
+        (from
+          (keyword_from)
+          (relation
+            (subquery
+              (select
+                (keyword_select)
+                (select_expression
+                  (term
+                    (literal)
+                    (identifier)))))
+            (keyword_as)
+            (identifier)))))
+
+

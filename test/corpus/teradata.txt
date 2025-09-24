@@ -295,44 +295,6 @@ nontemporal update db.table1 set field = NULL;
             (literal
               (keyword_null))))))
 
-================================================================================
-teradata date specific
-================================================================================
-
-select extract(day from current_date), extract(hour from current_timestamp)
-, extract(minute from current_timestamp), extract(second from current_timestamp);
-
---------------------------------------------------------------------------------
-    (program
-      (statement
-        (select
-          (keyword_select)
-          (select_expression
-            (term
-              (extract_expression
-                (keyword_extract)
-                (keyword_day)
-                (keyword_from)
-                (identifier)))
-            (term
-              (extract_expression
-                (keyword_extract)
-                (keyword_hour)
-                (keyword_from)
-                (identifier)))
-            (term
-              (extract_expression
-                (keyword_extract)
-                (keyword_minute)
-                (keyword_from)
-                (identifier)))
-            (term
-              (extract_expression
-                (keyword_extract)
-                (keyword_second)
-                (keyword_from)
-                (identifier)))))))
-
 
 ================================================================================
 collect stats

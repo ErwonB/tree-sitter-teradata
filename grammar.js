@@ -303,7 +303,6 @@ module.exports = grammar({
     keyword_immutable: _ => make_keyword("immutable"),
     keyword_stable: _ => make_keyword("stable"),
     keyword_volatile: _ => make_keyword("volatile"),
-    keyword_leakproof: _ => make_keyword("leakproof"),
     keyword_parallel: _ => make_keyword("parallel"),
     keyword_safe: _ => make_keyword("safe"),
     keyword_unsafe: _ => make_keyword("unsafe"),
@@ -1084,6 +1083,9 @@ module.exports = grammar({
       seq($.keyword_without, $.keyword_oids),
       $.storage_parameters,
       $.table_option,
+      $.primary_index_clause,
+      $.partition_by_clause,
+      seq($.keyword_no, $.keyword_primary, $.keyword_index),
     ),
 
     storage_parameters: $ => seq(
@@ -1272,9 +1274,7 @@ module.exports = grammar({
         choice(
           $.function_language,
           $.function_volatility,
-          $.function_leakproof,
           $.function_security,
-          $.function_safety,
           $.function_strictness,
           $.function_cost,
           $.function_rows,
@@ -1288,9 +1288,7 @@ module.exports = grammar({
         choice(
           $.function_language,
           $.function_volatility,
-          $.function_leakproof,
           $.function_security,
-          $.function_safety,
           $.function_strictness,
           $.function_cost,
           $.function_rows,
@@ -1398,24 +1396,10 @@ module.exports = grammar({
       $.keyword_volatile,
     ),
 
-    function_leakproof: $ => seq(
-      optional($.keyword_not),
-      $.keyword_leakproof,
-    ),
-
     function_security: $ => seq(
       optional($.keyword_external),
       $.keyword_security,
       choice($.keyword_invoker, $.keyword_definer),
-    ),
-
-    function_safety: $ => seq(
-      $.keyword_parallel,
-      choice(
-        $.keyword_safe,
-        $.keyword_unsafe,
-        $.keyword_restricted,
-      ),
     ),
 
     function_strictness: $ => choice(
@@ -2781,9 +2765,6 @@ module.exports = grammar({
         '=',
         field('value', choice($.identifier, $._literal_string)),
       ),
-      $.primary_index_clause,
-      $.partition_by_clause,
-      seq($.keyword_no, $.keyword_primary, $.keyword_index),
     ),
 
       primary_index_clause:$ => seq(
@@ -3106,6 +3087,29 @@ module.exports = grammar({
                 $.term,
               ),
               optional($.order_by)
+            )
+          ),
+          //translate
+          paren_list(
+            seq(
+              field(
+                'expression',
+                $._expression,
+              ),
+              $.keyword_using,
+              field('encoding',$.encoding_identifier),
+              optional(seq($.keyword_with, $.keyword_error)),
+            )
+          ),
+          //extract
+          paren_list(
+            seq(
+              field(
+                'unit',
+                $.object_reference,
+              ),
+              $.keyword_from,
+              $.term
             )
           ),
           // _aggregate_function, e.g. group_concat
@@ -3479,27 +3483,7 @@ module.exports = grammar({
         $.between_expression,
         $.parenthesized_expression,
         $.object_id,
-        $.extract_expression,
-        $.translate_expression,
       )
-    ),
-
-    extract_expression: $ => seq($.keyword_extract,
-        "(",
-        choice($.keyword_year,$.keyword_month, $.keyword_day, $.keyword_hour, $.keyword_minute, $.keyword_second),
-        $.keyword_from,
-        field('from',$.identifier),
-        ")"
-    ),
-
-    translate_expression: $ => seq($.keyword_translate,
-        "(",
-        field('expression', $._expression),
-        $.keyword_using,
-        // field('encoding',$.identifier),
-        field('encoding',$.encoding_identifier),
-        optional(seq($.keyword_with, $.keyword_error)),
-        ")"
     ),
 
     parenthesized_expression: $ => prec(2,

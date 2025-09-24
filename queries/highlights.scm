@@ -18,8 +18,6 @@
   (keyword_brin)
   (keyword_array)
   (keyword_object_id)
-  (keyword_extract)
-  (keyword_translate)
 ] @function.call
 
 (relation
@@ -84,8 +82,6 @@
  (keyword_immutable)
  (keyword_atomic)
  (keyword_parallel)
- (keyword_leakproof)
- (keyword_safe)
  (keyword_cost)
  (keyword_strict)
 ] @attribute
@@ -172,12 +168,6 @@
   (keyword_transactiontime)
   (keyword_validtime)
   (keyword_nontemporal)
-  (keyword_year)
-  (keyword_month)
-  (keyword_day)
-  (keyword_hour)
-  (keyword_minute)
-  (keyword_second)
   (keyword_table)
   (keyword_tables)
   (keyword_key)
@@ -269,7 +259,6 @@
   (keyword_regnamespace)
   (keyword_regproc)
   (keyword_regtype)
-  (keyword_restricted)
   (keyword_return)
   (keyword_returns)
   (keyword_separator)
@@ -278,7 +267,6 @@
   (keyword_support)
   (keyword_tblproperties)
   (keyword_trigger)
-  (keyword_unsafe)
   (keyword_admin)
   (keyword_connection)
   (keyword_cycle)
