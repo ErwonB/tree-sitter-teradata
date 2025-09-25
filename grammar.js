@@ -763,6 +763,8 @@ module.exports = grammar({
           $._update_statement,
           $._truncate_statement,
           $._copy_statement,
+          $._macro_statement,
+          $._abort_statement,
         ),
       ),
     ),
@@ -1033,8 +1035,17 @@ module.exports = grammar({
     ),
 
     _delete_statement: $ => seq(
-      $.delete,
-      alias($._delete_from, $.from),
+      choice(
+        seq(
+          $.delete,
+          $.object_reference,
+          optional($.where)
+        ),
+        seq(
+          $.delete,
+          alias($._delete_from, $.from),
+        ),
+      ),
     ),
 
     _delete_from: $ => seq(
@@ -1060,6 +1071,7 @@ module.exports = grammar({
         $.create_type,
         $.create_database,
         $.create_role,
+        $.create_macro,
         $.create_sequence,
         $.create_extension,
         $.create_trigger,
@@ -1431,6 +1443,22 @@ module.exports = grammar({
     function_support: $ => seq(
       $.keyword_support,
       alias($._literal_string, $.literal),
+    ),
+
+    create_macro: $ => seq(
+      choice($.keyword_create, $.keyword_replace),
+      $.keyword_macro,
+      $.object_reference,
+      optional(wrapped_in_parenthesis(comma_list($.column_definition))),
+      $.keyword_as,
+      '(',
+        repeat1(
+          seq(
+            $.statement,
+            ';'
+          ),
+        ),
+       ')',
     ),
 
     _operator_class: $ => seq(
@@ -2456,6 +2484,14 @@ module.exports = grammar({
       $.update,
     ),
 
+    _macro_statement: $ => seq(
+      $.macro,
+    ),
+
+    _abort_statement: $ => seq(
+      $.abort,
+    ),
+
     _merge_statement: $=> seq(
       $.keyword_merge,
       $.keyword_into,
@@ -2636,6 +2672,21 @@ module.exports = grammar({
         $._set_values,
         optional($.from),
       ),
+    ),
+
+    macro: $ => seq(
+      $._exec,
+      field('macro', $.object_reference),
+      optional(wrapped_in_parenthesis(
+          comma_list($._expression),
+        ),
+      ),
+    ),
+
+    abort: $ => seq(
+      $.keyword_abort,
+      field('abort_message', alias($._literal_string, $.literal)),
+      optional(choice($.where, $.from)),
     ),
 
     storage_location: $ => prec.right(
@@ -3066,6 +3117,7 @@ module.exports = grammar({
           field('parameter', $._expression),
           $.keyword_as,
           $._type,
+          optional(seq($.keyword_format, $._literal_string)),
         ),
       ),
     ),
@@ -3746,9 +3798,11 @@ module.exports = grammar({
       seq("`", $._identifier, "`"),
       $._interpolated_identifier1,
       $._interpolated_identifier,
+      $._macro_identifier,
     ),
     _tsql_parameter: $ => seq('@', $._identifier),
     _identifier: _ => /[a-zA-Z_][0-9a-zA-Z_]*/,
+    _macro_identifier: _ => /\:[a-zA-Z_][0-9a-zA-Z_]*/,
     _interpolated_identifier1: _ => /\$\{[a-zA-Z_][0-9a-zA-Z_]*\}/,
     _interpolated_identifier: _ => /\$\{[a-zA-Z_][0-9a-zA-Z_]*\}_[a-zA-Z_][0-9a-zA-Z_]*/,
     encoding_identifier: _ => /[a-zA-Z_][0-9a-zA-Z_]*_TO_[a-zA-Z_][0-9a-zA-Z_]*/,

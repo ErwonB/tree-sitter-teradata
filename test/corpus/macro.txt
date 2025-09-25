@@ -1,0 +1,137 @@
+================================================================================
+exec macro : no param
+================================================================================
+
+exec ZDP_DVL_H1_PM_ACQ.mymacro;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (macro
+          (keyword_exec)
+          (object_reference
+            (identifier)
+            (identifier)))))
+
+
+================================================================================
+exec macro with param
+================================================================================
+
+exec ZDP_DVL_H1_PM_ACQ.mymacro(2, 'plop', 1);
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (macro
+          (keyword_exec)
+          (object_reference
+            (identifier)
+            (identifier))
+          (literal)
+          (literal)
+          (literal))))
+
+================================================================================
+Create macro without parameters
+================================================================================
+
+replace macro db1.macro1 as (
+    delete from db2.table1;
+    delete from db2.table2;
+);
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (create_macro
+          (keyword_replace)
+          (keyword_macro)
+          (object_reference
+            (identifier)
+            (identifier))
+          (keyword_as)
+          (statement
+            (delete
+              (keyword_delete))
+            (from
+              (keyword_from)
+              (object_reference
+                (identifier)
+                (identifier))))
+          (statement
+            (delete
+              (keyword_delete))
+            (from
+              (keyword_from)
+              (object_reference
+                (identifier)
+                (identifier)))))))
+
+
+================================================================================
+Create macro with parameters
+================================================================================
+
+replace macro db1.macro1(field1 varchar(128), field2 integer) as (
+    delete from db2.table1 where f1 like :field1;
+    delete from db2.table2 where f2 like :field2;
+);
+
+--------------------------------------------------------------------------------
+    (program
+      (statement
+        (create_macro
+          (keyword_replace)
+          (keyword_macro)
+          (object_reference
+            (identifier)
+            (identifier))
+          (column_definition
+            (identifier)
+            (varchar
+              (keyword_varchar)
+              (literal)))
+          (column_definition
+            (identifier)
+            (int
+              (keyword_int)))
+          (keyword_as)
+          (statement
+            (delete
+              (keyword_delete))
+            (from
+              (keyword_from)
+              (object_reference
+                (identifier)
+                (identifier))
+              (where
+                (keyword_where)
+                (binary_expression
+                  (field
+                    (identifier))
+                  (keyword_like)
+                  (field
+                    (identifier))))))
+          (statement
+            (delete
+              (keyword_delete))
+            (from
+              (keyword_from)
+              (object_reference
+                (identifier)
+                (identifier))
+              (where
+                (keyword_where)
+                (binary_expression
+                  (field
+                    (identifier))
+                  (keyword_like)
+                  (field
+                    (identifier)))))))))
+
+
+

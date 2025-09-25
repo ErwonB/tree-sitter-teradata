@@ -346,3 +346,42 @@ select current_date, current_date + interval '03-01' year to month;
                   (keyword_month))))))))
 
 
+================================================================================
+abort statement (with a macro param)
+================================================================================
+
+abort 'condition x not met'
+where not exists (select 1 from db.table1 where field1 = :arg1);
+
+--------------------------------------------------------------------------------
+    (program
+      (statement
+        (abort
+          (keyword_abort)
+          (literal)
+          (where
+            (keyword_where)
+            (unary_expression
+              (keyword_not)
+              (exists
+                (keyword_exists)
+                (subquery
+                  (select
+                    (keyword_select)
+                    (select_expression
+                      (term
+                        (literal))))
+                  (from
+                    (keyword_from)
+                    (relation
+                      (object_reference
+                        (identifier)
+                        (identifier)))
+                    (where
+                      (keyword_where)
+                      (binary_expression
+                        (field
+                          (identifier))
+                        (field
+                          (identifier))))))))))))
+

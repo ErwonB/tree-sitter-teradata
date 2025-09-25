@@ -1264,3 +1264,24 @@ INTERVAL(PERIOD(DATE '2014-02-28',  DATE '2016-03-01')) YEAR TO MONTH;
                 (keyword_to)
                 (keyword_month)))))))
 
+================================================================================
+cast with format
+================================================================================
+
+select cast('2024-03-31' as date format'YYYY-MM-DD');
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (cast
+                (keyword_cast)
+                (literal)
+                (keyword_as)
+                (keyword_date)
+                (keyword_format)))))))
+
