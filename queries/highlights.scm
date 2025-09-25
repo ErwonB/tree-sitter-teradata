@@ -346,6 +346,12 @@
   (keyword_storage)
   (keyword_compression)
   (keyword_duplicate)
+  (keyword_year)
+  (keyword_month)
+  (keyword_day)
+  (keyword_hour)
+  (keyword_minute)
+  (keyword_second)
 ] @keyword
 
 [

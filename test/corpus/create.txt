@@ -2379,8 +2379,8 @@ CREATE MULTISET TABLE db.table1
                   (each_clause
                     (keyword_each)
                     (interval
-                      (keyword_interval))))
-                (identifier)))
+                      (keyword_interval)
+                      (keyword_month))))))
             (invocation
               (object_reference
                 (identifier))

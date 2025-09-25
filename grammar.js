@@ -3056,6 +3056,7 @@ module.exports = grammar({
     interval: $ => seq(
         $.keyword_interval,
         $._literal_string,
+        $._temporal_qualifier,
     ),
 
     cast: $ => seq(
@@ -3483,8 +3484,28 @@ module.exports = grammar({
         $.between_expression,
         $.parenthesized_expression,
         $.object_id,
+        $.interval_expression,
       )
     ),
+
+    interval_expression: $ => seq($.keyword_interval,
+    "(",
+        field('period_expression', $._expression),
+        ")",
+        field('temporal_qualifier', $._temporal_qualifier),
+    ),
+
+    _temporal_qualifier: $ => choice(
+    $.keyword_year,
+    seq($.keyword_year, $.keyword_to, $.keyword_month),
+    $.keyword_month,
+    $.keyword_day,
+    seq($.keyword_day, $.keyword_to, choice($.keyword_hour, $.keyword_minute, $.keyword_second)),
+    $.keyword_hour,
+    seq($.keyword_hour, $.keyword_to, choice($.keyword_minute, $.keyword_second)),
+    $.keyword_minute,
+    seq($.keyword_minute, $.keyword_to, choice($.keyword_second)),
+    $.keyword_second),
 
     parenthesized_expression: $ => prec(2,
       wrapped_in_parenthesis($._expression)

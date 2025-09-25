@@ -319,3 +319,30 @@ collect stats column(field1), column(field2) on db.table1;
           (identifier)
           (identifier))))
 
+================================================================================
+interval addition
+================================================================================
+
+select current_date, current_date + interval '03-01' year to month;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))
+            (term
+              (binary_expression
+                (field
+                  (identifier))
+                (interval
+                  (keyword_interval)
+                  (keyword_year)
+                  (keyword_to)
+                  (keyword_month))))))))
+
+

@@ -1221,3 +1221,46 @@ select translate(cast('E' as char(1)) using KANJI1_KanjiEBCDIC_TO_UNICODE) as EX
             (identifier)))))
 
 
+================================================================================
+interval
+================================================================================
+
+SELECT INTERVAL(PERIOD(DATE '2016-02-29',  DATE '2016-03-01')) MONTH ,
+INTERVAL(PERIOD(DATE '2014-02-28',  DATE '2016-03-01')) YEAR TO MONTH;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (interval_expression
+                (keyword_interval)
+                (invocation
+                  (object_reference
+                    (identifier))
+                  (term
+                    (literal
+                      (identifier)))
+                  (term
+                    (literal
+                      (identifier))))
+                (keyword_month)))
+            (term
+              (interval_expression
+                (keyword_interval)
+                (invocation
+                  (object_reference
+                    (identifier))
+                  (term
+                    (literal
+                      (identifier)))
+                  (term
+                    (literal
+                      (identifier))))
+                (keyword_year)
+                (keyword_to)
+                (keyword_month)))))))
+
