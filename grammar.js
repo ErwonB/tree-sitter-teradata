@@ -63,6 +63,8 @@ module.exports = grammar({
       ),
     ),
 
+    keyword_strtok_split_to_table: _ => make_keyword("strtok_split_to_table"),
+    keyword_regexp_split_to_table: _ => make_keyword("regexp_split_to_table"),
     keyword_collect: _ => make_keyword("collect"),
     keyword_compress: _ => make_keyword("compress"),
     keyword_top: _ => make_keyword("top"),
@@ -3315,6 +3317,7 @@ module.exports = grammar({
       seq(
         choice(
           $.subquery,
+          $.table_function,
           $.invocation,
           $.object_reference,
           wrapped_in_parenthesis($.values),
@@ -3540,6 +3543,36 @@ module.exports = grammar({
       )
     ),
 
+    table_function: $ => seq($.keyword_table,
+      wrapped_in_parenthesis($._table_expression),
+    ),
+
+    _table_expression: $ => prec(1,
+      choice(
+        $.split_to_table_expression,
+      )
+    ),
+
+    split_to_table_expression: $ => seq(
+      choice($.keyword_strtok_split_to_table, $.keyword_regexp_split_to_table),
+      "(",
+        seq(
+          field('inkey', choice($.object_reference, $.literal)), ',',
+          field('instring', choice($.object_reference, $.literal)), ',',
+          field('delimiter', $._literal_string),
+          optional(seq(',', field('match_arg', $._literal_string))),
+          ),
+        ")",
+      $.keyword_returns,
+      "(",
+        seq(
+          field('outkey', seq($._column, $._type)), ',',
+          field('tokennum', seq($._column, $._type)), ',',
+          field('token', seq($._column, $._type)),
+          ),
+        ")",
+    ),
+
     interval_expression: $ => seq($.keyword_interval,
     "(",
         field('period_expression', $._expression),
@@ -3675,7 +3708,7 @@ module.exports = grammar({
         prec.left(precedence, seq(
           field('left', $._expression),
           field('operator', operator),
-          field('right', choice($.list, $.subquery))
+          field('right', choice($.list, $.subquery, ))
         ))
       ),
     ),

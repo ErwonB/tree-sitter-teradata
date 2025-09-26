@@ -1285,3 +1285,107 @@ select cast('2024-03-31' as date format'YYYY-MM-DD');
                 (keyword_date)
                 (keyword_format)))))))
 
+================================================================================
+strtok_split_to_table
+================================================================================
+
+select d.* from table (
+    strtok_split_to_table(t.id, t.str, ' -/')
+    returns (outkey integer, tokennum integer, token varchar(20))
+) as d order by 1,2;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (all_fields
+                (object_reference
+                  (identifier))))))
+        (from
+          (keyword_from)
+          (relation
+            (table_function
+              (keyword_table)
+              (split_to_table_expression
+                (keyword_strtok_split_to_table)
+                (object_reference
+                  (identifier)
+                  (identifier))
+                (object_reference
+                  (identifier)
+                  (identifier))
+                (keyword_returns)
+                (identifier)
+                (int
+                  (keyword_int))
+                (identifier)
+                (int
+                  (keyword_int))
+                (identifier)
+                (varchar
+                  (keyword_varchar)
+                  (literal))))
+            (keyword_as)
+            (identifier))
+          (order_by
+            (keyword_order)
+            (keyword_by)
+            (order_target
+              (literal))
+            (order_target
+              (literal))))))
+
+
+
+================================================================================
+regexp_split_to_table
+================================================================================
+
+SELECT * from table(regexp_split_to_table
+('phonemaker','Apple&Microsoft&Google','&','c')
+returns (outkey varchar(30), token_ndx integer, token varchar(100))) as t1
+order by 1;
+
+--------------------------------------------------------------------------------
+
+(program
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (all_fields))))
+        (from
+          (keyword_from)
+          (relation
+            (table_function
+              (keyword_table)
+              (split_to_table_expression
+                (keyword_regexp_split_to_table)
+                (literal)
+                (literal)
+                (keyword_returns)
+                (identifier)
+                (varchar
+                  (keyword_varchar)
+                  (literal))
+                (identifier)
+                (int
+                  (keyword_int))
+                (identifier)
+                (varchar
+                  (keyword_varchar)
+                  (literal))))
+            (keyword_as)
+            (identifier))
+          (order_by
+            (keyword_order)
+            (keyword_by)
+            (order_target
+              (literal))))))
+
+

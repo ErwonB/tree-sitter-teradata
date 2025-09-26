@@ -18,6 +18,8 @@
   (keyword_brin)
   (keyword_array)
   (keyword_object_id)
+  (keyword_strtok_split_to_table)
+  (keyword_regexp_split_to_table)
 ] @function.call
 
 (relation
