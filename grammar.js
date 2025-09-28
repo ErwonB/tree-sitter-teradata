@@ -165,7 +165,6 @@ module.exports = grammar({
     keyword_or: _ => make_keyword("or"),
     keyword_is: _ => make_keyword("is"),
     keyword_not: _ => make_keyword("not"),
-    keyword_force: _ => make_keyword("force"),
     keyword_ignore: _ => make_keyword("ignore"),
     keyword_using: _ => make_keyword("using"),
     keyword_use: _ => make_keyword("use"),
@@ -2147,7 +2146,6 @@ module.exports = grammar({
       optional($._if_exists),
       $.identifier,
       optional($.keyword_with),
-      optional($.keyword_force),
     ),
 
     drop_role: $ => seq(
@@ -3162,7 +3160,6 @@ module.exports = grammar({
 
     index_hint: $ => seq(
       choice(
-        $.keyword_force,
         $.keyword_use,
         $.keyword_ignore,
       ),

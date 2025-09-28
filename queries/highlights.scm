@@ -167,7 +167,6 @@
   (keyword_references)
   (keyword_foreign)
   (keyword_constraint)
-  (keyword_force)
   (keyword_use)
   (keyword_period)
   (keyword_for)

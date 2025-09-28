@@ -195,25 +195,6 @@ DROP INDEX CONCURRENTLY IF EXISTS idx RESTRICT ON tbl;
         name: (identifier)))))
 
 ================================================================================
-Drop Database
-================================================================================
-
-DROP DATABASE IF EXISTS hollywood WITH FORCE;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (drop_database
-      (keyword_drop)
-      (keyword_database)
-      (keyword_if)
-      (keyword_exists)
-      (identifier)
-      (keyword_with)
-      (keyword_force))))
-
-================================================================================
 Drop Role
 ================================================================================
 
