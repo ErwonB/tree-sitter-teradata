@@ -318,27 +318,6 @@ ALTER TABLE my_table
           name: (identifier))))))
 
 ================================================================================
-Alter table and set schema
-================================================================================
-
-ALTER TABLE my_table
-  SET SCHEMA new_schema;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (alter_table
-      (keyword_alter)
-      (keyword_table)
-      (object_reference
-        name: (identifier))
-      (set_schema
-        (keyword_set)
-        (keyword_schema)
-        schema: (identifier)))))
-
-================================================================================
 Alter table and change owner
 ================================================================================
 
@@ -602,41 +581,6 @@ col2 VARCHAR(255) NOT NULL DEFAULT('EMPTY');
           (list
             (literal)))))))
 
-================================================================================
-Alter schema rename
-================================================================================
-
-ALTER SCHEMA sales RENAME TO mysales;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (alter_schema
-      (keyword_alter)
-      (keyword_schema)
-      (identifier)
-      (keyword_rename)
-      (keyword_to)
-      (identifier))))
-
-================================================================================
-Alter schema owner
-================================================================================
-
-ALTER SCHEMA sales OWNER TO CURRENT_USER;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (alter_schema
-      (keyword_alter)
-      (keyword_schema)
-      (identifier)
-      (keyword_owner)
-      (keyword_to)
-      (identifier))))
 
 ================================================================================
 Alter index rename
@@ -1001,25 +945,6 @@ ALTER SEQUENCE IF EXISTS serial RENAME TO cereal;
         (keyword_to)
         (object_reference
           (identifier))))))
-
-================================================================================
-Alter sequence change Schema
-================================================================================
-
-ALTER SEQUENCE serial SET SCHEMA serious_schema;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (alter_sequence
-      (keyword_alter)
-      (keyword_sequence)
-      (object_reference
-        (identifier))
-      (keyword_set)
-      (keyword_schema)
-      (identifier))))
 
 ================================================================================
 Alter sequence change owner

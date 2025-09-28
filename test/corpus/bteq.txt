@@ -1,0 +1,214 @@
+================================================================================
+logon command
+================================================================================
+
+.logon tdpid/user,\$tdwallet(user)
+
+--------------------------------------------------------------------------------
+    (program
+      (bteq_statement
+        (keyword_dot_logon)
+        (object_reference
+          (identifier))
+        (object_reference
+          (identifier))
+        (keyword_dollar_tdwallet)
+        (object_reference
+          (identifier))))
+
+================================================================================
+simple goto
+================================================================================
+
+.goto plop
+
+--------------------------------------------------------------------------------
+    (program
+      (bteq_statement
+        (keyword_dot_goto)
+        (object_reference
+          (identifier))))
+
+================================================================================
+simple label
+================================================================================
+
+.label plop
+
+--------------------------------------------------------------------------------
+    (program
+      (bteq_statement
+        (keyword_dot_label)
+        (object_reference
+          (identifier))))
+
+
+================================================================================
+simple quit
+================================================================================
+
+.quit 1
+
+--------------------------------------------------------------------------------
+    (program
+      (bteq_statement
+        (keyword_dot_quit)))
+
+
+================================================================================
+simple if
+================================================================================
+
+.if errorcode <> 0 then .goto plop
+
+--------------------------------------------------------------------------------
+
+    (program
+      (bteq_statement
+        (keyword_dot_if)
+        (binary_expression
+          (field
+            (identifier))
+          (literal))
+        (keyword_then)
+        (bteq_statement
+          (keyword_dot_goto)
+          (object_reference
+            (identifier)))))
+
+
+
+================================================================================
+sql then bteq
+================================================================================
+
+select * from db.table2;
+.if errorcode <> 0 then .quit 1
+
+--------------------------------------------------------------------------------
+    (program
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (all_fields))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)
+              (identifier)))))
+      (bteq_statement
+        (keyword_dot_if)
+        (binary_expression
+          (field
+            (identifier))
+          (literal))
+        (keyword_then)
+        (bteq_statement
+          (keyword_dot_quit))))
+
+
+================================================================================
+bteq inside bt;et
+================================================================================
+
+bt;
+select * from db.table2;
+.if errorcode <> 0 then .quit 1
+select * from db.table3;
+et;
+
+--------------------------------------------------------------------------------
+    (program
+      (transaction
+        (keyword_bt)
+        (statement
+          (select
+            (keyword_select)
+            (select_expression
+              (term
+                (all_fields))))
+          (from
+            (keyword_from)
+            (relation
+              (object_reference
+                (identifier)
+                (identifier)))))
+        (bteq_statement
+          (keyword_dot_if)
+          (binary_expression
+            (field
+              (identifier))
+            (literal))
+          (keyword_then)
+          (bteq_statement
+            (keyword_dot_quit)))
+        (statement
+          (select
+            (keyword_select)
+            (select_expression
+              (term
+                (all_fields))))
+          (from
+            (keyword_from)
+            (relation
+              (object_reference
+                (identifier)
+                (identifier)))))
+        (keyword_et)))
+
+================================================================================
+full if
+================================================================================
+
+select * from db.table1;
+.if errorcode <> 0 then .goto plop
+select * from db.table2;
+
+.label plop
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (all_fields))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)
+              (identifier)))))
+      (bteq_statement
+        (keyword_dot_if)
+        (binary_expression
+          (field
+            (identifier))
+          (literal))
+        (keyword_then)
+        (bteq_statement
+          (keyword_dot_goto)
+          (object_reference
+            (identifier))))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (all_fields))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)
+              (identifier)))))
+      (bteq_statement
+        (keyword_dot_label)
+        (object_reference
+          (identifier))))
+

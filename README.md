@@ -28,3 +28,6 @@ cp sql.so .../parser/sql.so
 cp queries/*.scm .../queries/sql/*.scm
 ```
 
+## BTEQ
+
+Minimal support for BTEQ commands: If, Logon, Logoff, Exit, Quit, Goto, Label

@@ -50,16 +50,20 @@ module.exports = grammar({
       repeat(
         seq(
           choice(
-            $.transaction,
-            $.statement,
-            $.block,
+            seq(choice(
+              $.transaction,
+              $.statement,
+              $.block,
+            ),
+            ';',
+            ),
+            seq($.bteq_statement, optional(';')),
           ),
-          ';',
         ),
       ),
       // optionally, a single statement without a terminating ;
       optional(
-        $.statement,
+          $.statement,
       ),
     ),
 
@@ -93,7 +97,6 @@ module.exports = grammar({
     keyword_replace: _ => make_keyword("replace"),
     keyword_update: _ => make_keyword("update"),
     keyword_upd: _ => make_keyword("upd"),
-    keyword_truncate: _ => make_keyword("truncate"),
     keyword_merge: _ => make_keyword("merge"),
     keyword_show: _ => make_keyword("show"),
     keyword_unload: _ => make_keyword("unload"),
@@ -112,8 +115,6 @@ module.exports = grammar({
     keyword_outer: _ => make_keyword("outer"),
     keyword_cross: _ => make_keyword("cross"),
     keyword_join: _ => make_keyword("join"),
-    keyword_lateral: _ => make_keyword("lateral"),
-    keyword_natural: _ => make_keyword("natural"),
     keyword_on: _ => make_keyword("on"),
     keyword_off: _ => make_keyword("off"),
     keyword_where: _ => make_keyword("where"),
@@ -128,9 +129,7 @@ module.exports = grammar({
     keyword_create: _ => make_keyword("create"),
     keyword_alter: _ => make_keyword("alter"),
     keyword_change: _ => make_keyword("change"),
-    keyword_analyze: _ => make_keyword("analyze"),
     keyword_explain: _ => make_keyword("explain"),
-    keyword_verbose: _ => make_keyword("verbose"),
     keyword_modify: _ => make_keyword("modify"),
     keyword_drop: _ => make_keyword("drop"),
     keyword_add: _ => make_keyword("add"),
@@ -138,7 +137,6 @@ module.exports = grammar({
     keyword_tables: _ => make_keyword("tables"),
     keyword_view: _ => make_keyword("view"),
     keyword_column: _ => make_keyword("column"),
-    keyword_columns: _ => make_keyword("columns"),
     keyword_materialized: _ => make_keyword("materialized"),
     keyword_tablespace: _ => make_keyword("tablespace"),
     keyword_sequence: _ => make_keyword("sequence"),
@@ -194,7 +192,6 @@ module.exports = grammar({
     keyword_rename: _ => make_keyword("rename"),
     keyword_to: _ => make_keyword("to"),
     keyword_database: _ => make_keyword("database"),
-    keyword_schema: _ => make_keyword("schema"),
     keyword_owner: _ => make_keyword("owner"),
     keyword_user: _ => make_keyword("user"),
     keyword_admin: _ => make_keyword("admin"),
@@ -264,12 +261,10 @@ module.exports = grammar({
     keyword_low_priority: _ => make_keyword("low_priority"),
     keyword_delayed: _ => make_keyword("delayed"),
     keyword_recursive: _ => make_keyword("recursive"),
-    keyword_cascaded: _ => make_keyword("cascaded"),
     keyword_local: _ => make_keyword("local"),
     keyword_current_timestamp: _ => make_keyword("current_timestamp"),
     keyword_check: _ => make_keyword("check"),
     keyword_option: _ => make_keyword("option"),
-    keyword_vacuum: _ => make_keyword("vacuum"),
     keyword_wait: _ => make_keyword("wait"),
     keyword_nowait: _ => make_keyword("nowait"),
     keyword_attribute: _ => make_keyword("attribute"),
@@ -305,10 +300,6 @@ module.exports = grammar({
     keyword_immutable: _ => make_keyword("immutable"),
     keyword_stable: _ => make_keyword("stable"),
     keyword_volatile: _ => make_keyword("volatile"),
-    keyword_parallel: _ => make_keyword("parallel"),
-    keyword_safe: _ => make_keyword("safe"),
-    keyword_unsafe: _ => make_keyword("unsafe"),
-    keyword_restricted: _ => make_keyword("restricted"),
     keyword_called: _ => make_keyword("called"),
     keyword_input: _ => make_keyword("input"),
     keyword_strict: _ => make_keyword("strict"),
@@ -324,6 +315,7 @@ module.exports = grammar({
     keyword_inout: _ => make_keyword("inout"),
     keyword_variadic: _ => make_keyword("variadic"),
     keyword_ordinality: _ => make_keyword("ordinality"),
+    keyword_csv: _ => make_keyword("csv"),
 
     keyword_session: _ => make_keyword("session"),
     keyword_isolation: _ => make_keyword("isolation"),
@@ -365,13 +357,8 @@ module.exports = grammar({
     keyword_uncached: _ => make_keyword("uncached"),
     keyword_replication: _ => make_keyword("replication"),
     keyword_tblproperties: _ => make_keyword("tblproperties"),
-    keyword_compute: _ => make_keyword("compute"),
     keyword_stats: _ => make_keyword("stats"),
     keyword_statistics: _ => make_keyword("statistics"),
-    keyword_optimize: _ => make_keyword("optimize"),
-    keyword_rewrite: _ => make_keyword("rewrite"),
-    keyword_bin_pack: _ => make_keyword("bin_pack"),
-    keyword_incremental: _ => make_keyword("incremental"),
     keyword_location: _ => make_keyword("location"),
     keyword_partitioned: _ => make_keyword("partitioned"),
     keyword_comment: _ => make_keyword("comment"),
@@ -384,19 +371,6 @@ module.exports = grammar({
     keyword_escaped: _ => make_keyword("escaped"),
     keyword_lines: _ => make_keyword("lines"),
     keyword_cache: _ => make_keyword("cache"),
-    keyword_metadata: _ => make_keyword("metadata"),
-    keyword_noscan: _ => make_keyword("noscan"),
-
-    // Hive file formats
-    keyword_parquet: _ => make_keyword("parquet"),
-    keyword_rcfile: _ => make_keyword("rcfile"),
-    keyword_csv: _ => make_keyword("csv"),
-    keyword_textfile: _ => make_keyword("textfile"),
-    keyword_avro: _ => make_keyword("avro"),
-    keyword_sequencefile: _ => make_keyword("sequencefile"),
-    keyword_orc: _ => make_keyword("orc"),
-    keyword_avro: _ => make_keyword("avro"),
-    keyword_jsonfile: _ => make_keyword("jsonfile"),
 
     // Teradata shortcut
     _exec: $ => choice($.keyword_execute, $.keyword_exec),
@@ -404,6 +378,16 @@ module.exports = grammar({
     _update: $ => choice($.keyword_update, $.keyword_upd),
     _delete: $ => choice($.keyword_delete, $.keyword_del),
     _insert: $ => choice($.keyword_insert, $.keyword_ins),
+
+
+    keyword_dot_goto: _ => make_keyword(".goto"),
+    keyword_dot_label: _ => make_keyword(".label"),
+    keyword_dot_if: _ => make_keyword(".if"),
+    keyword_dot_quit: _ => make_keyword(".quit"),
+    keyword_dot_exit: _ => make_keyword(".exit"),
+    keyword_dot_logoff: _ => make_keyword(".logoff"),
+    keyword_dot_logon: _ => make_keyword(".logon"),
+    keyword_dollar_tdwallet: _ => make_keyword("$tdwallet"),
     // Operators
     is_not: $ => prec.left(seq($.keyword_is, $.keyword_not)),
     not_like: $ => seq($.keyword_not, $.keyword_like),
@@ -680,9 +664,12 @@ module.exports = grammar({
     transaction: $ => seq(
       seq($.keyword_bt, ';'),
       repeat(
-        seq(
-          $.statement,
-          ';'
+        choice(
+          seq(
+            $.statement,
+            ';'
+          ),
+          seq($.bteq_statement, optional(';')),
         ),
       ),
       choice(
@@ -716,8 +703,6 @@ module.exports = grammar({
       seq(
         optional(seq(
           $.keyword_explain,
-          optional($.keyword_analyze),
-          optional($.keyword_verbose),
         )),
         optional($.lock_clause),
         choice(
@@ -735,12 +720,41 @@ module.exports = grammar({
       $._alter_statement,
       $._drop_statement,
       $._rename_statement,
-      $._optimize_statement,
       $._merge_statement,
       $.comment_statement,
       $.set_statement,
       $.reset_statement,
     ),
+
+
+
+  bteq_statement: $ => choice(
+    $._bteq_if_statement,
+    $._goto_statement,
+    $._logon_statement,
+    $._quit_statement,
+    $._label_statement,
+    $.keyword_dot_exit,
+    $.keyword_dot_logoff
+  ),
+
+  _bteq_if_statement: $ => seq(
+    $.keyword_dot_if,
+    $._expression,
+    $.keyword_then,
+    $.bteq_statement,
+  ),
+
+  _label_statement: $ => seq($.keyword_dot_label, $.object_reference),
+  _goto_statement: $ => seq($.keyword_dot_goto, $.object_reference),
+  _quit_statement: $ => seq($.keyword_dot_quit, $._integer),
+  _logon_statement: $ => seq($.keyword_dot_logon, $.object_reference, '/', $.object_reference, ',' ,
+                            choice(
+                              seq(optional('\\'), $.keyword_dollar_tdwallet, wrapped_in_parenthesis($.object_reference)),
+                              $.object_reference,
+                            )
+                          ),
+
 
     _cte: $ => seq(
         $.keyword_with,
@@ -763,7 +777,6 @@ module.exports = grammar({
           $._delete_statement,
           $._insert_statement,
           $._update_statement,
-          $._truncate_statement,
           $._copy_statement,
           $._macro_statement,
           $._abort_statement,
@@ -815,22 +828,6 @@ module.exports = grammar({
           $.object_reference,
           )
         )
-    ),
-
-    _show_create: $ => seq(
-      $.keyword_create,
-      choice(
-        // Trino/Presto/MySQL
-        $.keyword_schema,
-        $.keyword_table,
-        seq(optional($.keyword_materialized), $.keyword_view),
-        // MySQL
-        $.keyword_user,
-        $.keyword_trigger,
-        $.keyword_procedure,
-        $.keyword_function
-      ),
-      $.object_reference
     ),
 
     cte: $ => seq(
@@ -960,7 +957,6 @@ module.exports = grammar({
       seq($.keyword_role, $.identifier),
       // TODO: routine
       // TODO: rule
-      seq($.keyword_schema, $.identifier),
       seq($.keyword_sequence, $.object_reference),
       // TODO: server
       // TODO: statistics
@@ -1029,13 +1025,6 @@ module.exports = grammar({
       optional($._alias),
     ),
 
-    _truncate_statement: $ => seq(
-      $.keyword_truncate,
-      optional($.keyword_table),
-      comma_list($.object_reference),
-      optional($._drop_behavior),
-    ),
-
     _delete_statement: $ => seq(
       choice(
         seq(
@@ -1077,16 +1066,11 @@ module.exports = grammar({
         $.create_sequence,
         $.create_extension,
         $.create_trigger,
-        prec.left(seq(
-          $.create_schema,
-          repeat($._create_statement),
-        )),
       ),
     ),
 
     _table_settings: $ => choice(
       $.table_partition,
-      $.stored_as,
       $.storage_location,
       $.table_sort,
       $.row_format,
@@ -1197,7 +1181,6 @@ module.exports = grammar({
                 $.keyword_off,
               ),
             ),
-            seq($.keyword_schema, $.literal),
             seq($.keyword_names, $.literal),
             seq($.keyword_time, $.keyword_zone, choice($.literal, $.keyword_local, $.keyword_default)),
             seq($.keyword_session, $.keyword_authorization, choice($.identifier, $.keyword_default)),
@@ -1229,10 +1212,7 @@ module.exports = grammar({
           seq(
             $.keyword_with,
             optional(
-              choice(
                 $.keyword_local,
-                $.keyword_cascaded,
-              )
             ),
             $._check_option,
           ),
@@ -1526,22 +1506,6 @@ module.exports = grammar({
       ),
     ),
 
-    create_schema: $ => prec.left(seq(
-      $.keyword_create,
-      $.keyword_schema,
-      choice(
-        seq(
-          optional($._if_not_exists),
-          $.identifier,
-          optional(seq($.keyword_authorization, $.identifier)),
-        ),
-        seq(
-          $.keyword_authorization,
-          $.identifier,
-        ),
-      ),
-    )),
-
     _with_settings: $ => seq(
           field('name', $.identifier),
           optional('='),
@@ -1639,7 +1603,6 @@ module.exports = grammar({
       optional($._if_not_exists),
       $.identifier,
       optional($.keyword_with),
-      optional(seq($.keyword_schema, $.identifier)),
       optional(seq($.keyword_version, choice($.identifier, alias($._literal_string, $.literal)))),
       optional($.keyword_cascade),
     ),
@@ -1703,7 +1666,6 @@ module.exports = grammar({
         ),
       ),
       $._delete,
-      $.keyword_truncate,
     ),
 
     create_type: $ => seq(
@@ -1747,7 +1709,6 @@ module.exports = grammar({
       choice(
         $.alter_table,
         $.alter_view,
-        $.alter_schema,
         $.alter_type,
         $.alter_index,
         $.alter_database,
@@ -1818,7 +1779,6 @@ module.exports = grammar({
       $.drop_column,
       $.rename_object,
       $.rename_column,
-      $.set_schema,
       $.change_ownership,
     ),
 
@@ -1958,21 +1918,8 @@ module.exports = grammar({
         // TODO Postgres allows a single "alter column" to set or drop default
         $.rename_object,
         $.rename_column,
-        $.set_schema,
         $.change_ownership,
       ),
-    ),
-
-    alter_schema: $ => seq(
-      $.keyword_alter,
-      $.keyword_schema,
-      $.identifier,
-      choice(
-        $.keyword_rename,
-        $.keyword_owner,
-      ),
-      $.keyword_to,
-      $.identifier,
     ),
 
     alter_database: $ => seq(
@@ -2093,10 +2040,7 @@ module.exports = grammar({
         $.change_ownership,
         seq(
           $.keyword_set,
-          choice(
             choice($.keyword_logged, $.keyword_unlogged),
-            seq($.keyword_schema, $.identifier)
-          ),
         ),
       ),
     ),
@@ -2107,7 +2051,6 @@ module.exports = grammar({
       $.identifier,
       choice(
         $.change_ownership,
-        $.set_schema,
         $.rename_object,
         seq(
           $.keyword_rename,
@@ -2174,7 +2117,6 @@ module.exports = grammar({
         $.drop_view,
         $.drop_index,
         $.drop_type,
-        $.drop_schema,
         $.drop_database,
         $.drop_role,
         $.drop_sequence,
@@ -2197,14 +2139,6 @@ module.exports = grammar({
       optional($._if_exists),
       $.object_reference,
       optional($._drop_behavior),
-    ),
-
-    drop_schema: $ => seq(
-      $.keyword_drop,
-      $.keyword_schema,
-      optional($._if_exists),
-      $.identifier,
-      optional($._drop_behavior)
     ),
 
     drop_database: $ => seq(
@@ -2278,12 +2212,6 @@ module.exports = grammar({
       $.keyword_rename,
       $.keyword_to,
       $.object_reference,
-    ),
-
-    set_schema: $ => seq(
-      $.keyword_set,
-      $.keyword_schema,
-      field('schema', $.identifier),
     ),
 
     change_ownership: $ => seq(
@@ -2535,101 +2463,6 @@ module.exports = grammar({
       )
     ),
 
-    _optimize_statement: $ => choice(
-      $._compute_stats,
-      $._vacuum_table,
-      $._optimize_table,
-    ),
-
-    // Compute stats for Impala and Hive
-    _compute_stats: $ => choice(
-      // Hive
-      seq(
-        $.keyword_analyze,
-        $.keyword_table,
-        $.object_reference,
-        optional($._partition_spec),
-        $.keyword_compute,
-        $.keyword_statistics,
-        optional(
-          seq(
-            $.keyword_for,
-            $.keyword_columns
-          )
-        ),
-        optional(
-          seq(
-            $.keyword_cache,
-            $.keyword_metadata
-          )
-        ),
-        optional($.keyword_noscan),
-      ),
-      // Impala
-      seq(
-        $.keyword_compute,
-        optional(
-          $.keyword_incremental,
-        ),
-        $.keyword_stats,
-        $.object_reference,
-        optional(
-          choice(
-            paren_list(repeat1($.field)),
-            $._partition_spec,
-          )
-        )
-      ),
-    ),
-
-    _optimize_table: $ => choice(
-      // Athena/Iceberg
-      seq(
-        $.keyword_optimize,
-        $.object_reference,
-        $.keyword_rewrite,
-        $.keyword_data,
-        $.keyword_using,
-        $.keyword_bin_pack,
-        optional(
-          $.where,
-        )
-      ),
-      // MariaDB Optimize
-      seq(
-        $.keyword_optimize,
-        optional(
-          choice(
-            $.keyword_local,
-            //$.keyword_no_write_to_binlog,
-          )
-        ),
-        $.keyword_table,
-        $.object_reference,
-        repeat(seq(',', $.object_reference)),
-      ),
-    ),
-
-    _vacuum_table: $ => seq(
-      $.keyword_vacuum,
-      optional($._vacuum_option),
-      $.object_reference,
-      optional(
-        paren_list($.field)
-      ),
-    ),
-
-    _vacuum_option: $ => choice(
-      seq($.keyword_full, optional(choice($.keyword_true, $.keyword_false))),
-      seq($.keyword_parallel, optional(choice($.keyword_true, $.keyword_false))),
-      seq($.keyword_analyze, optional(choice($.keyword_true, $.keyword_false))),
-      // seq($.keyword_freeze, choice($.keyword_true, $.keyword_false)),
-      // seq($.keyword_skip_locked, choice($.keyword_true, $.keyword_false)),
-      // seq($.keyword_truncate, choice($.keyword_true, $.keyword_false)),
-      // seq($.keyword_disable_page_skipping, choice($.keyword_true, $.keyword_false)),
-      // seq($.keyword_process_toast, choice($.keyword_true, $.keyword_false)),
-      // seq($.keyword_index_cleanup, choice($.keyword_auto, $.keyword_on, $.keyword_off)),
-    ),
 
     // TODO: this does not account for partitions specs like
     // (partcol1='2022-01-01', hr=11)
@@ -2781,21 +2614,6 @@ module.exports = grammar({
       field('key',$.identifier),
       '=',
       field('value', alias($._literal_string, $.literal)),
-    ),
-
-    stored_as: $ => seq(
-        $.keyword_stored,
-        $.keyword_as,
-        choice(
-            $.keyword_parquet,
-            $.keyword_csv,
-            $.keyword_sequencefile,
-            $.keyword_textfile,
-            $.keyword_rcfile,
-            $.keyword_orc,
-            $.keyword_avro,
-            $.keyword_jsonfile,
-        ),
     ),
 
     assignment: $ => seq(
@@ -3302,8 +3120,6 @@ module.exports = grammar({
         choice(
           $.join,
           $.cross_join,
-          $.lateral_join,
-          $.lateral_cross_join,
         ),
       ),
       optional($.where),
@@ -3363,7 +3179,6 @@ module.exports = grammar({
     ),
 
     join: $ => seq(
-      optional($.keyword_natural),
       optional(
         choice(
           $.keyword_left,
@@ -3410,57 +3225,6 @@ module.exports = grammar({
           )
         )
       )
-    ),
-
-    lateral_join: $ => seq(
-      optional(
-        choice(
-          // lateral joins cannot be right!
-          $.keyword_left,
-          seq($.keyword_left, $.keyword_outer),
-          $.keyword_inner,
-        ),
-      ),
-      $.keyword_join,
-      $.keyword_lateral,
-      choice(
-        $.invocation,
-        $.subquery,
-      ),
-      optional(
-        choice(
-          seq(
-            $.keyword_as,
-            field('alias', $.identifier),
-          ),
-          field('alias', $.identifier),
-        ),
-      ),
-      $.keyword_on,
-      choice(
-        $._expression,
-        $.keyword_true,
-        $.keyword_false,
-      ),
-    ),
-
-    lateral_cross_join: $ => seq(
-      $.keyword_cross,
-      $.keyword_join,
-      $.keyword_lateral,
-      choice(
-        $.invocation,
-        $.subquery,
-      ),
-      optional(
-        choice(
-          seq(
-            $.keyword_as,
-            field('alias', $.identifier),
-          ),
-          field('alias', $.identifier),
-        ),
-      ),
     ),
 
     where: $ => seq(
@@ -3829,13 +3593,14 @@ module.exports = grammar({
       $._double_quote_string,
       $._tsql_parameter,
       seq("`", $._identifier, "`"),
-      $._interpolated_identifier1,
       $._interpolated_identifier,
+      $._interpolated_identifier1,
       $._macro_identifier,
     ),
     _tsql_parameter: $ => seq('@', $._identifier),
     _identifier: _ => /[a-zA-Z_][0-9a-zA-Z_]*/,
     _macro_identifier: _ => /\:[a-zA-Z_][0-9a-zA-Z_]*/,
+  //TODO reword identifier regex
     _interpolated_identifier1: _ => /\$\{[a-zA-Z_][0-9a-zA-Z_]*\}/,
     _interpolated_identifier: _ => /\$\{[a-zA-Z_][0-9a-zA-Z_]*\}_[a-zA-Z_][0-9a-zA-Z_]*/,
     encoding_identifier: _ => /[a-zA-Z_][0-9a-zA-Z_]*_TO_[a-zA-Z_][0-9a-zA-Z_]*/,

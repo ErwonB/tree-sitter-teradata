@@ -195,24 +195,6 @@ DROP INDEX CONCURRENTLY IF EXISTS idx RESTRICT ON tbl;
         name: (identifier)))))
 
 ================================================================================
-Drop schema
-================================================================================
-
-DROP SCHEMA IF EXISTS myschema CASCADE;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (drop_schema
-      (keyword_drop)
-      (keyword_schema)
-      (keyword_if)
-      (keyword_exists)
-      (identifier)
-      (keyword_cascade))))
-
-================================================================================
 Drop Database
 ================================================================================
 
