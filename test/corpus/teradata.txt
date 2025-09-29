@@ -385,3 +385,22 @@ where not exists (select 1 from db.table1 where field1 = :arg1);
                         (field
                           (identifier))))))))))))
 
+================================================================================
+(title '')
+================================================================================
+
+select 'plop' (title '');
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (attribute_expression
+                (literal)
+                (parenthesized_attribute
+                  (keyword_title)
+                  (literal))))))))

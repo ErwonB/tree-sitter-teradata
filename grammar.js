@@ -136,6 +136,8 @@ module.exports = grammar({
     keyword_table: _ => make_keyword("table"),
     keyword_tables: _ => make_keyword("tables"),
     keyword_view: _ => make_keyword("view"),
+    keyword_format: _ => make_keyword("format"),
+    keyword_title: _ => make_keyword("title"),
     keyword_column: _ => make_keyword("column"),
     keyword_materialized: _ => make_keyword("materialized"),
     keyword_tablespace: _ => make_keyword("tablespace"),
@@ -362,7 +364,6 @@ module.exports = grammar({
     keyword_partitioned: _ => make_keyword("partitioned"),
     keyword_comment: _ => make_keyword("comment"),
     keyword_sort: _ => make_keyword("sort"),
-    keyword_format: _ => make_keyword("format"),
     keyword_delimited: _ => make_keyword("delimited"),
     keyword_delimiter: _ => make_keyword("delimiter"),
     keyword_fields: _ => make_keyword("fields"),
@@ -2935,6 +2936,7 @@ module.exports = grammar({
           field('parameter', $._expression),
           $.keyword_as,
           $._type,
+          //TODO CHARACTER SET
           optional(seq($.keyword_format, $._literal_string)),
         ),
       ),
@@ -3301,8 +3303,20 @@ module.exports = grammar({
         $.parenthesized_expression,
         $.object_id,
         $.interval_expression,
+        $.attribute_expression,
       )
     ),
+
+    parenthesized_attribute: $ => wrapped_in_parenthesis(seq(
+      choice($.keyword_title, $.keyword_format),
+      $._expression,
+    )),
+
+    attribute_expression: $ => prec.left(2, seq(
+      field('expression', $._expression),
+      field('attribute', $.parenthesized_attribute)
+    )),
+
 
     table_function: $ => seq($.keyword_table,
       wrapped_in_parenthesis($._table_expression),
