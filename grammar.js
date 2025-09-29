@@ -75,6 +75,7 @@ module.exports = grammar({
     keyword_qualify: _ => make_keyword("qualify"),
     keyword_macro: _ => make_keyword("macro"),
     keyword_lock: _ => make_keyword("lock"),
+    keyword_locking: _ => make_keyword("locking"),
     keyword_access: _ => make_keyword("access"),
     keyword_nonsequenced: _ => make_keyword("nonsequenced"),
     keyword_transactiontime: _ => make_keyword("transactiontime"),
@@ -378,6 +379,7 @@ module.exports = grammar({
     _update: $ => choice($.keyword_update, $.keyword_upd),
     _delete: $ => choice($.keyword_delete, $.keyword_del),
     _insert: $ => choice($.keyword_insert, $.keyword_ins),
+    _lock: $ => choice($.keyword_lock, $.keyword_locking),
 
 
     keyword_dot_goto: _ => make_keyword(".goto"),
@@ -990,9 +992,9 @@ module.exports = grammar({
         ),
 
     lock_clause: $ => choice(
-      seq($.keyword_lock, $.keyword_row, $.keyword_for, $.keyword_access),
+      seq($._lock, $.keyword_row, $.keyword_for, $.keyword_access),
         repeat1(
-          seq($.keyword_lock, choice($.keyword_table, $.keyword_view), $.object_reference, $.keyword_for,
+          seq($._lock, choice($.keyword_table, $.keyword_view), $.object_reference, $.keyword_for,
             choice($.keyword_read, $.keyword_write, $.keyword_access)),
           ),
       ),

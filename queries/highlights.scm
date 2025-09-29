@@ -155,6 +155,7 @@
   (keyword_top)
   (keyword_percent)
   (keyword_lock)
+  (keyword_locking)
   (keyword_macro)
   (keyword_access)
   (keyword_nonsequenced)
