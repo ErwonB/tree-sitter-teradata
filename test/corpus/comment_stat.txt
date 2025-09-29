@@ -107,26 +107,6 @@ COMMENT ON CAST (varchar AS text) IS "convert varchar to text";
       (literal))))
 
 ================================================================================
-Comment on materialized view
-================================================================================
-
-COMMENT ON MATERIALIZED VIEW matview IS "this view is materialized";
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (comment_statement
-      (keyword_comment)
-      (keyword_on)
-      (keyword_materialized)
-      (keyword_view)
-      (object_reference
-        (identifier))
-      (keyword_is)
-      (literal))))
-
-================================================================================
 Comment on trigger
 ================================================================================
 

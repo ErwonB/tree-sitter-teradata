@@ -463,7 +463,7 @@ WHERE (
 Basic SQL function creation
 ================================================================================
 
-create or replace function public.fn()
+replace function public.fn()
  returns int
  language sql
 return 1;
@@ -473,8 +473,6 @@ return 1;
 (program
   (statement
     (create_function
-      (keyword_create)
-      (keyword_or)
       (keyword_replace)
       (keyword_function)
       (object_reference
@@ -495,7 +493,7 @@ return 1;
 With arguments
 ================================================================================
 
-create or replace function public.fn(one int, two text)
+replace function public.fn(one int, two text)
  returns int
  language sql
 return 1;
@@ -505,8 +503,6 @@ return 1;
 (program
   (statement
     (create_function
-      (keyword_create)
-      (keyword_or)
       (keyword_replace)
       (keyword_function)
       (object_reference
@@ -534,7 +530,7 @@ return 1;
 Function details
 ================================================================================
 
-create or replace function public.fn()
+replace function public.fn()
   returns int
   language sql
   immutable
@@ -548,8 +544,6 @@ return 1;
 (program
   (statement
     (create_function
-      (keyword_create)
-      (keyword_or)
       (keyword_replace)
       (keyword_function)
       (object_reference
@@ -578,7 +572,7 @@ return 1;
 Function details, specified after string body
 ================================================================================
 
-create or replace function public.fn()
+replace function public.fn()
   returns int
   as $$select 1$$
   language sql
@@ -592,8 +586,6 @@ create or replace function public.fn()
 (program
   (statement
     (create_function
-      (keyword_create)
-      (keyword_or)
       (keyword_replace)
       (keyword_function)
       (object_reference
@@ -633,7 +625,7 @@ create or replace function public.fn()
 With a string body
 ================================================================================
 
-create or replace function public.fn()
+replace function public.fn()
   returns int
   language sql
 as 'select 1;';
@@ -643,8 +635,6 @@ as 'select 1;';
 (program
   (statement
     (create_function
-      (keyword_create)
-      (keyword_or)
       (keyword_replace)
       (keyword_function)
       (object_reference
@@ -665,7 +655,7 @@ as 'select 1;';
 Precedence between string body and `create table` with string options
 ================================================================================
 
-create or replace function public.fn()
+replace function public.fn()
   returns int
   language sql
 as 'create table x (id int) row_format=dynamic';
@@ -675,8 +665,6 @@ as 'create table x (id int) row_format=dynamic';
 (program
   (statement
     (create_function
-      (keyword_create)
-      (keyword_or)
       (keyword_replace)
       (keyword_function)
       (object_reference
@@ -697,7 +685,7 @@ as 'create table x (id int) row_format=dynamic';
 With `begin atomic`
 ================================================================================
 
-create or replace function public.fn()
+replace function public.fn()
   returns int
   language sql
 begin atomic
@@ -709,8 +697,6 @@ end;
 (program
   (statement
     (create_function
-      (keyword_create)
-      (keyword_or)
       (keyword_replace)
       (keyword_function)
       (object_reference
@@ -734,7 +720,7 @@ end;
 Dollar quoting a simple PLPGSQL body
 ================================================================================
 
-create or replace function public.fn()
+replace function public.fn()
   returns int
   language plpgsql
 as $function$
@@ -748,8 +734,6 @@ $function$;
 (program
   (statement
     (create_function
-      (keyword_create)
-      (keyword_or)
       (keyword_replace)
       (keyword_function)
       (object_reference
@@ -775,7 +759,7 @@ $function$;
 Variable declarations
 ================================================================================
 
-create or replace function public.fn()
+replace function public.fn()
   returns int
   language plpgsql
 as $function$
@@ -793,8 +777,6 @@ $function$;
 (program
   (statement
     (create_function
-      (keyword_create)
-      (keyword_or)
       (keyword_replace)
       (keyword_function)
       (object_reference
@@ -838,7 +820,7 @@ $function$;
 SQL function creation with complex arguments
 ================================================================================
 
-create or replace function public.fn(IN arg1 text, OUT arg2 int DEFAULT 12, IN OUT arg3 text = 'test')
+replace function public.fn(IN arg1 text, OUT arg2 int DEFAULT 12, IN OUT arg3 text = 'test')
  returns int
  language sql
 return 1;
@@ -848,8 +830,6 @@ return 1;
 (program
   (statement
     (create_function
-      (keyword_create)
-      (keyword_or)
       (keyword_replace)
       (keyword_function)
       (object_reference
@@ -887,7 +867,7 @@ return 1;
 Function body with a $$ string literal
 ================================================================================
 
-create or replace function public.do_stuff()
+replace function public.do_stuff()
   returns trigger
   language plpgsql
 as $a$
@@ -901,8 +881,6 @@ $a$
 (program
   (statement
     (create_function
-      (keyword_create)
-      (keyword_or)
       (keyword_replace)
       (keyword_function)
       (object_reference
@@ -927,7 +905,7 @@ $a$
 Function body with non alphabetic dollar quoted tags
 ================================================================================
 
-create or replace function public.do_stuff()
+replace function public.do_stuff()
   returns trigger
   language plpgsql
 as $_$
@@ -941,8 +919,6 @@ $_$
 (program
   (statement
     (create_function
-      (keyword_create)
-      (keyword_or)
       (keyword_replace)
       (keyword_function)
       (object_reference
@@ -1227,3 +1203,161 @@ order by 1;
               (literal))))))
 
 
+================================================================================
+teradata function
+================================================================================
+
+REPLACE FUNCTION fct.Conversion_EBCDIC_18Z9(P_MONTANT VARCHAR(48))
+RETURNS Decimal(18,9) LANGUAGE SQL CONTAINS SQL
+RETURNS NULL
+    ON NULL INPUT DETERMINISTIC SQL SECURITY DEFINER COLLATION INVOKER INLINE TYPE 1 RETURN cast((
+CASE    substr(P_MONTANT, length(P_MONTANT), 1)
+    WHEN '}'THEN '-'
+    WHEN 'R'THEN '-'
+    ELSE '+'
+END || substr(P_MONTANT, 1, COALESCE(length(P_MONTANT), 1)-1) ||
+CASE    substr(P_MONTANT, length(P_MONTANT),1)
+    WHEN 'A' THEN '1'
+    WHEN 'C'THEN '3'
+    ELSE '0'
+END)as DECIMAL(18,9))/1000000000;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (create_function
+          (keyword_replace)
+          (keyword_function)
+          (object_reference
+            (identifier)
+            (identifier))
+          (function_arguments
+            (function_argument
+              (identifier)
+              (varchar
+                (keyword_varchar)
+                (literal))))
+          (keyword_returns)
+          (decimal
+            (keyword_decimal)
+            (literal)
+            (literal))
+          (function_language
+            (keyword_language)
+            (identifier)
+            (keyword_contains)
+            (identifier))
+          (function_strictness
+            (keyword_returns)
+            (keyword_null)
+            (keyword_on)
+            (keyword_null)
+            (keyword_input))
+          (function_deterministic
+            (keyword_deterministic))
+          (function_security
+            (keyword_sql)
+            (keyword_security)
+            (keyword_definer))
+          (function_mandatory
+            (keyword_collation)
+            (keyword_invoker))
+          (function_mandatory
+            (keyword_inline)
+            (keyword_type))
+          (function_body
+            (keyword_return)
+            (binary_expression
+              (cast
+                (keyword_cast)
+                (parenthesized_expression
+                  (binary_expression
+                    (binary_expression
+                      (case
+                        (keyword_case)
+                        (invocation
+                          (object_reference
+                            (identifier))
+                          (term
+                            (field
+                              (identifier)))
+                          (term
+                            (invocation
+                              (object_reference
+                                (identifier))
+                              (term
+                                (field
+                                  (identifier)))))
+                          (term
+                            (literal)))
+                        (keyword_when)
+                        (literal)
+                        (keyword_then)
+                        (literal)
+                        (keyword_when)
+                        (literal)
+                        (keyword_then)
+                        (literal)
+                        (keyword_else)
+                        (literal)
+                        (keyword_end))
+                      (op_other)
+                      (invocation
+                        (object_reference
+                          (identifier))
+                        (term
+                          (field
+                            (identifier)))
+                        (term
+                          (literal))
+                        (term
+                          (binary_expression
+                            (invocation
+                              (object_reference
+                                (identifier))
+                              (term
+                                (invocation
+                                  (object_reference
+                                    (identifier))
+                                  (term
+                                    (field
+                                      (identifier)))))
+                              (term
+                                (literal)))
+                            (literal)))))
+                    (op_other)
+                    (case
+                      (keyword_case)
+                      (invocation
+                        (object_reference
+                          (identifier))
+                        (term
+                          (field
+                            (identifier)))
+                        (term
+                          (invocation
+                            (object_reference
+                              (identifier))
+                            (term
+                              (field
+                                (identifier)))))
+                        (term
+                          (literal)))
+                      (keyword_when)
+                      (literal)
+                      (keyword_then)
+                      (literal)
+                      (keyword_when)
+                      (literal)
+                      (keyword_then)
+                      (literal)
+                      (keyword_else)
+                      (literal)
+                      (keyword_end))))
+                (keyword_as)
+                (decimal
+                  (keyword_decimal)
+                  (literal)
+                  (literal)))
+              (literal))))))

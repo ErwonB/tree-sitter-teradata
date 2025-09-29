@@ -140,7 +140,6 @@ module.exports = grammar({
     keyword_format: _ => make_keyword("format"),
     keyword_title: _ => make_keyword("title"),
     keyword_column: _ => make_keyword("column"),
-    keyword_materialized: _ => make_keyword("materialized"),
     keyword_tablespace: _ => make_keyword("tablespace"),
     keyword_sequence: _ => make_keyword("sequence"),
     keyword_increment: _ => make_keyword("increment"),
@@ -299,6 +298,7 @@ module.exports = grammar({
     keyword_atomic: _ => make_keyword("atomic"),
     keyword_declare: _ => make_keyword("declare"),
     keyword_language: _ => make_keyword("language"),
+    keyword_contains: _ => make_keyword("contains"),
     keyword_immutable: _ => make_keyword("immutable"),
     keyword_stable: _ => make_keyword("stable"),
     keyword_volatile: _ => make_keyword("volatile"),
@@ -309,6 +309,10 @@ module.exports = grammar({
     keyword_rows: _ => make_keyword("rows"),
     keyword_support: _ => make_keyword("support"),
     keyword_definer: _ => make_keyword("definer"),
+    keyword_sql: _ => make_keyword("sql"),
+    keyword_deterministic: _ => make_keyword("deterministic"),
+    keyword_inline: _ => make_keyword("inline"),
+    keyword_collation: _ => make_keyword("collation"),
     keyword_invoker: _ => make_keyword("invoker"),
     keyword_security: _ => make_keyword("security"),
     keyword_version: _ => make_keyword("version"),
@@ -403,7 +407,6 @@ module.exports = grammar({
     _primary_key: $ => seq($.keyword_primary, $.keyword_key),
     _if_exists: $ => seq($.keyword_if, $.keyword_exists),
     _if_not_exists: $ => seq($.keyword_if, $.keyword_not, $.keyword_exists),
-    _or_replace: $ => seq($.keyword_or, $.keyword_replace),
     _default_null: $ => seq($.keyword_default, $.keyword_null),
     _current_row: $ => seq($.keyword_current, $.keyword_row),
     _exclude_current_row: $ => seq($.keyword_exclude, $.keyword_current, $.keyword_row),
@@ -836,12 +839,6 @@ module.exports = grammar({
       $.identifier,
       optional(paren_list(field("argument", $.identifier))),
       $.keyword_as,
-      optional(
-        seq(
-          optional($.keyword_not),
-          $.keyword_materialized,
-        ),
-      ),
       wrapped_in_parenthesis(
         alias(
           choice($._dml_read, $._dml_write),
@@ -950,7 +947,6 @@ module.exports = grammar({
       seq($.keyword_function, $.object_reference, optional($.function_arguments)),
       seq($.keyword_index, $.object_reference),
       // TODO: large object
-      seq($.keyword_materialized, $.keyword_view, $.object_reference),
       // TODO: operator (|class|family)
       // TODO: policy
       // TODO: (procedural) language
@@ -1058,7 +1054,6 @@ module.exports = grammar({
       choice(
         $.create_table,
         $.create_view,
-        $.create_materialized_view,
         $.create_index,
         $.create_function,
         $.create_type,
@@ -1200,8 +1195,7 @@ module.exports = grammar({
 
     create_view: $ => prec.right(
       seq(
-        $.keyword_create,
-        optional($._or_replace),
+        choice($.keyword_create, $.keyword_replace),
         optional($._temporary),
         optional($.keyword_recursive),
         $.keyword_view,
@@ -1222,40 +1216,13 @@ module.exports = grammar({
       ),
     ),
 
-    create_materialized_view: $ => prec.right(
-      seq(
-        $.keyword_create,
-        optional($._or_replace),
-        $.keyword_materialized,
-        $.keyword_view,
-        optional($._if_not_exists),
-        $.object_reference,
-        $.keyword_as,
-        $.create_query,
-        optional(
-          choice(
-            seq(
-              $.keyword_with,
-              $.keyword_data,
-            ),
-            seq(
-              $.keyword_with,
-              $.keyword_no,
-              $.keyword_data,
-            )
-          )
-        )
-      ),
-    ),
-
     // This is only used in create function statement, it is not needed to check
     // the start tag match the end one. The usage of this syntax in other
     // context is done by _dollar_string.
     dollar_quote: () => /\$[^\$]*\$/,
 
     create_function: $ => seq(
-      $.keyword_create,
-      optional($._or_replace),
+      choice($.keyword_create, $.keyword_replace),
       $.keyword_function,
       $.object_reference,
       $.function_arguments,
@@ -1271,10 +1238,12 @@ module.exports = grammar({
           $.function_language,
           $.function_volatility,
           $.function_security,
+          $.function_mandatory,
           $.function_strictness,
           $.function_cost,
           $.function_rows,
           $.function_support,
+          $.function_deterministic,
         ),
       ),
       // ensure that there's only one function body -- other specifiers are less
@@ -1285,10 +1254,12 @@ module.exports = grammar({
           $.function_language,
           $.function_volatility,
           $.function_security,
+          $.function_mandatory,
           $.function_strictness,
           $.function_cost,
           $.function_rows,
           $.function_support,
+          $.function_deterministic,
         ),
       ),
     ),
@@ -1379,11 +1350,9 @@ module.exports = grammar({
 
     function_language: $ => seq(
       $.keyword_language,
-      // TODO Maybe we should do different version of function_body_statement in
-      // regard to the defined language to match either sql, plsql or
-      // plpgsql. Currently the function_body_statement support only sql.  And
-      // maybe for other language the function_body should be a string.
-      $.identifier
+      $.identifier,
+      optional(seq($.keyword_contains,
+              $.identifier,))
     ),
 
     function_volatility: $ => choice(
@@ -1394,8 +1363,21 @@ module.exports = grammar({
 
     function_security: $ => seq(
       optional($.keyword_external),
+      optional($.keyword_sql),
       $.keyword_security,
       choice($.keyword_invoker, $.keyword_definer),
+    ),
+
+    function_mandatory: $ => seq(
+      choice(
+        seq($.keyword_collation, $.keyword_invoker),
+        seq($.keyword_inline, $.keyword_type, '1')
+      )
+    ),
+
+    function_deterministic: $ => seq(
+      optional($.keyword_not),
+      $.keyword_deterministic,
     ),
 
     function_strictness: $ => choice(
@@ -1610,8 +1592,7 @@ module.exports = grammar({
     ),
 
     create_trigger: $ => seq(
-      $.keyword_create,
-      optional($._or_replace),
+      choice($.keyword_create, $.keyword_replace),
       // mariadb
       optional(seq($.keyword_definer, '=', $.identifier)),
       optional($.keyword_constraint),

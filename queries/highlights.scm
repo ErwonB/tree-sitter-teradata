@@ -88,7 +88,6 @@
 ] @attribute
 
 [
- (keyword_materialized)
  (keyword_recursive)
  (keyword_temp)
  (keyword_global)
@@ -228,6 +227,7 @@
   (keyword_explain)
   (keyword_cache)
   (keyword_language)
+  (keyword_contains)
   (keyword_called)
   (keyword_conflict)
   (keyword_declare)
@@ -271,6 +271,10 @@
   (keyword_valid)
   (keyword_action)
   (keyword_definer)
+  (keyword_sql)
+  (keyword_deterministic)
+  (keyword_inline)
+  (keyword_collation)
   (keyword_invoker)
   (keyword_security)
   (keyword_extension)

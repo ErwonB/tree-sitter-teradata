@@ -62,7 +62,7 @@ created_at
 Function body with a $$ string literal with the same name
 ================================================================================
 
-create or replace function public.do_stuff()
+replace function public.do_stuff()
   returns trigger
   language plpgsql
 as $a$
@@ -75,8 +75,6 @@ $a$
 
 (program
   (ERROR
-    (keyword_create)
-    (keyword_or)
     (keyword_replace)
     (keyword_function)
     (object_reference
@@ -103,7 +101,7 @@ $a$
 Function body with a unbalanced $$
 ================================================================================
 
-create or replace function public.do_stuff()
+replace function public.do_stuff()
   returns trigger
   language plpgsql
 as $a$
@@ -117,8 +115,6 @@ $c$;
 (program
   (statement
     (create_function
-      (keyword_create)
-      (keyword_or)
       (keyword_replace)
       (keyword_function)
       (object_reference
