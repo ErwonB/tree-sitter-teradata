@@ -2743,7 +2743,7 @@ module.exports = grammar({
         $.unary_expression,
         $.array,
         $.invocation,
-        $.keyword_current_timestamp,
+        seq($.keyword_current_timestamp, optional(wrapped_in_parenthesis($._integer))),
         alias($.implicit_cast, $.cast),
     ),
 
