@@ -404,3 +404,111 @@ select 'plop' (title '');
                 (parenthesized_attribute
                   (keyword_title)
                   (literal))))))))
+
+================================================================================
+LOCKING ROW FOR ACCESS in view
+================================================================================
+
+REPLACE VIEW db.view1 AS
+LOCKING ROW FOR ACCESS
+select
+field1,field2
+from
+db.table1
+;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (create_view
+          (keyword_replace)
+          (keyword_view)
+          (object_reference
+            (identifier)
+            (identifier))
+          (keyword_as)
+          (create_query
+            (lock_clause
+              (keyword_locking)
+              (keyword_row)
+              (keyword_for)
+              (keyword_access))
+            (select
+              (keyword_select)
+              (select_expression
+                (term
+                  (field
+                    (identifier)))
+                (term
+                  (field
+                    (identifier)))))
+            (from
+              (keyword_from)
+              (relation
+                (object_reference
+                  (identifier)
+                  (identifier))))))))
+
+================================================================================
+LOCKING ROW FOR ACCESS in macro
+================================================================================
+
+replace macro plop.mac1(field1 varchar(50), field2 varchar(10)) as (
+
+lock row for write
+insert db.table1 (STEP_NAME, TS, STATUS)
+    values(:field1,  current_timestamp(6), :field2);
+);
+
+
+--------------------------------------------------------------------------------
+    (program
+      (statement
+        (create_macro
+          (keyword_replace)
+          (keyword_macro)
+          (object_reference
+            (identifier)
+            (identifier))
+          (column_definition
+            (identifier)
+            (varchar
+              (keyword_varchar)
+              (literal)))
+          (column_definition
+            (identifier)
+            (varchar
+              (keyword_varchar)
+              (literal)))
+          (keyword_as)
+          (statement
+            (lock_clause
+              (keyword_lock)
+              (keyword_row)
+              (keyword_for)
+              (keyword_write))
+            (insert
+              (keyword_insert)
+              (object_reference
+                (identifier)
+                (identifier))
+              (list
+                (column
+                  (identifier))
+                (column
+                  (identifier))
+                (column
+                  (identifier)))
+              (keyword_values)
+              (list
+                (field
+                  (identifier))
+                (invocation
+                  (object_reference
+                    (identifier))
+                  (term
+                    (literal)))
+                (field
+                  (identifier))))))))
+

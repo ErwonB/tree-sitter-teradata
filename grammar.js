@@ -737,10 +737,9 @@ module.exports = grammar({
         optional(seq(
           $.keyword_explain,
         )),
-        optional($.lock_clause),
         choice(
           $._ddl_statement,
-          $._dml_write,
+          seq(optional($.lock_clause), $._dml_write),
           optional_parenthesis($._dml_read),
         ),
       ),
@@ -822,7 +821,7 @@ module.exports = grammar({
       optional(optional_parenthesis($._cte)),
       optional_parenthesis(
         choice(
-          $._select_statement,
+          seq(optional($.lock_clause), $._select_statement),
           $.set_operation,
           $._unload_statement,
         ),
@@ -1017,7 +1016,7 @@ module.exports = grammar({
         ),
 
     lock_clause: $ => choice(
-      seq($._lock, $.keyword_row, $.keyword_for, $.keyword_access),
+      seq($._lock, $.keyword_row, $.keyword_for, choice($.keyword_read, $.keyword_write, $.keyword_access)),
         repeat1(
           seq($._lock, choice($.keyword_table, $.keyword_view), $.object_reference, $.keyword_for,
             choice($.keyword_read, $.keyword_write, $.keyword_access)),
