@@ -13,3 +13,4 @@ package-lock.json
 /src/parser.c
 /src/*.json
 sql.so
+test.sql

@@ -1,5 +1,5 @@
 * add sample
-* add procedure support
+* add procedure support (WIP)
 * add join index
 * add select and consume
 * add select as json

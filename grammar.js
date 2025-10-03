@@ -386,6 +386,7 @@ module.exports = grammar({
     _lock: $ => choice($.keyword_lock, $.keyword_locking),
 
 
+    // Teradata bteq
     keyword_dot_goto: _ => make_keyword(".goto"),
     keyword_dot_label: _ => make_keyword(".label"),
     keyword_dot_if: _ => make_keyword(".if"),
@@ -394,6 +395,33 @@ module.exports = grammar({
     keyword_dot_logoff: _ => make_keyword(".logoff"),
     keyword_dot_logon: _ => make_keyword(".logon"),
     keyword_dollar_tdwallet: _ => make_keyword("$tdwallet"),
+
+    // Teradata procedure
+    keyword_cursor: _ => make_keyword("cursor"),
+    keyword_continue: _ => make_keyword("continue"),
+    keyword_sqlstate: _ => make_keyword("sqlstate"),
+    keyword_found: _ => make_keyword("found"),
+    keyword_sqlwarning: _ => make_keyword("sqlwarning"),
+    keyword_sqlexception: _ => make_keyword("sqlexception"),
+    keyword_exit: _ => make_keyword("exit"),
+    keyword_condition: _ => make_keyword("condition"),
+    keyword_handler: _ => make_keyword("handler"),
+    keyword_leave: _ => make_keyword("leave"),
+    keyword_call: _ => make_keyword("call"),
+    keyword_glop: _ => make_keyword("glop"),
+    keyword_dynamic: _ => make_keyword("dynamic"),
+    keyword_result: _ => make_keyword("result"),
+    keyword_sets: _ => make_keyword("sets"),
+    keyword_parameter: _ => make_keyword("parameter"),
+    keyword_style: _ => make_keyword("style"),
+    keyword_td_general: _ => make_keyword("td_general"),
+    keyword_java: _ => make_keyword("java"),
+    keyword_creator: _ => make_keyword("creator"),
+    keyword_c: _ => make_keyword("c"),
+    keyword_cpp: _ => make_keyword("cpp"),
+    keyword_modifies: _ => make_keyword("modifies"),
+    keyword_reads: _ => make_keyword("reads"),
+
     // Operators
     is_not: $ => prec.left(seq($.keyword_is, $.keyword_not)),
     not_like: $ => seq($.keyword_not, $.keyword_like),
@@ -784,6 +812,7 @@ module.exports = grammar({
           $._update_statement,
           $._copy_statement,
           $._macro_statement,
+          $._procedure_statement,
           $._abort_statement,
         ),
       ),
@@ -1056,6 +1085,7 @@ module.exports = grammar({
         $.create_view,
         $.create_index,
         $.create_function,
+        $.create_procedure,
         $.create_type,
         $.create_database,
         $.create_role,
@@ -1176,6 +1206,7 @@ module.exports = grammar({
                 $.identifier,
                 $.keyword_on,
                 $.keyword_off,
+                $.binary_expression,
               ),
             ),
             seq($.keyword_names, $.literal),
@@ -1214,6 +1245,144 @@ module.exports = grammar({
           ),
         ),
       ),
+    ),
+
+    //SQL_Data_Definition_Language_Syntax-172K.pdf
+    create_procedure: $ => seq(
+      choice($.keyword_create, $.keyword_replace),
+      $.keyword_procedure,
+      $.object_reference,
+      $.procedure_arguments,
+      repeat(
+        choice(
+          $.procedure_security,
+          $.procedure_dynamic,
+          $.procedure_language_and_access_specification,
+          $.procedure_parameter_style_specification,
+          $.procedure_glop,
+          $.procedure_external_security,
+          $.procedure_external_name,
+        ),
+      ),
+      $.procedure_body, //TODO
+    ),
+
+    procedure_body: $ => seq(
+      $.compound_statement,
+    ),
+
+    compound_statement: $ => choice(
+      seq(
+        optional(seq($.object_reference, ':')),
+        $.keyword_begin,
+        repeat1($._create_procedure_statement),
+        $.keyword_end,
+      ),
+    ),
+
+    _create_procedure_statement: $ => seq(
+      $._procedure_body_statement,
+      ';'
+    ),
+
+
+    _procedure_body_statement: $ => choice(
+      $.leave_statement,
+      $.declare_statement,
+      $.procedure_if_statement, //TODO ELSEIF
+      $.procedure_for_statement,
+      $.statement,
+      $.compound_statement,
+    ),
+
+    procedure_for_statement: $ => seq(
+      $.keyword_for, $.identifier, $.keyword_as,
+      $.identifier, $.keyword_cursor, $.keyword_for,
+      $.statement,
+      $.keyword_do,
+      repeat1($._create_procedure_statement),
+      $.keyword_end, $.keyword_for
+    ),
+
+    procedure_if_statement: $ => seq(
+      $.keyword_if, $._expression, $.keyword_then,
+      repeat1($._create_procedure_statement),
+      optional($.procedure_else_statement),
+      $.keyword_end, $.keyword_if,
+    ),
+
+    procedure_else_statement: $ => seq(
+      $.keyword_else,
+      repeat1($._create_procedure_statement),
+    ),
+
+    leave_statement: $ => seq($.keyword_leave, $.identifier),
+
+    declare_statement: $ => choice(
+        seq($.keyword_declare, $.identifier, $._type),
+        seq(
+          $.keyword_declare,
+          $.identifier,
+          $.keyword_condition,
+          $.keyword_for,
+          choice($.keyword_sqlexception, $.keyword_sqlwarning, seq($.keyword_not, $.keyword_found), $.identifier, seq($.keyword_sqlstate, $._integer)),
+        ),
+        seq(
+          $.keyword_declare,
+          choice($.keyword_continue, $.keyword_exit),
+          $.keyword_handler,
+          $.keyword_for,
+          choice($.keyword_sqlexception, $.keyword_sqlwarning, seq($.keyword_not, $.keyword_found), $.identifier, seq($.keyword_sqlstate, $._integer)),
+          $.compound_statement,
+        )
+      ),
+
+
+    procedure_external_name: $ => seq($.keyword_external, $.keyword_name, $.object_reference),
+    procedure_external_security: $ => seq($.keyword_external, $.keyword_security, choice($.keyword_invoker, seq($.keyword_definer, $.object_reference))),
+    procedure_glop: $ => seq($.keyword_using, $.keyword_glop, $.keyword_set, $.object_reference),
+    procedure_dynamic: $ => seq($.keyword_dynamic, $.keyword_result, $.keyword_sets, $._integer),
+    procedure_parameter_style_specification : $ => seq($.keyword_parameter, $.keyword_style, choice($.keyword_sql, $.keyword_td_general, $.keyword_java)),
+
+    procedure_security: $ => seq(
+      $.keyword_sql,
+      $.keyword_security,
+      choice($.keyword_invoker, $.keyword_definer, $.keyword_creator, $.keyword_owner),
+    ),
+
+    procedure_language_and_access_specification: $ => seq(
+      seq($.keyword_language, choice(
+            $.keyword_c,
+            $.keyword_cpp,
+            $.keyword_java)),
+      repeat(choice(
+              seq($.keyword_contains, $.keyword_sql),
+              seq(choice($.keyword_modifies, $.keyword_reads),
+                  $.keyword_sql, $.keyword_data),
+              seq($.keyword_no, $.keyword_sql),
+              )
+            ),
+      optional(seq(
+                choice($.keyword_modifies, $.keyword_reads, $.keyword_no),
+                $.keyword_external,
+                $.keyword_data))
+    ),
+
+    _proc_argmode: $ => choice(
+      $.keyword_in,
+      $.keyword_out,
+      $.keyword_inout,
+    ),
+
+    procedure_argument: $ => seq(
+      $._argmode,
+      $.identifier,
+      $._type,
+    ),
+
+    procedure_arguments: $ => paren_list(
+      $.procedure_argument,
+      false,
     ),
 
     // This is only used in create function statement, it is not needed to check
@@ -2400,6 +2569,10 @@ module.exports = grammar({
       $.macro,
     ),
 
+    _procedure_statement: $ => seq(
+      $.procedure,
+    ),
+
     _abort_statement: $ => seq(
       $.abort,
     ),
@@ -2494,6 +2667,15 @@ module.exports = grammar({
     macro: $ => seq(
       $._exec,
       field('macro', $.object_reference),
+      optional(wrapped_in_parenthesis(
+          comma_list($._expression),
+        ),
+      ),
+    ),
+
+    procedure: $ => seq(
+      $.keyword_call,
+      field('procedure', $.object_reference),
       optional(wrapped_in_parenthesis(
           comma_list($._expression),
         ),
@@ -3261,34 +3443,42 @@ module.exports = grammar({
       ),
     ),
 
-    _expression: $ => prec(1,
-      choice(
-        $.literal,
-        alias(
-          $._qualified_field,
-          $.field,
+    _expression_base: $ => prec(1, choice(
+          $.literal,
+          alias(
+            $._qualified_field,
+            $.field,
+          ),
+          $.parameter,
+          $.list,
+          $.case,
+          $.window_function,
+          $.subquery,
+          $.cast,
+          alias($.implicit_cast, $.cast),
+          $.exists,
+          $.invocation,
+          $.binary_expression,
+          $.subscript,
+          $.unary_expression,
+          $.array,
+          $.interval,
+          $.between_expression,
+          $.parenthesized_expression,
+          $.object_id,
+          $.interval_expression,
+          $.attribute_expression,
         ),
-        $.parameter,
-        $.list,
-        $.case,
-        $.window_function,
-        $.subquery,
-        $.cast,
-        alias($.implicit_cast, $.cast),
-        $.exists,
-        $.invocation,
-        $.binary_expression,
-        $.subscript,
-        $.unary_expression,
-        $.array,
-        $.interval,
-        $.between_expression,
-        $.parenthesized_expression,
-        $.object_id,
-        $.interval_expression,
-        $.attribute_expression,
-      )
-    ),
+      ),
+
+     _expression: $ => choice(
+        prec(2, seq(
+          $._expression_base,
+          $.keyword_escape,
+          $._literal_string
+        )),
+        prec(1, $._expression_base)
+      ),
 
     parenthesized_attribute: $ => wrapped_in_parenthesis(seq(
       choice($.keyword_title, $.keyword_format),
