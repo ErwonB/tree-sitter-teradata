@@ -83,6 +83,9 @@ module.exports = grammar({
     keyword_nontemporal: _ => make_keyword("nontemporal"),
     keyword_extract: _ => make_keyword("extract"),
     keyword_translate: _ => make_keyword("translate"),
+    keyword_leading: _ => make_keyword("leading"),
+    keyword_trailing: _ => make_keyword("trailing"),
+    keyword_both: _ => make_keyword("both"),
     keyword_year: _ => make_keyword("year"),
     keyword_month: _ => make_keyword("month"),
     keyword_day: _ => make_keyword("day"),
@@ -3160,12 +3163,15 @@ module.exports = grammar({
               optional(seq($.keyword_with, $.keyword_error)),
             )
           ),
+          //trim
           //extract
           paren_list(
             seq(
-              field(
-                'unit',
-                $.object_reference,
+              choice(
+                field('unit', $.object_reference,),
+                seq(choice($.keyword_leading, $.keyword_trailing, $.keyword_both),
+                    optional($.literal),
+                  ),
               ),
               $.keyword_from,
               $.term

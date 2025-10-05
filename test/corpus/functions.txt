@@ -1361,3 +1361,97 @@ END)as DECIMAL(18,9))/1000000000;
                   (literal)
                   (literal)))
               (literal))))))
+
+================================================================================
+trim
+================================================================================
+
+SELECT trim(trailing from p.plop)
+, trim (trailing '0' from pl)
+, trim (both from a.l)
+, trim (both 'abc' from fds)
+, trim (leading from f.field1)
+, trim (leading '0' from f.field2) as plop
+from db.table1
+;
+
+--------------------------------------------------------------------------------
+    (program
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (invocation
+                (object_reference
+                  (identifier))
+                (keyword_trailing)
+                (keyword_from)
+                (term
+                  (field
+                    (object_reference
+                      (identifier))
+                    (identifier)))))
+            (term
+              (invocation
+                (object_reference
+                  (identifier))
+                (keyword_trailing)
+                (literal)
+                (keyword_from)
+                (term
+                  (field
+                    (identifier)))))
+            (term
+              (invocation
+                (object_reference
+                  (identifier))
+                (keyword_both)
+                (keyword_from)
+                (term
+                  (field
+                    (object_reference
+                      (identifier))
+                    (identifier)))))
+            (term
+              (invocation
+                (object_reference
+                  (identifier))
+                (keyword_both)
+                (literal)
+                (keyword_from)
+                (term
+                  (field
+                    (identifier)))))
+            (term
+              (invocation
+                (object_reference
+                  (identifier))
+                (keyword_leading)
+                (keyword_from)
+                (term
+                  (field
+                    (object_reference
+                      (identifier))
+                    (identifier)))))
+            (term
+              (invocation
+                (object_reference
+                  (identifier))
+                (keyword_leading)
+                (literal)
+                (keyword_from)
+                (term
+                  (field
+                    (object_reference
+                      (identifier))
+                    (identifier))))
+              (keyword_as)
+              (identifier))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)
+              (identifier))))))
+
