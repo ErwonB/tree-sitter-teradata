@@ -212,3 +212,34 @@ select * from db.table2;
         (object_reference
           (identifier))))
 
+================================================================================
+run/set
+================================================================================
+
+.set defaults
+.set maxerror 8
+
+.run file = 'plop.txt'
+.run file = 'ploppy.txt' skip 5
+
+--------------------------------------------------------------------------------
+
+    (program
+      (bteq_statement
+        (keyword_dot_set)
+        (keyword_defaults))
+      (bteq_statement
+        (keyword_dot_set)
+        (object_reference
+          (identifier))
+        (literal))
+      (bteq_statement
+        (keyword_dot_run)
+        (keyword_file)
+        (literal))
+      (bteq_statement
+        (keyword_dot_run)
+        (keyword_file)
+        (literal)
+        (keyword_skip)))
+

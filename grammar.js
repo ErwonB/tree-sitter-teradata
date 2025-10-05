@@ -394,7 +394,12 @@ module.exports = grammar({
     keyword_dot_exit: _ => make_keyword(".exit"),
     keyword_dot_logoff: _ => make_keyword(".logoff"),
     keyword_dot_logon: _ => make_keyword(".logon"),
+    keyword_dot_run: _ => make_keyword(".run"),
+    keyword_dot_set: _ => make_keyword(".set"),
     keyword_dollar_tdwallet: _ => make_keyword("$tdwallet"),
+    keyword_skip: _ => make_keyword("skip"),
+    keyword_file: _ => make_keyword("file"),
+    keyword_defaults: _ => make_keyword("defaults"),
 
     // Teradata procedure
     keyword_cursor: _ => make_keyword("cursor"),
@@ -766,6 +771,8 @@ module.exports = grammar({
     $._logon_statement,
     $._quit_statement,
     $._label_statement,
+    $._bteq_set_statement,
+    $._bteq_run_statement,
     $.keyword_dot_exit,
     $.keyword_dot_logoff
   ),
@@ -775,6 +782,21 @@ module.exports = grammar({
     $._expression,
     $.keyword_then,
     $.bteq_statement,
+  ),
+
+  _bteq_run_statement: $ => seq(
+    $.keyword_dot_run,
+    $.keyword_file,
+    '=',
+    choice($.object_reference, $.literal),
+    optional(seq($.keyword_skip, $._integer)),
+  ),
+
+  _bteq_set_statement: $ => seq(
+    $.keyword_dot_set,
+    choice($.keyword_defaults,
+      seq($.object_reference, choice($.object_reference, $.literal))
+      ),
   ),
 
   _label_statement: $ => seq($.keyword_dot_label, $.object_reference),

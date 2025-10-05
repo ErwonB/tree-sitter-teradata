@@ -30,4 +30,4 @@ cp queries/*.scm .../queries/sql/*.scm
 
 ## BTEQ
 
-Minimal support for BTEQ commands: If, Logon, Logoff, Exit, Quit, Goto, Label
+Minimal support for BTEQ commands: If, Logon, Logoff, Exit, Quit, Goto, Label, Set, Run
