@@ -951,7 +951,7 @@ module.exports = grammar({
       $.keyword_comment,
       $.keyword_on,
       $._comment_target,
-      $.keyword_is,
+      choice($.keyword_is, $.keyword_as),
       choice(
         $.keyword_null,
         alias($._literal_string, $.literal),
