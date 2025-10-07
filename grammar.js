@@ -131,6 +131,7 @@ module.exports = grammar({
     keyword_asc: _ => make_keyword("asc"),
     keyword_primary: _ => make_keyword("primary"),
     keyword_create: _ => make_keyword("create"),
+    keyword_ct: _ => make_keyword("ct"),
     keyword_alter: _ => make_keyword("alter"),
     keyword_change: _ => make_keyword("change"),
     keyword_explain: _ => make_keyword("explain"),
@@ -1151,19 +1152,23 @@ module.exports = grammar({
     // in =-assigned `table_option`s
     create_table: $ => prec.left(
       seq(
-        $.keyword_create,
-        optional(
-          choice(
-            $._temporary,
-            $.keyword_unlogged,
-            $.keyword_external,
-            $.keyword_multiset,
-            $.keyword_set,
-            $.keyword_volatile,
-            seq($.keyword_global, $.keyword_temporary),
-          )
-        ),
-        $.keyword_table,
+        choice($.keyword_ct,
+          seq(
+              $.keyword_create,
+              optional(
+                choice(
+                  $._temporary,
+                  $.keyword_unlogged,
+                  $.keyword_external,
+                  $.keyword_multiset,
+                  $.keyword_set,
+                  $.keyword_volatile,
+                  seq($.keyword_global, $.keyword_temporary),
+                )
+              ),
+              $.keyword_table,
+            ),
+          ),
         optional($._if_not_exists),
         $.object_reference,
         choice(

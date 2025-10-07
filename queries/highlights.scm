@@ -115,6 +115,7 @@
   (keyword_delete)
   (keyword_del)
   (keyword_create)
+  (keyword_ct)
   (keyword_show)
   (keyword_unload)
   (keyword_insert)

@@ -2020,3 +2020,28 @@ CREATE MULTISET TABLE db.table1
                   (each_clause
                     (keyword_each)
                     (literal)))))))))
+
+================================================================================
+Create table with shorcut
+================================================================================
+
+ct foo (
+	bar int NOT NULL
+);
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (create_table
+          (keyword_ct)
+          (object_reference
+            (identifier))
+          (column_definitions
+            (column_definition
+              (identifier)
+              (int
+                (keyword_int))
+              (keyword_not)
+              (keyword_null))))))
+
