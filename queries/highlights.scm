@@ -40,6 +40,11 @@
 
 ((term
    value: (cast
+    name: (keyword_trycast) @function.call
+    parameter: [(literal)]?)))
+
+((term
+   value: (cast
     name: (keyword_cast) @function.call
     parameter: [(literal)]?)))
 

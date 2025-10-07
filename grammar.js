@@ -160,6 +160,7 @@ module.exports = grammar({
     keyword_constraint: _ => make_keyword("constraint"),
     keyword_filter: _ => make_keyword("filter"),
     keyword_cast: _ => make_keyword("cast"),
+    keyword_trycast: _ => make_keyword("trycast"),
     keyword_separator: _ => make_keyword("separator"),
     keyword_case: _ => make_keyword("case"),
     keyword_when: _ => make_keyword("when"),
@@ -3124,7 +3125,7 @@ module.exports = grammar({
     ),
 
     cast: $ => seq(
-      field('name', $.keyword_cast),
+      field('name', choice($.keyword_cast,$.keyword_trycast)),
       wrapped_in_parenthesis(
         seq(
           field('parameter', $._expression),
