@@ -1746,7 +1746,7 @@ CREATE EXTENSION pg_stat_statements VERSION '12' CASCADE;
 Create view rule conflict with time and timestamp rules (check create_view)
 ================================================================================
 
-create view toto as select '123'::timestamp with check option;
+create view toto as select '123'(timestamp) with check option;
 
 --------------------------------------------------------------------------------
 

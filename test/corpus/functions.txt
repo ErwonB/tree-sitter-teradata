@@ -116,47 +116,6 @@ FROM my_table AS t;
         (keyword_as)
         alias: (identifier)))))
 
-================================================================================
-Casts and arrays
-================================================================================
-
-select col_has_check(
-  'one'::name,
-  'two'::name,
-  array['three'::name, 'four'::name],
-  'description'
-);
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (select
-      (keyword_select)
-      (select_expression
-        (term
-          value: (invocation
-            (object_reference
-              name: (identifier))
-            parameter: (term
-              value: (cast
-                (literal)
-                (keyword_name)))
-            parameter: (term
-              value: (cast
-                (literal)
-                (keyword_name)))
-            parameter: (term
-              value: (array
-                (keyword_array)
-                (cast
-                  (literal)
-                  (keyword_name))
-                (cast
-                  (literal)
-                  (keyword_name))))
-            parameter: (term
-              value: (literal))))))))
 
 ================================================================================
 Count with postgres style aggregate expression

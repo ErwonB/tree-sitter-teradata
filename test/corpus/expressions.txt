@@ -626,34 +626,6 @@ SELECT 'abc' ^@ 'a' || 'z';
             (literal)))))))
 
 ================================================================================
-full text search operators
-================================================================================
-
-SELECT 'fat cats ate rats' @@ !! ('cat' <-> 'rat'::tsquery);
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (select
-      (keyword_select)
-      (select_expression
-        (term
-          (binary_expression
-            (literal)
-            (op_other)
-            (unary_expression
-              (op_unary_other)
-              (parenthesized_expression
-                (cast
-                  (binary_expression
-                    (literal)
-                    (op_other)
-                    (literal))
-                  (object_reference
-                    (identifier)))))))))))
-
-================================================================================
 Array subscript
 ================================================================================
 

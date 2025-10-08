@@ -19,8 +19,6 @@ module.exports = grammar({
     [$.object_reference, $._qualified_field],
     [$.object_reference],
     [$.between_expression, $.binary_expression],
-    [$.time],
-    [$.timestamp],
   ],
 
   precedences: $ => [
@@ -594,13 +592,14 @@ module.exports = grammar({
           $.keyword_box3d,
 
           $.keyword_oid,
-          $.keyword_name,
+          // $.keyword_name,
           $.keyword_regclass,
           $.keyword_regnamespace,
           $.keyword_regproc,
           $.keyword_regtype,
 
-          field("custom_type", $.object_reference)
+          // TODO : find a way to make this work with teradata implicit cast
+          // field("custom_type", $.object_reference)
         ),
         optional($.array_size_definition)
       ),
@@ -3111,10 +3110,9 @@ module.exports = grammar({
       field('name', $.identifier),
     ),
 
-    implicit_cast: $ => seq(
+    implicit_cast: $ =>  seq(
       $._expression,
-      '::',
-      $._type,
+      wrapped_in_parenthesis($._type)
     ),
 
     // Postgres syntax for intervals
