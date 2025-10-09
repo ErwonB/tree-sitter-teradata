@@ -443,7 +443,8 @@ END;
                                                 (keyword_by)
                                                 (literal)
                                                 (literal)
-                                                (literal)
+                                                (literal))
+                                                (having
                                                 (keyword_having)
                                                 (binary_expression
                                                   (invocation
@@ -785,7 +786,8 @@ END;
                                             (keyword_by)
                                             (literal)
                                             (literal)
-                                            (literal)
+                                            (literal))
+                                            (having
                                             (keyword_having)
                                             (binary_expression
                                               (invocation

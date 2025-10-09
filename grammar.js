@@ -3326,6 +3326,7 @@ module.exports = grammar({
       ),
       optional($.where),
       optional($.group_by),
+      optional($.having),
       optional($.window_clause),
       optional($.qualify),
       optional($.order_by),
@@ -3437,10 +3438,9 @@ module.exports = grammar({
       $.keyword_group,
       $.keyword_by,
       comma_list($._expression, true),
-      optional($._having),
     ),
 
-    _having: $ => seq(
+    having: $ => seq(
       $.keyword_having,
       $._expression,
     ),
