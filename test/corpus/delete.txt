@@ -12,8 +12,9 @@ DELETE FROM my_table;
       (keyword_delete))
     (from
       (keyword_from)
-      (object_reference
-        name: (identifier)))))
+        (relation
+        (object_reference
+          name: (identifier))))))
 
 ================================================================================
 Delete whole table with FQN
@@ -29,10 +30,11 @@ DELETE FROM my_database.my_schema.my_table;
       (keyword_delete))
     (from
       (keyword_from)
-      (object_reference
-        database: (identifier)
-        schema: (identifier)
-        name: (identifier)))))
+        (relation
+            (object_reference
+              database: (identifier)
+              schema: (identifier)
+              name: (identifier))))))
 
 ================================================================================
 Delete table with order by
@@ -50,8 +52,9 @@ ORDER BY id DESC
       (keyword_delete))
     (from
       (keyword_from)
-      (object_reference
-        name: (identifier))
+      (relation
+          (object_reference
+            name: (identifier)))
       (order_by
         (keyword_order)
         (keyword_by)
@@ -77,8 +80,9 @@ WHERE id = 9;
       (keyword_delete))
     (from
       (keyword_from)
-      (object_reference
-        name: (identifier))
+        (relation
+          (object_reference
+            name: (identifier)))
       (where
         (keyword_where)
         predicate: (binary_expression
@@ -87,7 +91,7 @@ WHERE id = 9;
           right: (literal))))))
 
 ================================================================================
-Delete table with alias
+Delete table with alias after from
 ================================================================================
 
 DELETE FROM db.table1 t
@@ -101,16 +105,16 @@ WHERE t.field1 IN (
 
 --------------------------------------------------------------------------------
 
-(program
+    (program
       (statement
         (delete
           (keyword_delete))
         (from
           (keyword_from)
-          (object_reference
-            (identifier)
-            (identifier))
-          (object_reference
+          (relation
+            (object_reference
+              (identifier)
+              (identifier))
             (identifier))
           (where
             (keyword_where)
@@ -182,7 +186,7 @@ where field1 = (select field1 from db.table2)
                     (identifier)))))))))
 
 ================================================================================
-Delete table without from
+Delete table with alias
 ================================================================================
 
 delete c
@@ -200,10 +204,10 @@ where field1 = (select field1 from db.table2)
           (identifier))
         (from
           (keyword_from)
-          (object_reference
-            (identifier)
-            (identifier))
-          (object_reference
+          (relation
+            (object_reference
+              (identifier)
+              (identifier))
             (identifier))
           (where
             (keyword_where)
@@ -223,4 +227,76 @@ where field1 = (select field1 from db.table2)
                     (object_reference
                       (identifier)
                       (identifier))))))))))
+
+================================================================================
+Delete table with alias and list
+================================================================================
+
+delete c
+from db.table1 c,
+db.table2 t
+where c.field1 = 'plop'
+and c.f1 = t.f1
+and c.f2 = t.f2
+and t.f3 = 'll'
+;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (delete
+          (keyword_delete))
+        (object_reference
+          (identifier))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)
+              (identifier))
+            (identifier))
+          (relation
+            (object_reference
+              (identifier)
+              (identifier))
+            (identifier))
+          (where
+            (keyword_where)
+            (binary_expression
+              (binary_expression
+                (binary_expression
+                  (binary_expression
+                    (field
+                      (object_reference
+                        (identifier))
+                      (identifier))
+                    (literal))
+                  (keyword_and)
+                  (binary_expression
+                    (field
+                      (object_reference
+                        (identifier))
+                      (identifier))
+                    (field
+                      (object_reference
+                        (identifier))
+                      (identifier))))
+                (keyword_and)
+                (binary_expression
+                  (field
+                    (object_reference
+                      (identifier))
+                    (identifier))
+                  (field
+                    (object_reference
+                      (identifier))
+                    (identifier))))
+              (keyword_and)
+              (binary_expression
+                (field
+                  (object_reference
+                    (identifier))
+                  (identifier))
+                (literal)))))))
 

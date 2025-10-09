@@ -100,15 +100,16 @@ FROM my_table;
 
 --------------------------------------------------------------------------------
 
-(program
-  (statement
-    (delete
-      (keyword_delete))
-    (marginalia)
-    (from
-      (keyword_from)
-      (object_reference
-        name: (identifier)))))
+    (program
+      (statement
+        (delete
+          (keyword_delete))
+        (marginalia)
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              name: (identifier))))))
 
 ================================================================================
 Multiline marginalia, basic

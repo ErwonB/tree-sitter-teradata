@@ -1096,8 +1096,7 @@ module.exports = grammar({
 
     _delete_from: $ => seq(
       $.keyword_from,
-      $.object_reference,
-      optional(field('alias', $.object_reference)),
+      comma_list($.relation, true),
       optional($.where),
       optional($.order_by),
     ),

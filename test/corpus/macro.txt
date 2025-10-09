@@ -59,17 +59,19 @@ replace macro db1.macro1 as (
               (keyword_delete))
             (from
               (keyword_from)
-              (object_reference
-                (identifier)
-                (identifier))))
+                  (relation
+                  (object_reference
+                    (identifier)
+                    (identifier)))))
           (statement
             (delete
               (keyword_delete))
             (from
               (keyword_from)
-              (object_reference
-                (identifier)
-                (identifier)))))))
+                (relation
+                  (object_reference
+                    (identifier)
+                    (identifier))))))))
 
 
 ================================================================================
@@ -105,9 +107,10 @@ replace macro db1.macro1(field1 varchar(128), field2 integer) as (
               (keyword_delete))
             (from
               (keyword_from)
-              (object_reference
-                (identifier)
-                (identifier))
+              (relation
+                  (object_reference
+                    (identifier)
+                    (identifier)))
               (where
                 (keyword_where)
                 (binary_expression
@@ -121,9 +124,10 @@ replace macro db1.macro1(field1 varchar(128), field2 integer) as (
               (keyword_delete))
             (from
               (keyword_from)
-              (object_reference
-                (identifier)
-                (identifier))
+              (relation
+                  (object_reference
+                    (identifier)
+                    (identifier)))
               (where
                 (keyword_where)
                 (binary_expression
