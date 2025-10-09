@@ -19,6 +19,7 @@ module.exports = grammar({
     [$.object_reference, $._qualified_field],
     [$.object_reference],
     [$.between_expression, $.binary_expression],
+    [$._temporal_qualifier],
   ],
 
   precedences: $ => [
@@ -1074,6 +1075,7 @@ module.exports = grammar({
           $._expression,
         ),
       ),
+      optional($._temporal_qualifier),
       optional($._alias),
     ),
 
@@ -3561,14 +3563,14 @@ module.exports = grammar({
 
     _temporal_qualifier: $ => choice(
     $.keyword_year,
-    seq($.keyword_year, $.keyword_to, $.keyword_month),
+    seq($.keyword_year, optional(wrapped_in_parenthesis($._integer)), $.keyword_to, $.keyword_month),
     $.keyword_month,
     $.keyword_day,
-    seq($.keyword_day, $.keyword_to, choice($.keyword_hour, $.keyword_minute, $.keyword_second)),
+    seq($.keyword_day, optional(wrapped_in_parenthesis($._integer)), $.keyword_to, choice($.keyword_hour, $.keyword_minute, $.keyword_second)),
     $.keyword_hour,
-    seq($.keyword_hour, $.keyword_to, choice($.keyword_minute, $.keyword_second)),
+    seq($.keyword_hour, optional(wrapped_in_parenthesis($._integer)), $.keyword_to, choice($.keyword_minute, $.keyword_second, optional(wrapped_in_parenthesis($._integer)))),
     $.keyword_minute,
-    seq($.keyword_minute, $.keyword_to, choice($.keyword_second)),
+    seq($.keyword_minute, optional(wrapped_in_parenthesis($._integer)), $.keyword_to, $.keyword_second, optional(wrapped_in_parenthesis($._integer))),
     $.keyword_second),
 
     parenthesized_expression: $ => prec(2,
