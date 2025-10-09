@@ -209,3 +209,33 @@ from db.table1
             (object_reference
               (identifier)
               (identifier))))))
+
+================================================================================
+Explicit cast with format only
+================================================================================
+
+SELECT cast(dt as format 'YYYYMMDD')
+from db.table1
+;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (cast
+                (keyword_cast)
+                (field
+                  (identifier))
+                (keyword_as)
+                (format
+                  (keyword_format))))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)
+              (identifier))))))

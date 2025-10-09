@@ -599,6 +599,8 @@ module.exports = grammar({
           $.keyword_regproc,
           $.keyword_regtype,
 
+          $.format,
+
           // TODO : find a way to make this work with teradata implicit cast
           // field("custom_type", $.object_reference)
         ),
@@ -3136,6 +3138,8 @@ module.exports = grammar({
         ),
       ),
     ),
+
+    format: $ => seq($.keyword_format, $._literal_string),
 
     filter_expression : $ => seq(
       $.keyword_filter,
