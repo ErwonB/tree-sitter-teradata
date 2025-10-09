@@ -1088,6 +1088,7 @@ module.exports = grammar({
         ),
         seq(
           $.delete,
+          optional(field('alias', $.object_reference)),
           alias($._delete_from, $.from),
         ),
       ),

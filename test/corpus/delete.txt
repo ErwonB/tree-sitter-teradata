@@ -181,3 +181,46 @@ where field1 = (select field1 from db.table2)
                     (identifier)
                     (identifier)))))))))
 
+================================================================================
+Delete table without from
+================================================================================
+
+delete c
+from db.table1 c
+where field1 = (select field1 from db.table2)
+;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (delete
+          (keyword_delete))
+        (object_reference
+          (identifier))
+        (from
+          (keyword_from)
+          (object_reference
+            (identifier)
+            (identifier))
+          (object_reference
+            (identifier))
+          (where
+            (keyword_where)
+            (binary_expression
+              (field
+                (identifier))
+              (subquery
+                (select
+                  (keyword_select)
+                  (select_expression
+                    (term
+                      (field
+                        (identifier)))))
+                (from
+                  (keyword_from)
+                  (relation
+                    (object_reference
+                      (identifier)
+                      (identifier))))))))))
+
