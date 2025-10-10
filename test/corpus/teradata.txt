@@ -300,7 +300,7 @@ nontemporal update db.table1 set field = NULL;
 collect stats
 ================================================================================
 
-collect stats column(field1), column(field2) on db.table1;
+collect stats column(field1,field3), column(field2) on db.table1;
 
 --------------------------------------------------------------------------------
 
@@ -309,6 +309,8 @@ collect stats column(field1), column(field2) on db.table1;
         (keyword_collect)
         (keyword_stats)
         (keyword_column)
+        (field
+          (identifier))
         (field
           (identifier))
         (keyword_column)
