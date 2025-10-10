@@ -514,3 +514,181 @@ insert db.table1 (STEP_NAME, TS, STATUS)
                 (field
                   (identifier))))))))
 
+================================================================================
+period operator
+================================================================================
+
+lock row for access
+select
+  	begin(period(a2.START_TS, a2.END_TS) p_intersect  period(a1.START_TS, a1.END_TS)) as START_TS
+,  	end(period(a2.START_TS, a2.END_TS) p_intersect  period(a1.START_TS, a1.END_TS)) as END_TS
+,	a1.col1
+from db.table1 a1
+	inner join db.table2 a2
+		on a1.col2 = a2.col2
+where  	period(a2.START_TS, a2.END_TS) overlaps  period(a1.START_TS, a1.END_TS)
+and a1.col3 = 'plop'
+group by 1,2,3
+;
+
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (lock_clause
+          (keyword_lock)
+          (keyword_row)
+          (keyword_for)
+          (keyword_access))
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (invocation
+                (object_reference
+                  (identifier))
+                (term
+                  (period_expression
+                    (invocation
+                      (object_reference
+                        (identifier))
+                      (term
+                        (field
+                          (object_reference
+                            (identifier))
+                          (identifier)))
+                      (term
+                        (field
+                          (object_reference
+                            (identifier))
+                          (identifier))))
+                    (period_operator
+                      (keyword_p_intersect))
+                    (invocation
+                      (object_reference
+                        (identifier))
+                      (term
+                        (field
+                          (object_reference
+                            (identifier))
+                          (identifier)))
+                      (term
+                        (field
+                          (object_reference
+                            (identifier))
+                          (identifier)))))))
+              (keyword_as)
+              (identifier))
+            (term
+              (invocation
+                (object_reference
+                  (identifier))
+                (term
+                  (period_expression
+                    (invocation
+                      (object_reference
+                        (identifier))
+                      (term
+                        (field
+                          (object_reference
+                            (identifier))
+                          (identifier)))
+                      (term
+                        (field
+                          (object_reference
+                            (identifier))
+                          (identifier))))
+                    (period_operator
+                      (keyword_p_intersect))
+                    (invocation
+                      (object_reference
+                        (identifier))
+                      (term
+                        (field
+                          (object_reference
+                            (identifier))
+                          (identifier)))
+                      (term
+                        (field
+                          (object_reference
+                            (identifier))
+                          (identifier)))))))
+              (keyword_as)
+              (identifier))
+            (term
+              (field
+                (object_reference
+                  (identifier))
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)
+              (identifier))
+            (identifier))
+          (join
+            (keyword_inner)
+            (keyword_join)
+            (relation
+              (object_reference
+                (identifier)
+                (identifier))
+              (identifier))
+            (keyword_on)
+            (binary_expression
+              (field
+                (object_reference
+                  (identifier))
+                (identifier))
+              (field
+                (object_reference
+                  (identifier))
+                (identifier))))
+          (where
+            (keyword_where)
+            (binary_expression
+              (period_expression
+                (invocation
+                  (object_reference
+                    (identifier))
+                  (term
+                    (field
+                      (object_reference
+                        (identifier))
+                      (identifier)))
+                  (term
+                    (field
+                      (object_reference
+                        (identifier))
+                      (identifier))))
+                (period_operator
+                  (keyword_overlaps))
+                (invocation
+                  (object_reference
+                    (identifier))
+                  (term
+                    (field
+                      (object_reference
+                        (identifier))
+                      (identifier)))
+                  (term
+                    (field
+                      (object_reference
+                        (identifier))
+                      (identifier)))))
+              (keyword_and)
+              (binary_expression
+                (field
+                  (object_reference
+                    (identifier))
+                  (identifier))
+                (literal))))
+          (group_by
+            (keyword_group)
+            (keyword_by)
+            (literal)
+            (literal)
+            (literal)))))
+

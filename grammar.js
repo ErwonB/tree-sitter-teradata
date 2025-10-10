@@ -18,7 +18,7 @@ module.exports = grammar({
   conflicts: $ => [
     [$.object_reference, $._qualified_field],
     [$.object_reference],
-    [$.between_expression, $.binary_expression],
+    [$.between_expression, $.period_expression, $.binary_expression],
     [$._temporal_qualifier],
   ],
 
@@ -431,6 +431,17 @@ module.exports = grammar({
     keyword_cpp: _ => make_keyword("cpp"),
     keyword_modifies: _ => make_keyword("modifies"),
     keyword_reads: _ => make_keyword("reads"),
+
+    // Period operators
+    keyword_overlaps: _ => make_keyword("overlaps"),
+    keyword_equals: _ => make_keyword("equals"),
+    keyword_immediately: _ => make_keyword("immediately"),
+    keyword_succeeds: _ => make_keyword("succeeds"),
+    keyword_meets: _ => make_keyword("meets"),
+    keyword_ldiff: _ => make_keyword("ldiff"),
+    keyword_rdiff: _ => make_keyword("rdiff"),
+    keyword_p_intersect: _ => make_keyword("p_intersect"),
+
 
     // Operators
     is_not: $ => prec.left(seq($.keyword_is, $.keyword_not)),
@@ -3514,6 +3525,7 @@ module.exports = grammar({
           $.object_id,
           $.interval_expression,
           $.attribute_expression,
+          $.period_expression,
         ),
       ),
 
@@ -3525,6 +3537,25 @@ module.exports = grammar({
         )),
         prec(1, $._expression_base)
       ),
+
+    period_expression: $ => prec.left(seq(
+      field('left', $._expression),
+      field('period_operator', $.period_operator),
+      field('right', $._expression),
+    )),
+
+  period_operator: $ => seq(
+    optional($.keyword_not),
+    choice($.keyword_contains,
+      $.keyword_overlaps,
+      $.keyword_equals,
+      $.keyword_meets,
+      $.keyword_ldiff,
+      $.keyword_rdiff,
+      $.keyword_p_intersect,
+      seq(optional($.keyword_immediately), choice($.keyword_precedes, $.keyword_succeeds)),
+    ),
+  ),
 
     parenthesized_attribute: $ => wrapped_in_parenthesis(seq(
       choice($.keyword_title, $.keyword_format),

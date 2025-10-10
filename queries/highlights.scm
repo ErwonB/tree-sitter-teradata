@@ -369,6 +369,14 @@
   (keyword_handler)
   (keyword_exit)
   (keyword_condition)
+    (keyword_overlaps)
+    (keyword_equals)
+    (keyword_immediately)
+    (keyword_succeeds)
+    (keyword_meets)
+    (keyword_ldiff)
+    (keyword_rdiff)
+    (keyword_p_intersect)
 ] @keyword
 
 [
