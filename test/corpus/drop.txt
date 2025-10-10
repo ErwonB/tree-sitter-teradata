@@ -254,3 +254,21 @@ DROP EXTENSION my_extension;
       (keyword_drop)
       (keyword_extension)
       (identifier))))
+
+================================================================================
+Drop stats
+================================================================================
+
+drop stats on DB.TABLE1;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (drop_stats
+          (keyword_drop)
+          (keyword_stats)
+          (keyword_on)
+          (object_reference
+            (identifier)
+            (identifier)))))

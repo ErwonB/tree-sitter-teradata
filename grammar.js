@@ -388,6 +388,7 @@ module.exports = grammar({
     _delete: $ => choice($.keyword_delete, $.keyword_del),
     _insert: $ => choice($.keyword_insert, $.keyword_ins),
     _lock: $ => choice($.keyword_lock, $.keyword_locking),
+    _stats: $ => choice($.keyword_statistics, $.keyword_stats),
 
 
     // Teradata bteq
@@ -873,14 +874,14 @@ module.exports = grammar({
         $.keyword_view,
         $.keyword_macro,
         $.keyword_function,
-        seq(choice($.keyword_stats, $.keyword_statistics), $.keyword_on),
+        seq($._stats, $.keyword_on),
       ),
       $.object_reference,
     ),
 
     _collect_statement: $ => seq(
       $.keyword_collect,
-      choice($.keyword_stats, $.keyword_statistics),
+      choice($._stats),
       choice(
         seq($.keyword_on, $.object_reference, $.keyword_column, field('value', $._expression)),
         seq(
@@ -2307,7 +2308,15 @@ module.exports = grammar({
         $.drop_sequence,
         $.drop_extension,
         $.drop_function,
+        $.drop_stats,
       ),
+    ),
+
+    drop_stats: $ => seq(
+      $.keyword_drop,
+      $._stats,
+      $.keyword_on,
+      $.object_reference,
     ),
 
     drop_table: $ => seq(
