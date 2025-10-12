@@ -1,0 +1,193 @@
+================================================================================
+Pivot 1
+================================================================================
+SELECT *
+FROM star1 PIVOT (
+                   SUM(sales) as ss1, SUM(cogs) as sc FOR qtr
+                                       IN ('Q1' AS Quarter1,
+                                           'Q2' AS Quarter2,
+                                           'Q3' AS Quarter3)
+                                          )Tmp;
+
+--------------------------------------------------------------------------------
+    (program
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (all_fields))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)))
+          (pivot
+            (keyword_pivot)
+            (keyword_sum)
+            (object_reference
+              (identifier))
+            (keyword_as)
+            (identifier)
+            (keyword_sum)
+            (object_reference
+              (identifier))
+            (keyword_as)
+            (identifier)
+            (keyword_for)
+            (object_reference
+              (identifier))
+            (keyword_in)
+            (literal)
+            (keyword_as)
+            (identifier)
+            (literal)
+            (keyword_as)
+            (identifier)
+            (literal)
+            (keyword_as)
+            (identifier)
+            (identifier)))))
+
+================================================================================
+Pivot 2
+================================================================================
+
+SELECT *
+FROM star1 PIVOT (SUM(sales) AS ss1, SUM(cogs) AS sc FOR (yr, qtr)
+                                                  IN ((2001, 'Q1'),
+                                                      (2001, 'Q2'),
+                                                      (2001, 'Q3'))
+                                                     )Tmp;
+
+
+--------------------------------------------------------------------------------
+    (program
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (all_fields))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)))
+          (pivot
+            (keyword_pivot)
+            (keyword_sum)
+            (object_reference
+              (identifier))
+            (keyword_as)
+            (identifier)
+            (keyword_sum)
+            (object_reference
+              (identifier))
+            (keyword_as)
+            (identifier)
+            (keyword_for)
+            (object_reference
+              (identifier))
+            (object_reference
+              (identifier))
+            (keyword_in)
+            (literal)
+            (literal)
+            (literal)
+            (literal)
+            (literal)
+            (literal)
+            (identifier)))))
+
+================================================================================
+Pivot 3
+================================================================================
+
+SELECT * FROM s1 PIVOT(SUM(SALES) FOR MON IN ('JAN', 'FEB', 'MAR')
+  WITH SUM("'JAN'", "'FEB'") AS AGGR1 ) DT
+order by 1;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (all_fields))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)))
+          (pivot
+            (keyword_pivot)
+            (keyword_sum)
+            (object_reference
+              (identifier))
+            (keyword_for)
+            (object_reference
+              (identifier))
+            (keyword_in)
+            (literal)
+            (literal)
+            (literal)
+            (with_pivot
+              (keyword_with)
+              (keyword_sum)
+              (literal)
+              (literal)
+              (keyword_as)
+              (identifier))
+            (identifier))
+          (order_by
+            (keyword_order)
+            (keyword_by)
+            (order_target
+              (literal))))))
+
+================================================================================
+Pivot 4
+================================================================================
+
+SELECT * FROM s1 PIVOT (SUM (sales) FOR mon in (SELECT mon FROM s2)) dt;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (all_fields))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)))
+          (pivot
+            (keyword_pivot)
+            (keyword_sum)
+            (object_reference
+              (identifier))
+            (keyword_for)
+            (object_reference
+              (identifier))
+            (keyword_in)
+            (subquery
+              (select
+                (keyword_select)
+                (select_expression
+                  (term
+                    (field
+                      (identifier)))))
+              (from
+                (keyword_from)
+                (relation
+                  (object_reference
+                    (identifier)))))
+            (identifier)))))
+
