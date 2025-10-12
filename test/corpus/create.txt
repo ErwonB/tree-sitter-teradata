@@ -2045,3 +2045,76 @@ ct foo (
               (keyword_not)
               (keyword_null))))))
 
+================================================================================
+Create join index
+================================================================================
+
+CREATE JOIN INDEX ord_cust_idx AS
+    SELECT c_nationkey, SUM(o_totalprice(FLOAT)) AS price, o_orderdate
+    FROM orders, customer
+    WHERE o_custkey = c_custkey
+    GROUP BY c_nationkey, o_orderdate
+    ORDER BY o_orderdate;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (create_join_index
+          (keyword_create)
+          (keyword_join)
+          (keyword_index)
+          (object_reference
+            (identifier))
+          (keyword_as)
+          (create_query
+            (select
+              (keyword_select)
+              (select_expression
+                (term
+                  (field
+                    (identifier)))
+                (term
+                  (invocation
+                    (object_reference
+                      (identifier))
+                    (term
+                      (cast
+                        (field
+                          (identifier))
+                        (float
+                          (keyword_float)))))
+                  (keyword_as)
+                  (identifier))
+                (term
+                  (field
+                    (identifier)))))
+            (from
+              (keyword_from)
+              (relation
+                (object_reference
+                  (identifier)))
+              (relation
+                (object_reference
+                  (identifier)))
+              (where
+                (keyword_where)
+                (binary_expression
+                  (field
+                    (identifier))
+                  (field
+                    (identifier))))
+              (group_by
+                (keyword_group)
+                (keyword_by)
+                (field
+                  (identifier))
+                (field
+                  (identifier)))
+              (order_by
+                (keyword_order)
+                (keyword_by)
+                (order_target
+                  (field
+                    (identifier)))))))))
+

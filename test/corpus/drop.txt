@@ -272,3 +272,22 @@ drop stats on DB.TABLE1;
           (object_reference
             (identifier)
             (identifier)))))
+
+================================================================================
+Drop join index
+================================================================================
+
+drop join index DB.TABLE1;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (drop_join_index
+          (keyword_drop)
+          (keyword_join)
+          (keyword_index)
+          (object_reference
+            (identifier)
+            (identifier)))))
+

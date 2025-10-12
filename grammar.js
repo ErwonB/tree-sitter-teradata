@@ -1140,6 +1140,7 @@ module.exports = grammar({
         $.create_sequence,
         $.create_extension,
         $.create_trigger,
+        $.create_join_index,
       ),
     ),
 
@@ -1295,6 +1296,16 @@ module.exports = grammar({
             $._check_option,
           ),
         ),
+      ),
+    ),
+
+    create_join_index: $ => prec.right(
+      seq(
+        $.keyword_create, $.keyword_join, $.keyword_index,
+        $.object_reference,
+        //missing table options
+        $.keyword_as,
+        $.create_query,
       ),
     ),
 
@@ -2326,7 +2337,15 @@ module.exports = grammar({
         $.drop_extension,
         $.drop_function,
         $.drop_stats,
+        $.drop_join_index,
       ),
+    ),
+
+    drop_join_index: $ => seq(
+      $.keyword_drop,
+      $.keyword_join,
+      $.keyword_index,
+      $.object_reference,
     ),
 
     drop_stats: $ => seq(
