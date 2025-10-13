@@ -19,7 +19,6 @@ module.exports = grammar({
     [$.object_reference, $._qualified_field],
     [$.object_reference],
     [$.between_expression, $.period_expression, $.binary_expression],
-    [$._temporal_qualifier],
   ],
 
   precedences: $ => [
@@ -3662,17 +3661,24 @@ module.exports = grammar({
         field('temporal_qualifier', $._temporal_qualifier),
     ),
 
+    //TODO refactor
     _temporal_qualifier: $ => choice(
-    $.keyword_year,
-    seq($.keyword_year, optional(wrapped_in_parenthesis($._integer)), $.keyword_to, $.keyword_month),
-    $.keyword_month,
-    $.keyword_day,
-    seq($.keyword_day, optional(wrapped_in_parenthesis($._integer)), $.keyword_to, choice($.keyword_hour, $.keyword_minute, $.keyword_second)),
-    $.keyword_hour,
-    seq($.keyword_hour, optional(wrapped_in_parenthesis($._integer)), $.keyword_to, choice($.keyword_minute, $.keyword_second, optional(wrapped_in_parenthesis($._integer)))),
-    $.keyword_minute,
-    seq($.keyword_minute, optional(wrapped_in_parenthesis($._integer)), $.keyword_to, $.keyword_second, optional(wrapped_in_parenthesis($._integer))),
-    $.keyword_second),
+      $.keyword_year,
+      prec.right(1, seq($.keyword_year, optional(wrapped_in_parenthesis($._integer)), $.keyword_to, $.keyword_month)),
+
+      $.keyword_month,
+
+      seq($.keyword_day, optional(wrapped_in_parenthesis($._integer))),
+      prec.right(1, seq($.keyword_day, optional(wrapped_in_parenthesis($._integer)), $.keyword_to, choice($.keyword_hour, $.keyword_minute, seq($.keyword_second, optional(wrapped_in_parenthesis($._integer)))))),
+
+      seq($.keyword_hour, optional(wrapped_in_parenthesis($._integer))),
+      prec.right(1, seq($.keyword_hour, optional(wrapped_in_parenthesis($._integer)), $.keyword_to, choice($.keyword_minute, seq($.keyword_second, optional(wrapped_in_parenthesis($._integer)))))),
+
+      seq($.keyword_minute, optional(wrapped_in_parenthesis($._integer))),
+      prec.right(1, seq($.keyword_minute, optional(wrapped_in_parenthesis($._integer)), $.keyword_to, seq($.keyword_second, optional(wrapped_in_parenthesis($._integer))))),
+
+      prec.right(1, seq($.keyword_second, optional(wrapped_in_parenthesis(seq($._integer, optional(seq(',', $._integer))))))),
+    ),
 
     parenthesized_expression: $ => prec(2,
       wrapped_in_parenthesis($._expression)
