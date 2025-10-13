@@ -1094,7 +1094,6 @@ module.exports = grammar({
           $._expression,
         ),
       ),
-      optional($._temporal_qualifier),
       optional($._alias),
     ),
 
@@ -3585,7 +3584,18 @@ module.exports = grammar({
         ),
       ),
 
-     _expression: $ => choice(
+    _expression: $ =>
+      choice(seq(
+          choice(
+            prec(2, seq(
+              $._expression_base,
+              $.keyword_escape,
+              $._literal_string
+            )),
+            prec(1, $._expression_base)
+          ),
+          $._temporal_qualifier),
+      choice(
         prec(2, seq(
           $._expression_base,
           $.keyword_escape,
@@ -3593,6 +3603,7 @@ module.exports = grammar({
         )),
         prec(1, $._expression_base)
       ),
+    ),
 
     period_expression: $ => prec.left(seq(
       field('left', $._expression),
