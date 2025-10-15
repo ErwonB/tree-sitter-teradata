@@ -10,6 +10,7 @@ FROM star1 PIVOT (
                                           )Tmp;
 
 --------------------------------------------------------------------------------
+
     (program
       (statement
         (select
@@ -24,29 +25,41 @@ FROM star1 PIVOT (
               (identifier)))
           (pivot
             (keyword_pivot)
-            (keyword_sum)
-            (object_reference
-              (identifier))
-            (keyword_as)
-            (identifier)
-            (keyword_sum)
-            (object_reference
-              (identifier))
-            (keyword_as)
-            (identifier)
-            (keyword_for)
-            (object_reference
-              (identifier))
-            (keyword_in)
-            (literal)
-            (keyword_as)
-            (identifier)
-            (literal)
-            (keyword_as)
-            (identifier)
-            (literal)
-            (keyword_as)
-            (identifier)
+            (pivot_body
+              (agg_list
+                (agg_call
+                  (agg_function
+                    (keyword_sum))
+                  (object_reference
+                    (identifier))
+                  (keyword_as)
+                  (identifier))
+                (agg_call
+                  (agg_function
+                    (keyword_sum))
+                  (object_reference
+                    (identifier))
+                  (keyword_as)
+                  (identifier)))
+              (keyword_for)
+              (for_columns
+                (object_reference
+                  (identifier)))
+              (keyword_in)
+              (pivot_in
+                (pivot_in_values
+                  (value_or_ref
+                    (literal))
+                  (keyword_as)
+                  (identifier)
+                  (value_or_ref
+                    (literal))
+                  (keyword_as)
+                  (identifier)
+                  (value_or_ref
+                    (literal))
+                  (keyword_as)
+                  (identifier))))
             (identifier)))))
 
 ================================================================================
@@ -62,6 +75,7 @@ FROM star1 PIVOT (SUM(sales) AS ss1, SUM(cogs) AS sc FOR (yr, qtr)
 
 
 --------------------------------------------------------------------------------
+
     (program
       (statement
         (select
@@ -76,28 +90,46 @@ FROM star1 PIVOT (SUM(sales) AS ss1, SUM(cogs) AS sc FOR (yr, qtr)
               (identifier)))
           (pivot
             (keyword_pivot)
-            (keyword_sum)
-            (object_reference
-              (identifier))
-            (keyword_as)
-            (identifier)
-            (keyword_sum)
-            (object_reference
-              (identifier))
-            (keyword_as)
-            (identifier)
-            (keyword_for)
-            (object_reference
-              (identifier))
-            (object_reference
-              (identifier))
-            (keyword_in)
-            (literal)
-            (literal)
-            (literal)
-            (literal)
-            (literal)
-            (literal)
+            (pivot_body
+              (agg_list
+                (agg_call
+                  (agg_function
+                    (keyword_sum))
+                  (object_reference
+                    (identifier))
+                  (keyword_as)
+                  (identifier))
+                (agg_call
+                  (agg_function
+                    (keyword_sum))
+                  (object_reference
+                    (identifier))
+                  (keyword_as)
+                  (identifier)))
+              (keyword_for)
+              (for_columns
+                (object_reference
+                  (identifier))
+                (object_reference
+                  (identifier)))
+              (keyword_in)
+              (pivot_in
+                (pivot_in_tuples
+                  (tuple_value
+                    (value_or_ref
+                      (literal))
+                    (value_or_ref
+                      (literal)))
+                  (tuple_value
+                    (value_or_ref
+                      (literal))
+                    (value_or_ref
+                      (literal)))
+                  (tuple_value
+                    (value_or_ref
+                      (literal))
+                    (value_or_ref
+                      (literal))))))
             (identifier)))))
 
 ================================================================================
@@ -124,23 +156,36 @@ order by 1;
               (identifier)))
           (pivot
             (keyword_pivot)
-            (keyword_sum)
-            (object_reference
-              (identifier))
-            (keyword_for)
-            (object_reference
-              (identifier))
-            (keyword_in)
-            (literal)
-            (literal)
-            (literal)
-            (with_pivot
-              (keyword_with)
-              (keyword_sum)
-              (literal)
-              (literal)
-              (keyword_as)
-              (identifier))
+            (pivot_body
+              (agg_list
+                (agg_call
+                  (agg_function
+                    (keyword_sum))
+                  (object_reference
+                    (identifier))))
+              (keyword_for)
+              (for_columns
+                (object_reference
+                  (identifier)))
+              (keyword_in)
+              (pivot_in
+                (pivot_in_values
+                  (value_or_ref
+                    (literal))
+                  (value_or_ref
+                    (literal))
+                  (value_or_ref
+                    (literal))))
+              (with_pivot
+                (keyword_with)
+                (agg_function
+                  (keyword_sum))
+                (value_or_ref
+                  (literal))
+                (value_or_ref
+                  (literal))
+                (keyword_as)
+                (identifier)))
             (identifier))
           (order_by
             (keyword_order)
@@ -170,24 +215,29 @@ SELECT * FROM s1 PIVOT (SUM (sales) FOR mon in (SELECT mon FROM s2)) dt;
               (identifier)))
           (pivot
             (keyword_pivot)
-            (keyword_sum)
-            (object_reference
-              (identifier))
-            (keyword_for)
-            (object_reference
-              (identifier))
-            (keyword_in)
-            (subquery
-              (select
-                (keyword_select)
-                (select_expression
-                  (term
-                    (field
-                      (identifier)))))
-              (from
-                (keyword_from)
-                (relation
+            (pivot_body
+              (agg_list
+                (agg_call
+                  (agg_function
+                    (keyword_sum))
                   (object_reference
-                    (identifier)))))
+                    (identifier))))
+              (keyword_for)
+              (for_columns
+                (object_reference
+                  (identifier)))
+              (keyword_in)
+              (pivot_in
+                (subquery
+                  (select
+                    (keyword_select)
+                    (select_expression
+                      (term
+                        (field
+                          (identifier)))))
+                  (from
+                    (keyword_from)
+                    (relation
+                      (object_reference
+                        (identifier)))))))
             (identifier)))))
-

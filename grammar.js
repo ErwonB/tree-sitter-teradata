@@ -899,10 +899,10 @@ module.exports = grammar({
       $.keyword_collect,
       choice($._stats),
       choice(
-        seq($.keyword_on, $.object_reference, $.keyword_column, field('value', $._expression)),
+        seq($.keyword_on, $.object_reference, $.keyword_column, field('value', $.object_reference)),
         seq(
-          $.keyword_column, wrapped_in_parenthesis(comma_list(field('value', $._expression))),
-          repeat(seq(',', $.keyword_column, wrapped_in_parenthesis(comma_list(field('value', $._expression))))),
+          $.keyword_column, wrapped_in_parenthesis(comma_list(field('value', $.object_reference))),
+          repeat(seq(',', $.keyword_column, wrapped_in_parenthesis(comma_list(field('value', $.object_reference))))),
           $.keyword_on,
           $.object_reference,
           )
@@ -3479,36 +3479,56 @@ module.exports = grammar({
       field("predicate", $._expression),
     ),
 
+
     pivot: $ => seq(
       $.keyword_pivot,
-      wrapped_in_parenthesis(
-        seq(
-          comma_list(seq(
-            choice($.keyword_sum, $.keyword_avg, $.keyword_min, $.keyword_max),
-            wrapped_in_parenthesis($.object_reference),
-            optional($._alias),
-          )),
-          $.keyword_for,
-          choice($.object_reference,
-                wrapped_in_parenthesis(comma_list($.object_reference))),
-          $.keyword_in,
-            choice(
-              wrapped_in_parenthesis(
-                  comma_list(seq(choice($.object_reference, $.literal), optional($._alias))),
-                ),
-              wrapped_in_parenthesis(
-               comma_list(wrapped_in_parenthesis(comma_list(seq(choice($.object_reference, $.literal))))),
-              ),
-              $.subquery
-            ),
-          optional($.with_pivot),
-        ),
-      ),
+      wrapped_in_parenthesis($.pivot_body),
       optional($._alias)
     ),
 
-    with_pivot: $ => seq($.keyword_with, choice($.keyword_sum, $.keyword_avg, $.keyword_min, $.keyword_max),
-        wrapped_in_parenthesis(comma_list(choice($.object_reference, $.literal))), optional($._alias)),
+    pivot_body: $ => seq(
+      $.agg_list,
+      $.keyword_for,
+      $.for_columns,
+      $.keyword_in,
+      $.pivot_in,
+      optional($.with_pivot)
+    ),
+
+    agg_function: $ => choice($.keyword_sum, $.keyword_avg, $.keyword_min, $.keyword_max),
+
+    agg_call: $ => seq(
+      $.agg_function,
+      wrapped_in_parenthesis($.object_reference),
+      optional($._alias)
+    ),
+
+    agg_list: $ => comma_list($.agg_call, true),
+
+    for_columns: $ => choice(
+      $.object_reference,
+      wrapped_in_parenthesis(comma_list($.object_reference))
+    ),
+
+    pivot_in: $ => choice(
+      wrapped_in_parenthesis($.pivot_in_values),
+      wrapped_in_parenthesis($.pivot_in_tuples),
+      $.subquery
+    ),
+
+    value_or_ref: $ => choice($.object_reference, $.literal),
+
+    pivot_in_values: $ => comma_list(seq($.value_or_ref, optional($._alias)), true),
+
+    tuple_value: $ => wrapped_in_parenthesis(comma_list($.value_or_ref), true),
+    pivot_in_tuples: $ => comma_list($.tuple_value, true),
+
+    with_pivot: $ => seq(
+      $.keyword_with,
+      $.agg_function,
+      wrapped_in_parenthesis(comma_list($.value_or_ref)),
+      optional($._alias)
+    ),
 
     group_by: $ => seq(
       $.keyword_group,
