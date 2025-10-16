@@ -865,10 +865,11 @@ module.exports = grammar({
     ),
 
     _dml_read: $ => seq(
+      optional($.lock_clause),
       optional(optional_parenthesis($._cte)),
       optional_parenthesis(
         choice(
-          seq(optional($.lock_clause), $._select_statement),
+          $._select_statement,
           $.set_operation,
           $._unload_statement,
         ),
