@@ -67,6 +67,7 @@ module.exports = grammar({
 
     keyword_strtok_split_to_table: _ => make_keyword("strtok_split_to_table"),
     keyword_pivot: _ => make_keyword("pivot"),
+    keyword_casespecific: _ => make_keyword("casespecific"),
     keyword_regexp_split_to_table: _ => make_keyword("regexp_split_to_table"),
     keyword_collect: _ => make_keyword("collect"),
     keyword_compress: _ => make_keyword("compress"),
@@ -2918,13 +2919,15 @@ module.exports = grammar({
         field('name', $._column)),
       field('type', $._type),
       repeat($._column_constraint),
-      optional(
-        seq($.keyword_compress,
-          optional(seq('(', alias($._literal_string, $.literal),
-            repeat(seq(',', alias($._literal_string, $.literal))),
-            ')')))
-          ),
     ),
+
+    _format_column_constraint: $ => seq($.keyword_format, $._literal_string),
+    _compress_column_constraint: $ =>
+        seq($.keyword_compress,
+            optional(wrapped_in_parenthesis(comma_list(alias($._literal_string, $.literal), true)))
+      ),
+    _character_set_column_constraint: $ => seq($.keyword_character, $.keyword_set, $.object_reference),
+
 
     _derived_period: $ => seq($.keyword_period, $.keyword_for,
           field('name', seq($._column, '(', $._column, ',', $._column, ')')),
@@ -2961,6 +2964,10 @@ module.exports = grammar({
           ),
         ),
       ),
+      $._format_column_constraint,
+      $._compress_column_constraint,
+      $._character_set_column_constraint,
+      seq(optional($.keyword_not), $.keyword_casespecific),
       $._default_expression,
       $._primary_key,
       $.keyword_auto_increment,
@@ -3002,6 +3009,7 @@ module.exports = grammar({
         $.unary_expression,
         $.array,
         $.invocation,
+        $.keyword_user,
         seq($.keyword_current_timestamp, optional(wrapped_in_parenthesis($._integer))),
         alias($.implicit_cast, $.cast),
     ),
