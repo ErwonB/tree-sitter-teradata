@@ -855,7 +855,7 @@ module.exports = grammar({
         choice(
           $._delete_statement,
           $._insert_statement,
-          $._update_statement,
+          seq($._update_statement, optional($._else_insert_statement)),
           $._copy_statement,
           $._macro_statement,
           $._procedure_statement,
@@ -863,6 +863,8 @@ module.exports = grammar({
         ),
       ),
     ),
+
+    _else_insert_statement: $ => seq($.keyword_else, $._insert_statement),
 
     _dml_read: $ => seq(
       optional($.lock_clause),
