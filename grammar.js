@@ -1311,6 +1311,7 @@ module.exports = grammar({
         //missing table options
         $.keyword_as,
         $.create_query,
+        optional(seq($.primary_index_clause, $.partition_by_clause)),
       ),
     ),
 

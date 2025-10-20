@@ -2118,3 +2118,136 @@ CREATE JOIN INDEX ord_cust_idx AS
                   (field
                     (identifier)))))))))
 
+================================================================================
+Create join index with PI and partition
+================================================================================
+
+CREATE JOIN INDEX db.table1_aji as
+select
+    field3,
+    field4,
+    field5,
+    field6,
+    dt,
+    step,
+    field1,
+    field2,
+    field7
+from db.table1
+group by 1, 2, 3, 4, 5, 6, 7, 8, 9
+PRIMARY INDEX (dt, field1, field2, field3)
+PARTITION BY (
+    RANGE_N(dt  BETWEEN DATE '2016-01-01' AND DATE '2999-01-01' EACH INTERVAL '1' MONTH ),
+    RANGE_N(field1  BETWEEN 0  AND 99999  EACH 1 )
+);
+
+--------------------------------------------------------------------------------
+
+
+    (program
+      (statement
+        (create_join_index
+          (keyword_create)
+          (keyword_join)
+          (keyword_index)
+          (object_reference
+            (identifier)
+            (identifier))
+          (keyword_as)
+          (create_query
+            (select
+              (keyword_select)
+              (select_expression
+                (term
+                  (field
+                    (identifier)))
+                (term
+                  (field
+                    (identifier)))
+                (term
+                  (field
+                    (identifier)))
+                (term
+                  (field
+                    (identifier)))
+                (term
+                  (field
+                    (identifier)))
+                (term
+                  (field
+                    (identifier)))
+                (term
+                  (field
+                    (identifier)))
+                (term
+                  (field
+                    (identifier)))
+                (term
+                  (field
+                    (identifier)))))
+            (from
+              (keyword_from)
+              (relation
+                (object_reference
+                  (identifier)
+                  (identifier)))
+              (group_by
+                (keyword_group)
+                (keyword_by)
+                (literal)
+                (literal)
+                (literal)
+                (literal)
+                (literal)
+                (literal)
+                (literal)
+                (literal)
+                (literal))))
+          (primary_index_clause
+            (keyword_primary)
+            (keyword_index)
+            (field
+              (identifier))
+            (field
+              (identifier))
+            (field
+              (identifier))
+            (field
+              (identifier)))
+          (partition_by_clause
+            (keyword_partition)
+            (keyword_by)
+            (invocation
+              (object_reference
+                (identifier))
+              (term
+                (between_expression
+                  (field
+                    (identifier))
+                  (keyword_between)
+                  (literal
+                    (identifier))
+                  (keyword_and)
+                  (literal
+                    (identifier))
+                  (each_clause
+                    (keyword_each)
+                    (interval
+                      (keyword_interval)
+                      (keyword_month))))))
+            (invocation
+              (object_reference
+                (identifier))
+              (term
+                (between_expression
+                  (field
+                    (identifier))
+                  (keyword_between)
+                  (literal)
+                  (keyword_and)
+                  (literal)
+                  (each_clause
+                    (keyword_each)
+                    (literal)))))))))
+
+
