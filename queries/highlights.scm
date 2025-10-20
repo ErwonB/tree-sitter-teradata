@@ -402,6 +402,7 @@
 
 [
   (keyword_int)
+  (keyword_byteint)
   (keyword_null)
   (keyword_boolean)
   (keyword_binary)
