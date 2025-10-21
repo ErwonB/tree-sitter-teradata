@@ -291,3 +291,21 @@ drop join index DB.TABLE1;
             (identifier)
             (identifier)))))
 
+
+================================================================================
+Drop macro
+================================================================================
+
+drop macro db.my_macro;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (drop_macro
+          (keyword_drop)
+          (keyword_macro)
+          (object_reference
+            (identifier)
+            (identifier)))))
+

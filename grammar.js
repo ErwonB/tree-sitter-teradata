@@ -2347,6 +2347,7 @@ module.exports = grammar({
         $.drop_sequence,
         $.drop_extension,
         $.drop_function,
+        $.drop_macro,
         $.drop_stats,
         $.drop_join_index,
       ),
@@ -2446,6 +2447,12 @@ module.exports = grammar({
       optional($._if_exists),
       $.object_reference,
       optional($._drop_behavior),
+    ),
+
+    drop_macro: $ => seq(
+      $.keyword_drop,
+      $.keyword_macro,
+      $.object_reference,
     ),
 
     rename_object: $ => seq(
