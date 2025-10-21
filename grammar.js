@@ -2933,8 +2933,10 @@ module.exports = grammar({
         seq($.keyword_compress,
             optional(wrapped_in_parenthesis(comma_list(alias($._literal_string, $.literal), true)))
       ),
+
     _character_set_column_constraint: $ => seq($.keyword_character, $.keyword_set, $.object_reference),
 
+    _title_column_constraint: $ => seq($.keyword_title, $.literal),
 
     _derived_period: $ => seq($.keyword_period, $.keyword_for,
           field('name', seq($._column, '(', $._column, ',', $._column, ')')),
@@ -2971,6 +2973,7 @@ module.exports = grammar({
           ),
         ),
       ),
+      $._title_column_constraint,
       $._format_column_constraint,
       $._compress_column_constraint,
       $._character_set_column_constraint,

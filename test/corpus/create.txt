@@ -1872,7 +1872,7 @@ CREATE MULTISET TABLE db.table1
     field2              INTEGER NOT NULL COMPRESS('PLOP', 'PLOPPY'),
     field3 DATE NOT NULL,
     ts TIMESTAMP(0) NOT NULL DEFAULT current_timestamp(0),
-    field4 VARCHAR(100) not null,
+    field4 VARCHAR(100) not null title 'plop',
 	BEGIN_TT TIMESTAMP(6) WITH TIME ZONE NOT NULL,
 	END_TT TIMESTAMP(6) WITH TIME ZONE NOT NULL,
 	PERIOD FOR PERIOD_TT  (BEGIN_TT, END_TT) as TRANSACTIONTIME
@@ -1889,6 +1889,7 @@ CREATE MULTISET TABLE db.table1
 
 
 --------------------------------------------------------------------------------
+
     (program
       (statement
         (create_table
@@ -1934,7 +1935,9 @@ CREATE MULTISET TABLE db.table1
                 (keyword_varchar)
                 (literal))
               (keyword_not)
-              (keyword_null))
+              (keyword_null)
+              (keyword_title)
+              (literal))
             (column_definition
               (identifier)
               (timestamp
