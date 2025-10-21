@@ -1071,7 +1071,7 @@ module.exports = grammar({
     lock_clause: $ => choice(
       seq($._lock, $.keyword_row, $.keyword_for, choice($.keyword_read, $.keyword_write, $.keyword_access)),
         repeat1(
-          seq($._lock, choice($.keyword_table, $.keyword_view), $.object_reference, $.keyword_for,
+          seq($._lock, optional(choice($.keyword_table, $.keyword_view)), $.object_reference, $.keyword_for,
             choice($.keyword_read, $.keyword_write, $.keyword_access)),
           ),
       ),

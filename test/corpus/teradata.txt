@@ -28,11 +28,13 @@ lock table/view for access
 
 lock view db.my_table for access
 lock table db.table2 for access
+locking db.table3 for access
 select * from my_table;
 
 --------------------------------------------------------------------------------
 
-(program
+
+    (program
       (statement
         (lock_clause
           (keyword_lock)
@@ -44,6 +46,12 @@ select * from my_table;
           (keyword_access)
           (keyword_lock)
           (keyword_table)
+          (object_reference
+            (identifier)
+            (identifier))
+          (keyword_for)
+          (keyword_access)
+          (keyword_locking)
           (object_reference
             (identifier)
             (identifier))
