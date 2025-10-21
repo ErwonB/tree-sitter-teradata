@@ -406,6 +406,8 @@ module.exports = grammar({
     keyword_skip: _ => make_keyword("skip"),
     keyword_file: _ => make_keyword("file"),
     keyword_defaults: _ => make_keyword("defaults"),
+    keyword_errorlevel: _ => make_keyword("errorlevel"),
+    keyword_severity: _ => make_keyword("severity"),
 
     // Teradata procedure
     keyword_cursor: _ => make_keyword("cursor"),
@@ -823,9 +825,12 @@ module.exports = grammar({
   _bteq_set_statement: $ => seq(
     $.keyword_dot_set,
     choice($.keyword_defaults,
+      $._bteq_set_errorlevel,
       seq($.object_reference, choice($.object_reference, $.literal))
       ),
   ),
+
+  _bteq_set_errorlevel: $ => seq($.keyword_errorlevel, $._integer, $.keyword_severity, $._integer),
 
   _label_statement: $ => seq($.keyword_dot_label, $.object_reference),
   _goto_statement: $ => seq($.keyword_dot_goto, $.object_reference),

@@ -218,6 +218,7 @@ run/set
 
 .set defaults
 .set maxerror 8
+.set errorlevel 3807 severity 0
 
 .run file = 'plop.txt'
 .run file = 'ploppy.txt' skip 5
@@ -233,6 +234,10 @@ run/set
         (object_reference
           (identifier))
         (literal))
+      (bteq_statement
+        (keyword_dot_set)
+        (keyword_errorlevel)
+        (keyword_severity))
       (bteq_statement
         (keyword_dot_run)
         (keyword_file)
