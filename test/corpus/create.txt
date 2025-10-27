@@ -1868,9 +1868,11 @@ Create table with COMPRESS column, PI and PPI
 
 CREATE MULTISET TABLE db.table1
 (
-	field1               INTEGER NOT NULL ,
+	field1               INTEGER NOT NULL COMPRESS 0.000 ,
     field2              INTEGER NOT NULL COMPRESS('PLOP', 'PLOPPY'),
     field3 DATE NOT NULL,
+    field4 VARCHAR(10) COMPRESS 'PLOP',
+    field5 DECIMAL(10,4) COMPRESS (0.0000, 10,0000),
     ts TIMESTAMP(0) NOT NULL DEFAULT current_timestamp(0),
     field4 VARCHAR(100) not null title 'plop',
 	BEGIN_TT TIMESTAMP(6) WITH TIME ZONE NOT NULL,
@@ -1890,139 +1892,7 @@ CREATE MULTISET TABLE db.table1
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (create_table
-          (keyword_create)
-          (keyword_multiset)
-          (keyword_table)
-          (object_reference
-            (identifier)
-            (identifier))
-          (column_definitions
-            (column_definition
-              (identifier)
-              (int
-                (keyword_int))
-              (keyword_not)
-              (keyword_null))
-            (column_definition
-              (identifier)
-              (int
-                (keyword_int))
-              (keyword_not)
-              (keyword_null)
-              (keyword_compress)
-              (literal)
-              (literal))
-            (column_definition
-              (identifier)
-              (keyword_date)
-              (keyword_not)
-              (keyword_null))
-            (column_definition
-              (identifier)
-              (timestamp
-                (keyword_timestamp)
-                (literal))
-              (keyword_not)
-              (keyword_null)
-              (keyword_default)
-              (keyword_current_timestamp))
-            (column_definition
-              (identifier)
-              (varchar
-                (keyword_varchar)
-                (literal))
-              (keyword_not)
-              (keyword_null)
-              (keyword_title)
-              (literal))
-            (column_definition
-              (identifier)
-              (timestamp
-                (keyword_timestamp)
-                (literal)
-                (keyword_with)
-                (keyword_time)
-                (keyword_zone))
-              (keyword_not)
-              (keyword_null))
-            (column_definition
-              (identifier)
-              (timestamp
-                (keyword_timestamp)
-                (literal)
-                (keyword_with)
-                (keyword_time)
-                (keyword_zone))
-              (keyword_not)
-              (keyword_null))
-            (column_definition
-              (keyword_period)
-              (keyword_for)
-              (identifier)
-              (identifier)
-              (identifier)
-              (keyword_as)
-              (keyword_transactiontime)))
-          (primary_index_clause
-            (keyword_primary)
-            (keyword_index)
-            (field
-              (identifier))
-            (field
-              (identifier))
-            (field
-              (identifier)))
-          (partition_by_clause
-            (keyword_partition)
-            (keyword_by)
-            (invocation
-              (object_reference
-                (identifier))
-              (term
-                (binary_expression
-                  (field
-                    (identifier))
-                  (literal
-                    (identifier))))
-              (term
-                (field
-                  (identifier))
-                (identifier)))
-            (invocation
-              (object_reference
-                (identifier))
-              (term
-                (between_expression
-                  (field
-                    (identifier))
-                  (keyword_between)
-                  (literal
-                    (identifier))
-                  (keyword_and)
-                  (literal
-                    (identifier))
-                  (each_clause
-                    (keyword_each)
-                    (interval
-                      (keyword_interval)
-                      (keyword_month))))))
-            (invocation
-              (object_reference
-                (identifier))
-              (term
-                (between_expression
-                  (field
-                    (identifier))
-                  (keyword_between)
-                  (literal)
-                  (keyword_and)
-                  (literal)
-                  (each_clause
-                    (keyword_each)
-                    (literal)))))))))
+
 
 ================================================================================
 Create table with shorcut

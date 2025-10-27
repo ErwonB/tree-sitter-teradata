@@ -2943,7 +2943,20 @@ module.exports = grammar({
     _format_column_constraint: $ => seq($.keyword_format, $._literal_string),
     _compress_column_constraint: $ =>
         seq($.keyword_compress,
-            optional(wrapped_in_parenthesis(comma_list(alias($._literal_string, $.literal), true)))
+            optional(choice(
+              $._integer,
+              $._decimal_number,
+              $._literal_string,
+              wrapped_in_parenthesis(
+                  comma_list(
+                    choice(
+                      $._integer,
+                      $._decimal_number,
+                      $._literal_string,
+                    )
+                  , true))
+              )
+            )
       ),
 
     _character_set_column_constraint: $ => seq($.keyword_character, $.keyword_set, $.object_reference),
