@@ -2676,7 +2676,7 @@ module.exports = grammar({
     _merge_statement: $=> seq(
       optional($.lock_clause),
       $.keyword_merge,
-      $.keyword_into,
+      optional($.keyword_into),
       $.object_reference,
       optional($._alias),
       $.keyword_using,
