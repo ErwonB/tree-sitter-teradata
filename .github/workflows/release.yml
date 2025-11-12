@@ -1,0 +1,120 @@
+name: Build & Release (Tree-sitter Teradata)
+
+on:
+  push:
+    tags:
+      - v*
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  LANG_NAME: teradata
+
+jobs:
+  build-native:
+    name: Build native libs (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            asset: sql-linux-x64.so
+          - os: macos-latest
+            asset: sql-macos.dylib
+          - os: windows-latest
+            asset: sql-windows-x64.dll
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Rust toolchain (for tree-sitter-cli)
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install tree-sitter-cli
+        run: cargo install tree-sitter-cli --locked
+
+      - name: Generate parser
+        run: tree-sitter generate
+
+      - name: Enable MSVC toolchain (Windows)
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Build shared library (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: |
+          mkdir -p dist
+          tree-sitter build --output dist/${{ matrix.asset }}
+
+      - name: Build shared library (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          $env:CC = "cl"
+          tree-sitter build --output dist/${{ matrix.asset }}
+
+      - name: Upload native artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-${{ runner.os }}
+          path: dist/*
+
+  build-wasm:
+    name: Build WebAssembly
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Rust toolchain (for tree-sitter-cli)
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install tree-sitter-cli
+        run: cargo install tree-sitter-cli --locked
+
+      - name: Set up Emscripten
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: latest
+
+      - name: Generate parser
+        run: tree-sitter generate
+
+      - name: Build Wasm
+        run: |
+          mkdir -p dist
+          tree-sitter build --wasm --output dist/tree-sitter-teradata.wasm
+
+      - name: Upload wasm artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: wasm
+          path: dist/*.wasm
+
+  release:
+    name: Create GitHub Release
+    needs: [build-native, build-wasm]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+
+      - name: Gather files
+        run: |
+          mkdir -p release
+          find dist -type f -exec cp {} release/ \;
+
+      - name: Publish Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release/*
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
