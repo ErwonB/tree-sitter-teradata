@@ -2491,11 +2491,11 @@ module.exports = grammar({
         field('name', $.identifier),
       ),
       seq(
-        field('schema', $.identifier),
+        field('schema', choice($.identifier, alias($._interpolated_var, $.identifier))),
         '.',
-        field('name', $.identifier),
+        field('name', choice($.identifier, alias($._interpolated_var, $.identifier))),
       ),
-      field('name', $.identifier),
+      field('name', choice($.identifier, alias($._interpolated_var, $.identifier))),
     ),
 
     _copy_statement: $ => seq(
@@ -3953,6 +3953,7 @@ module.exports = grammar({
         $.keyword_true,
         $.keyword_false,
         $.keyword_null,
+        $._interpolated_var
       ),
     ),
     _double_quote_string: _ => /"[^"]*"/,
@@ -3987,14 +3988,17 @@ module.exports = grammar({
 
     bang: _ => '!',
 
+    _interpolated_var: $ => choice(
+      $._interpolated_identifier,
+      $._interpolated_identifier1,
+      $._interpolated_identifier2,
+    ),
+
     identifier: $ => choice(
       $._identifier,
       $._double_quote_string,
       $._tsql_parameter,
       seq("`", $._identifier, "`"),
-      $._interpolated_identifier,
-      $._interpolated_identifier1,
-      $._interpolated_identifier2,
       $._macro_identifier,
     ),
     _tsql_parameter: $ => seq('@', $._identifier),
