@@ -2267,4 +2267,115 @@ PARTITION BY (
                     (keyword_each)
                     (literal)))))))))
 
+================================================================================
+Create with constraint teradata style
+================================================================================
+
+CREATE MULTISET  TABLE db.table1
+(
+    field1           INTEGER 					NOT NULL,
+	field2			 VARCHAR(250) 					NULL,
+    CONSTRAINT primary_1 PRIMARY KEY (column_1, column_2) ,
+     CONSTRAINT unique_1  current transactiontime UNIQUE (column_3, column_4),
+     CONSTRAINT check_1   CHECK (column_3 > 0 OR column_4 IS NOT NULL),
+     CONSTRAINT ref_1     FOREIGN KEY (column_5, column_6) REFERENCES parent_1 (column_2, column_3),
+     CONSTRAINT U_REF_MAIL CURRENT TRANSACTIONTIME UNIQUE ( col5 )
+
+)
+PRIMARY INDEX ( field1 )
+;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (create_table
+          (keyword_create)
+          (keyword_multiset)
+          (keyword_table)
+          (object_reference
+            (identifier)
+            (identifier))
+          (column_definitions
+            (column_definition
+              (identifier)
+              (int
+                (keyword_int))
+              (keyword_not)
+              (keyword_null))
+            (column_definition
+              (identifier)
+              (varchar
+                (keyword_varchar)
+                (literal))
+              (keyword_null))
+            (constraints
+              (constraint
+                (keyword_constraint)
+                (identifier)
+                (keyword_primary)
+                (keyword_key)
+                (ordered_columns
+                  (column
+                    (identifier))
+                  (column
+                    (identifier))))
+              (constraint
+                (keyword_constraint)
+                (identifier)
+                (keyword_current)
+                (keyword_transactiontime)
+                (keyword_unique)
+                (ordered_columns
+                  (column
+                    (identifier))
+                  (column
+                    (identifier))))
+              (constraint
+                (keyword_constraint)
+                (identifier)
+                (keyword_check)
+                (binary_expression
+                  (binary_expression
+                    (field
+                      (identifier))
+                    (literal))
+                  (keyword_or)
+                  (binary_expression
+                    (field
+                      (identifier))
+                    (is_not
+                      (keyword_is)
+                      (keyword_not))
+                    (literal
+                      (keyword_null)))))
+              (constraint
+                (keyword_constraint)
+                (identifier)
+                (keyword_foreign)
+                (keyword_key)
+                (ordered_columns
+                  (column
+                    (identifier))
+                  (column
+                    (identifier)))
+                (keyword_references)
+                (object_reference
+                  (identifier))
+                (identifier)
+                (identifier))
+              (constraint
+                (keyword_constraint)
+                (identifier)
+                (keyword_current)
+                (keyword_transactiontime)
+                (keyword_unique)
+                (ordered_columns
+                  (column
+                    (identifier))))))
+          (primary_index_clause
+            (keyword_primary)
+            (keyword_index)
+            (field
+              (identifier))))))
 

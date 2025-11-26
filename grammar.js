@@ -3035,6 +3035,7 @@ module.exports = grammar({
           $.literal
         )
       ),
+      optional(seq($.keyword_current, $.keyword_transactiontime)),
       $.keyword_check,
       wrapped_in_parenthesis($.binary_expression)
     ),
@@ -3067,6 +3068,7 @@ module.exports = grammar({
     constraint: $ => choice(
       $._constraint_literal,
       $._key_constraint,
+      $._constraint_key_constraint,
       $._primary_key_constraint,
       $._check_constraint
     ),
@@ -3089,6 +3091,42 @@ module.exports = grammar({
       $._primary_key,
       $.ordered_columns,
     ),
+
+    _constraint_key_constraint: $ => seq(
+      $.keyword_constraint,
+      field('name', $.identifier),
+      optional(seq($.keyword_current, $.keyword_transactiontime)),
+      choice(
+          $.keyword_unique,
+        seq(optional($.keyword_foreign), $.keyword_key, optional($._if_not_exists)),
+        $.keyword_index,
+      ),
+      $.ordered_columns,
+      optional(
+        seq(
+          $.keyword_references,
+          $.object_reference,
+          paren_list($.identifier, true),
+          repeat(
+            seq(
+              $.keyword_on,
+              choice($._delete, $._update),
+              choice(
+                seq($.keyword_no, $.keyword_action),
+                $.keyword_restrict,
+                $.keyword_cascade,
+                seq(
+                  $.keyword_set,
+                  choice($.keyword_null, $.keyword_default),
+                    optional(paren_list($.identifier, true))
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
+
 
     _key_constraint: $ => seq(
       choice(
