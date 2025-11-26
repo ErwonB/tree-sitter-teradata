@@ -788,6 +788,7 @@ module.exports = grammar({
       $._drop_statement,
       $._rename_statement,
       $._merge_statement,
+      $._database_statement,
       $.comment_statement,
       $.set_statement,
       $.reset_statement,
@@ -902,6 +903,7 @@ module.exports = grammar({
         $.keyword_view,
         $.keyword_macro,
         $.keyword_function,
+        seq($.keyword_join, $.keyword_index),
         seq($._stats, $.keyword_on),
       ),
       $.object_reference,
@@ -2671,6 +2673,11 @@ module.exports = grammar({
 
     _abort_statement: $ => seq(
       $.abort,
+    ),
+
+    _database_statement: $ => seq(
+      $.keyword_database,
+      $.object_reference,
     ),
 
     _merge_statement: $=> seq(
