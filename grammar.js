@@ -464,8 +464,6 @@ module.exports = grammar({
     _temporary: $ => choice($.keyword_temp, $.keyword_temporary),
     _not_null: $ => seq($.keyword_not, $.keyword_null),
     _primary_key: $ => seq($.keyword_primary, $.keyword_key),
-    _if_exists: $ => seq($.keyword_if, $.keyword_exists),
-    _if_not_exists: $ => seq($.keyword_if, $.keyword_not, $.keyword_exists),
     _default_null: $ => seq($.keyword_default, $.keyword_null),
     _current_row: $ => seq($.keyword_current, $.keyword_row),
     _exclude_current_row: $ => seq($.keyword_exclude, $.keyword_current, $.keyword_row),
@@ -1206,7 +1204,6 @@ module.exports = grammar({
               $.keyword_table,
             ),
           ),
-        optional($._if_not_exists),
         $.object_reference,
         choice(
           seq(
@@ -1296,7 +1293,6 @@ module.exports = grammar({
         optional($._temporary),
         optional($.keyword_recursive),
         $.keyword_view,
-        optional($._if_not_exists),
         $.object_reference,
         optional(paren_list($.identifier)),
         $.keyword_as,
@@ -1709,7 +1705,6 @@ module.exports = grammar({
       optional($.keyword_concurrently),
       optional(
         seq(
-          optional($._if_not_exists),
           field("column", $._column),
         ),
       ),
@@ -1745,7 +1740,6 @@ module.exports = grammar({
     create_database: $ => seq(
       $.keyword_create,
       $.keyword_database,
-      optional($._if_not_exists),
       $.identifier,
       optional($.keyword_with),
       repeat(
@@ -1809,7 +1803,6 @@ module.exports = grammar({
         )
       ),
       $.keyword_sequence,
-      optional($._if_not_exists),
       $.object_reference,
       repeat(
         choice(
@@ -1830,7 +1823,6 @@ module.exports = grammar({
     create_extension: $ => seq(
       $.keyword_create,
       $.keyword_extension,
-      optional($._if_not_exists),
       $.identifier,
       optional($.keyword_with),
       optional(seq($.keyword_version, choice($.identifier, alias($._literal_string, $.literal)))),
@@ -1846,7 +1838,6 @@ module.exports = grammar({
       optional($._temporary),
       $.keyword_trigger,
       // sqlite/mariadb
-      optional($._if_not_exists),
       $.object_reference,
       choice(
         $.keyword_before,
@@ -1952,7 +1943,6 @@ module.exports = grammar({
         $.keyword_table,
         $.keyword_tables,
       ),
-      optional($._if_exists),
       $.object_reference,
       optional(
         choice(
@@ -1983,7 +1973,6 @@ module.exports = grammar({
       optional($.keyword_nontemporal),
       $.keyword_alter,
       $.keyword_table,
-      optional($._if_exists),
       $.object_reference,
       choice(
         seq(
@@ -2018,7 +2007,6 @@ module.exports = grammar({
       optional(
         $.keyword_column,
       ),
-      optional($._if_not_exists),
       $.column_definition,
     ),
 
@@ -2032,7 +2020,6 @@ module.exports = grammar({
     drop_constraint: $ => seq(
       $.keyword_drop,
       $.keyword_constraint,
-      optional($._if_exists),
       $.identifier,
       optional($._drop_behavior),
     ),
@@ -2105,7 +2092,6 @@ module.exports = grammar({
       optional(
         $.keyword_column,
       ),
-      optional($._if_exists),
       $.column_definition,
     ),
 
@@ -2114,7 +2100,6 @@ module.exports = grammar({
       optional(
         $.keyword_column,
       ),
-      optional($._if_exists),
       field('old_name', $.identifier),
       $.column_definition,
     ),
@@ -2124,7 +2109,6 @@ module.exports = grammar({
       optional(
         $.keyword_column,
       ),
-      optional($._if_exists),
       field('name', $.identifier),
     ),
 
@@ -2141,7 +2125,6 @@ module.exports = grammar({
     alter_view: $ => seq(
       $.keyword_alter,
       $.keyword_view,
-      optional($._if_exists),
       $.object_reference,
       choice(
         // TODO Postgres allows a single "alter column" to set or drop default
@@ -2223,7 +2206,6 @@ module.exports = grammar({
     alter_index: $ => seq(
       $.keyword_alter,
       $.keyword_index,
-      optional($._if_exists),
       $.identifier,
       choice(
         $.rename_object,
@@ -2249,7 +2231,6 @@ module.exports = grammar({
     alter_sequence: $ => seq(
       $.keyword_alter,
       $.keyword_sequence,
-      optional($._if_exists),
       $.object_reference,
       choice(
         repeat1(
@@ -2292,7 +2273,6 @@ module.exports = grammar({
         seq(
           $.keyword_add,
           $.keyword_value,
-          optional($._if_not_exists),
             alias($._single_quote_string,$.literal),
           optional(
             seq(
@@ -2318,7 +2298,6 @@ module.exports = grammar({
             ),
             seq($.keyword_drop,
               $.keyword_attribute,
-              optional($._if_exists),
               $.identifier),
             seq(
               $.keyword_alter,
@@ -2374,7 +2353,6 @@ module.exports = grammar({
     drop_table: $ => seq(
       $.keyword_drop,
       $.keyword_table,
-      optional($._if_exists),
       $.object_reference,
       optional($._drop_behavior),
     ),
@@ -2382,7 +2360,6 @@ module.exports = grammar({
     drop_view: $ => seq(
       $.keyword_drop,
       $.keyword_view,
-      optional($._if_exists),
       $.object_reference,
       optional($._drop_behavior),
     ),
@@ -2390,7 +2367,6 @@ module.exports = grammar({
     drop_database: $ => seq(
       $.keyword_drop,
       $.keyword_database,
-      optional($._if_exists),
       $.identifier,
       optional($.keyword_with),
     ),
@@ -2402,14 +2378,12 @@ module.exports = grammar({
         $.keyword_role,
         $.keyword_user,
       ),
-      optional($._if_exists),
       $.identifier,
     ),
 
     drop_type: $ => seq(
       $.keyword_drop,
       $.keyword_type,
-      optional($._if_exists),
       $.object_reference,
       optional($._drop_behavior),
     ),
@@ -2417,7 +2391,6 @@ module.exports = grammar({
     drop_sequence: $ => seq(
       $.keyword_drop,
       $.keyword_sequence,
-      optional($._if_exists),
       $.object_reference,
       optional($._drop_behavior),
     ),
@@ -2426,7 +2399,6 @@ module.exports = grammar({
       $.keyword_drop,
       $.keyword_index,
       optional($.keyword_concurrently),
-      optional($._if_exists),
       field("name", $.identifier),
       optional($._drop_behavior),
       optional(
@@ -2440,7 +2412,6 @@ module.exports = grammar({
     drop_extension: $ => seq(
       $.keyword_drop,
       $.keyword_extension,
-      optional($._if_exists),
       comma_list($.identifier, true),
       optional(choice($.keyword_cascade, $.keyword_restrict)),
     ),
@@ -2448,7 +2419,6 @@ module.exports = grammar({
     drop_function: $ => seq(
       $.keyword_drop,
       $.keyword_function,
-      optional($._if_exists),
       $.object_reference,
       optional($._drop_behavior),
     ),
@@ -3100,7 +3070,7 @@ module.exports = grammar({
       optional(seq($.keyword_current, $.keyword_transactiontime)),
       choice(
           $.keyword_unique,
-        seq(optional($.keyword_foreign), $.keyword_key, optional($._if_not_exists)),
+        seq(optional($.keyword_foreign), $.keyword_key),
         $.keyword_index,
       ),
       $.ordered_columns,
@@ -3142,7 +3112,7 @@ module.exports = grammar({
             ),
           ),
         ),
-        seq(optional($.keyword_foreign), $.keyword_key, optional($._if_not_exists)),
+        seq(optional($.keyword_foreign), $.keyword_key),
         $.keyword_index,
       ),
       optional(field('name', $.identifier)),

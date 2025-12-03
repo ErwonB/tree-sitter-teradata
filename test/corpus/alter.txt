@@ -158,7 +158,7 @@ Alter table and change column renaming and changing type
 ================================================================================
 
 ALTER TABLE my_table
-  CHANGE COLUMN IF EXISTS val3 val4 INT UNSIGNED NOT NULL;
+  CHANGE COLUMN val3 val4 INT UNSIGNED NOT NULL;
 
 --------------------------------------------------------------------------------
 
@@ -172,8 +172,6 @@ ALTER TABLE my_table
       (change_column
         (keyword_change)
         (keyword_column)
-        (keyword_if)
-        (keyword_exists)
         old_name: (identifier)
         (column_definition
           name: (identifier)
@@ -342,10 +340,10 @@ ALTER TABLE my_table
 Alter table and multiple
 ================================================================================
 
-ALTER TABLE IF EXISTS my_table
-  ADD COLUMN IF NOT EXISTS val4 DATE,
+ALTER TABLE my_table
+  ADD COLUMN val4 DATE,
   ALTER COLUMN val5 DROP NOT NULL, -- comment, ignore me!
-  DROP COLUMN IF EXISTS val8;
+  DROP COLUMN val8;
 
 --------------------------------------------------------------------------------
 
@@ -354,16 +352,11 @@ ALTER TABLE IF EXISTS my_table
     (alter_table
       (keyword_alter)
       (keyword_table)
-      (keyword_if)
-      (keyword_exists)
       (object_reference
         name: (identifier))
       (add_column
         (keyword_add)
         (keyword_column)
-        (keyword_if)
-        (keyword_not)
-        (keyword_exists)
         (column_definition
           name: (identifier)
           type: (keyword_date)))
@@ -378,8 +371,6 @@ ALTER TABLE IF EXISTS my_table
       (drop_column
         (keyword_drop)
         (keyword_column)
-        (keyword_if)
-        (keyword_exists)
         name: (identifier)))))
 
 ================================================================================
@@ -407,7 +398,7 @@ ALTER VIEW my_view
 Alter view and rename
 ================================================================================
 
-ALTER VIEW IF EXISTS my_view
+ALTER VIEW my_view
   RENAME TO my_other_view;
 
 --------------------------------------------------------------------------------
@@ -417,8 +408,6 @@ ALTER VIEW IF EXISTS my_view
     (alter_view
       (keyword_alter)
       (keyword_view)
-      (keyword_if)
-      (keyword_exists)
       (object_reference
         name: (identifier))
       (rename_object
@@ -514,7 +503,7 @@ FOREIGN KEY ("accountId") REFERENCES "Account" ("accountId") ON DELETE CASCADE;
 MySQL: Rename table
 ================================================================================
 
-RENAME TABLES IF EXISTS old_table
+RENAME TABLES old_table
 NOWAIT
 TO backup_table,
 new_table TO old_table;
@@ -525,8 +514,6 @@ new_table TO old_table;
   (statement
     (keyword_rename)
     (keyword_tables)
-    (keyword_if)
-    (keyword_exists)
     (object_reference
       (identifier))
     (keyword_nowait)
@@ -586,7 +573,7 @@ col2 VARCHAR(255) NOT NULL DEFAULT('EMPTY');
 Alter index rename
 ================================================================================
 
-ALTER INDEX IF EXISTS myindex RENAME TO my_index
+ALTER INDEX myindex RENAME TO my_index
 
 --------------------------------------------------------------------------------
 
@@ -595,8 +582,6 @@ ALTER INDEX IF EXISTS myindex RENAME TO my_index
     (alter_index
       (keyword_alter)
       (keyword_index)
-      (keyword_if)
-      (keyword_exists)
       (identifier)
       (rename_object
         (keyword_rename)
@@ -927,7 +912,7 @@ ALTER SEQUENCE serial RESTART WITH 105;
 Alter sequence rename
 ================================================================================
 
-ALTER SEQUENCE IF EXISTS serial RENAME TO cereal;
+ALTER SEQUENCE serial RENAME TO cereal;
 
 --------------------------------------------------------------------------------
 
@@ -936,8 +921,6 @@ ALTER SEQUENCE IF EXISTS serial RENAME TO cereal;
     (alter_sequence
       (keyword_alter)
       (keyword_sequence)
-      (keyword_if)
-      (keyword_exists)
       (object_reference
         (identifier))
       (rename_object
@@ -970,7 +953,7 @@ ALTER SEQUENCE serial OWNER TO count_von_count;
 Alter sequence complex example
 ================================================================================
 
-ALTER SEQUENCE IF EXISTS serial
+ALTER SEQUENCE serial
 AS BIGINT
 INCREMENT BY 2
 MINVALUE 3
@@ -987,8 +970,6 @@ OWNED BY numbers.number_sequences
     (alter_sequence
       (keyword_alter)
       (keyword_sequence)
-      (keyword_if)
-      (keyword_exists)
       (object_reference
         (identifier))
       (keyword_as)

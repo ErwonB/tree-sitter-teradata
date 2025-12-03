@@ -18,7 +18,7 @@ DROP FUNCTION my_function;
 Drop function if exists
 ================================================================================
 
-DROP FUNCTION IF EXISTS my_function;
+DROP FUNCTION my_function;
 
 --------------------------------------------------------------------------------
 
@@ -27,8 +27,6 @@ DROP FUNCTION IF EXISTS my_function;
     (drop_function
       (keyword_drop)
       (keyword_function)
-      (keyword_if)
-      (keyword_exists)
       (object_reference
         (identifier)))))
 
@@ -154,7 +152,7 @@ DROP INDEX idx ON tbl;
 Drop index cascade full sequence
 ================================================================================
 
-DROP INDEX CONCURRENTLY IF EXISTS idx CASCADE ON tbl;
+DROP INDEX CONCURRENTLY idx CASCADE ON tbl;
 
 --------------------------------------------------------------------------------
 
@@ -164,8 +162,6 @@ DROP INDEX CONCURRENTLY IF EXISTS idx CASCADE ON tbl;
       (keyword_drop)
       (keyword_index)
       (keyword_concurrently)
-      (keyword_if)
-      (keyword_exists)
       name: (identifier)
       (keyword_cascade)
       (keyword_on)
@@ -176,7 +172,7 @@ DROP INDEX CONCURRENTLY IF EXISTS idx CASCADE ON tbl;
 Drop index restrict full sequence
 ================================================================================
 
-DROP INDEX CONCURRENTLY IF EXISTS idx RESTRICT ON tbl;
+DROP INDEX CONCURRENTLY idx RESTRICT ON tbl;
 
 --------------------------------------------------------------------------------
 
@@ -186,8 +182,6 @@ DROP INDEX CONCURRENTLY IF EXISTS idx RESTRICT ON tbl;
       (keyword_drop)
       (keyword_index)
       (keyword_concurrently)
-      (keyword_if)
-      (keyword_exists)
       name: (identifier)
       (keyword_restrict)
       (keyword_on)
@@ -225,7 +219,7 @@ DROP USER rapunzel;
 Drop sequence
 ================================================================================
 
-DROP SEQUENCE IF EXISTS serial RESTRICT;
+DROP SEQUENCE serial RESTRICT;
 
 --------------------------------------------------------------------------------
 
@@ -234,8 +228,6 @@ DROP SEQUENCE IF EXISTS serial RESTRICT;
     (drop_sequence
       (keyword_drop)
       (keyword_sequence)
-      (keyword_if)
-      (keyword_exists)
       (object_reference
         (identifier))
       (keyword_restrict))))

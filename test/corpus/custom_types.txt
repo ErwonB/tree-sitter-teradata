@@ -115,7 +115,7 @@ CREATE TYPE bigobj (
 Drop type
 ================================================================================
 
-DROP TYPE IF EXISTS boxes CASCADE;
+DROP TYPE boxes CASCADE;
 
 --------------------------------------------------------------------------------
 
@@ -124,8 +124,6 @@ DROP TYPE IF EXISTS boxes CASCADE;
     (drop_type
       (keyword_drop)
       (keyword_type)
-      (keyword_if)
-      (keyword_exists)
       (object_reference
         (identifier))
       (keyword_cascade))))
@@ -196,7 +194,7 @@ Alter type add value
 ================================================================================
 
 ALTER TYPE boxes
-ADD VALUE  IF NOT EXISTS 'color' AFTER 'weight'
+ADD VALUE  'color' AFTER 'weight'
 
 --------------------------------------------------------------------------------
 
@@ -208,9 +206,6 @@ ADD VALUE  IF NOT EXISTS 'color' AFTER 'weight'
       (identifier)
       (keyword_add)
       (keyword_value)
-      (keyword_if)
-      (keyword_not)
-      (keyword_exists)
       (literal)
       (keyword_after)
       (literal))))
@@ -260,7 +255,7 @@ ADD ATTRIBUTE label text
 Alter type drop attribute
 ================================================================================
 
-ALTER TYPE boxes DROP ATTRIBUTE IF EXISTS label
+ALTER TYPE boxes DROP ATTRIBUTE label
 --------------------------------------------------------------------------------
 
 (program
@@ -271,8 +266,6 @@ ALTER TYPE boxes DROP ATTRIBUTE IF EXISTS label
       (identifier)
       (keyword_drop)
       (keyword_attribute)
-      (keyword_if)
-      (keyword_exists)
       (identifier))))
 
 ================================================================================

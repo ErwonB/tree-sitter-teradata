@@ -23,7 +23,7 @@ Create named index with options
 ================================================================================
 
 CREATE UNIQUE INDEX CONCURRENTLY
-IF NOT EXISTS idx1
+idx1
 ON tab USING HASH(col ASC)
 WHERE tab.col > 10;
 
@@ -36,9 +36,6 @@ WHERE tab.col > 10;
       (keyword_unique)
       (keyword_index)
       (keyword_concurrently)
-      (keyword_if)
-      (keyword_not)
-      (keyword_exists)
       (identifier)
       (keyword_on)
       (object_reference

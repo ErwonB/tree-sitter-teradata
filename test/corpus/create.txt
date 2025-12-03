@@ -312,7 +312,7 @@ CREATE TABLE products (
 Create table if not exists
 ================================================================================
 
-CREATE TABLE IF NOT EXISTS `addresses` (
+CREATE TABLE `addresses` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT
 );
 
@@ -323,9 +323,6 @@ CREATE TABLE IF NOT EXISTS `addresses` (
     (create_table
       (keyword_create)
       (keyword_table)
-      (keyword_if)
-      (keyword_not)
-      (keyword_exists)
       (object_reference
         name: (identifier))
       (column_definitions
@@ -405,7 +402,7 @@ CREATE TABLE `addresses` (
 Create table with auto increment
 ================================================================================
 
-CREATE TABLE IF NOT EXISTS `addresses` (
+CREATE TABLE `addresses` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
   KEY `addresses_s_id_index` (`s_id`)
@@ -418,9 +415,6 @@ CREATE TABLE IF NOT EXISTS `addresses` (
     (create_table
       (keyword_create)
       (keyword_table)
-      (keyword_if)
-      (keyword_not)
-      (keyword_exists)
       (object_reference
         name: (identifier))
       (column_definitions
@@ -450,7 +444,7 @@ CREATE TABLE IF NOT EXISTS `addresses` (
 Create table with multiple constraints
 ================================================================================
 
-CREATE TABLE IF NOT EXISTS `addresses` (
+CREATE TABLE `addresses` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `s_id` bigint(20) DEFAULT NULL,
   `first_name` varchar(255) DEFAULT NULL,
@@ -468,9 +462,6 @@ CREATE TABLE IF NOT EXISTS `addresses` (
     (create_table
       (keyword_create)
       (keyword_table)
-      (keyword_if)
-      (keyword_not)
-      (keyword_exists)
       (object_reference
         name: (identifier))
       (column_definitions
@@ -536,7 +527,7 @@ CREATE TABLE IF NOT EXISTS `addresses` (
 Debugging
 ================================================================================
 
-CREATE TABLE IF NOT EXISTS `addresses` (
+CREATE TABLE `addresses` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `s_id` bigint(20) DEFAULT NULL,
   `first_name` varchar(255) DEFAULT NULL
@@ -549,9 +540,6 @@ CREATE TABLE IF NOT EXISTS `addresses` (
     (create_table
       (keyword_create)
       (keyword_table)
-      (keyword_if)
-      (keyword_not)
-      (keyword_exists)
       (object_reference
         name: (identifier))
       (column_definitions
@@ -1607,7 +1595,7 @@ CREATE DATABASE hollywood
 Create database if not exists
 ================================================================================
 
-CREATE DATABASE IF NOT EXISTS hollywood
+CREATE DATABASE hollywood
 
 --------------------------------------------------------------------------------
 
@@ -1616,9 +1604,6 @@ CREATE DATABASE IF NOT EXISTS hollywood
     (create_database
       (keyword_create)
       (keyword_database)
-      (keyword_if)
-      (keyword_not)
-      (keyword_exists)
       (identifier))))
 
 ================================================================================
@@ -1681,7 +1666,7 @@ INHERIT;
 Create sequence
 ================================================================================
 
-CREATE TEMP SEQUENCE IF NOT EXISTS serial
+CREATE TEMP SEQUENCE serial
 AS BIGINT
 INCREMENT BY 3
 MINVALUE 10
@@ -1697,9 +1682,6 @@ OWNED BY numbers.number_sequences;
       (keyword_create)
       (keyword_temp)
       (keyword_sequence)
-      (keyword_if)
-      (keyword_not)
-      (keyword_exists)
       (object_reference
         (identifier))
       (keyword_as)
