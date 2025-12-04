@@ -2361,3 +2361,72 @@ PRIMARY INDEX ( field1 )
             (field
               (identifier))))))
 
+================================================================================
+Create with constraint teradata style
+================================================================================
+
+CREATE SET TABLE t_blc, map = TD_MAP1,
+NO FALLBACK, NO BEFORE JOURNAL,
+ NO AFTER JOURNAL, CHECKSUM = DEFAULT,
+ BLOCKCOMPRESSION = ALWAYS
+ BLOCKCOMPRESSIONALGORITHM=ZLIB
+ BLOCKCOMPRESSIONLEVEL=8
+ ,WITH CONCURRENT ISOLATED LOADING (
+       c1   INTEGER
+       )
+     UNIQUE PRIMARY INDEX (c1)
+     ;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (create_table
+          (keyword_create)
+          (keyword_set)
+          (keyword_table)
+          (object_reference
+            (identifier))
+          (pre_table_option
+            (pre_table_option_spec
+              (keyword_map)
+              (literal
+                (identifier)
+                (MISSING "_single_quote_string_token1")))
+            (pre_table_option_spec
+              (keyword_no)
+              (keyword_fallback))
+            (pre_table_option_spec
+              (keyword_no)
+              (keyword_before)
+              (keyword_journal))
+            (pre_table_option_spec
+              (keyword_no)
+              (keyword_after)
+              (keyword_journal))
+            (pre_table_option_spec
+              (keyword_checksum)
+              (keyword_default))
+            (pre_table_option_spec
+              (keyword_blockcompression)
+              (keyword_always)
+              (keyword_blockcompressionalgorithm)
+              (keyword_zlib)
+              (keyword_blockcompressionlevel))
+            (pre_table_option_spec
+              (keyword_with)
+              (keyword_concurrent)
+              (keyword_isolated)
+              (keyword_loading)))
+          (column_definitions
+            (column_definition
+              (identifier)
+              (int
+                (keyword_int))))
+          (primary_index_clause
+            (keyword_unique)
+            (keyword_primary)
+            (keyword_index)
+            (field
+              (identifier))))))
+

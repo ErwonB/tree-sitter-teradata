@@ -437,6 +437,36 @@ module.exports = grammar({
     keyword_modifies: _ => make_keyword("modifies"),
     keyword_reads: _ => make_keyword("reads"),
 
+    // Teradata table option
+    keyword_map: _ => make_keyword("map"),
+    keyword_isolated: _ => make_keyword("isolated"),
+    keyword_loading: _ => make_keyword("loading"),
+    keyword_concurrent: _ => make_keyword("concurrent"),
+    keyword_blockcompressionlevel: _ => make_keyword("blockcompressionlevel"),
+    keyword_elzs_h: _ => make_keyword("elzs_h"),
+    keyword_zlib: _ => make_keyword("zlib"),
+    keyword_blockcompressionalgorithm: _ => make_keyword("blockcompressionalgorithm"),
+    keyword_never: _ => make_keyword("never"),
+    keyword_always: _ => make_keyword("always"),
+    keyword_manual: _ => make_keyword("manual"),
+    keyword_autotemp: _ => make_keyword("autotemp"),
+    keyword_blockcompression: _ => make_keyword("blockcompression"),
+    keyword_kilobytes: _ => make_keyword("kilobytes"),
+    keyword_kbytes: _ => make_keyword("kbytes"),
+    keyword_bytes: _ => make_keyword("bytes"),
+    keyword_maximum: _ => make_keyword("maximum"),
+    keyword_minimum: _ => make_keyword("minimum"),
+    keyword_datablocksize: _ => make_keyword("datablocksize"),
+    keyword_mergeblockratio: _ => make_keyword("mergeblockratio"),
+    keyword_freespace: _ => make_keyword("freespace"),
+    keyword_checksum: _ => make_keyword("checksum"),
+    keyword_log: _ => make_keyword("log"),
+    keyword_dual: _ => make_keyword("dual"),
+    keyword_journal: _ => make_keyword("journal"),
+    keyword_protection: _ => make_keyword("protection"),
+    keyword_fallback: _ => make_keyword("fallback"),
+    keyword_colocate: _ => make_keyword("colocate"),
+
     // Period operators
     keyword_overlaps: _ => make_keyword("overlaps"),
     keyword_equals: _ => make_keyword("equals"),
@@ -1205,6 +1235,7 @@ module.exports = grammar({
             ),
           ),
         $.object_reference,
+        optional($.pre_table_option),
         choice(
           seq(
             $.column_definitions,
@@ -2866,6 +2897,34 @@ module.exports = grammar({
       '=',
       field('right', $._expression),
     ),
+
+    pre_table_option_spec: $ =>
+      choice(
+        seq($.keyword_map, '=', $.literal, optional(seq($.keyword_colocate, $.keyword_using, $.literal))),
+        seq(optional($.keyword_no), $.keyword_fallback, optional($.keyword_protection)),
+        seq($.keyword_with, $.keyword_journal, $.keyword_table, '=', $.literal),
+        seq(optional($.keyword_no), $.keyword_log),
+        seq(choice($.keyword_no, $.keyword_dual), optional($.keyword_before), $.keyword_journal),
+        seq(choice($.keyword_no, $.keyword_dual, seq(optional($.keyword_not), $.keyword_local)), $.keyword_after, $.keyword_journal),
+        seq($.keyword_checksum, '=', choice($.keyword_default, $.keyword_on, $.keyword_off)),
+        seq($.keyword_freespace, '=', $._integer, optional($.keyword_percent)),
+        seq(choice(
+                  seq($.keyword_default, $.keyword_mergeblockratio),
+                  seq($.keyword_mergeblockratio, '=', $._integer, optional($.keyword_percent)),
+                  seq($.keyword_no, $.keyword_mergeblockratio),
+                  )
+            ),
+        choice(seq($.keyword_datablocksize, '=', $.float, choice($.keyword_bytes, $.keyword_kbytes, $.keyword_kilobytes)),
+          seq(choice($.keyword_minimum, $.keyword_maximum, $.keyword_default), $.keyword_datablocksize)),
+        seq($.keyword_blockcompression, '=', choice($.keyword_autotemp, $.keyword_manual, $.keyword_always, $.keyword_never, $.keyword_default),
+         optional(seq($.keyword_blockcompressionalgorithm, '=', choice($.keyword_zlib, $.keyword_elzs_h, $.keyword_default))),
+         optional(seq($.keyword_blockcompressionlevel, '=', choice($._integer, $.keyword_default)))),
+         seq($.keyword_with, optional($.keyword_no), optional($.keyword_concurrent), $.keyword_isolated, $.keyword_loading, optional(seq($.keyword_for, choice($.keyword_all, $.keyword_insert, $.keyword_none)))),
+  )
+    ,
+
+    pre_table_option: $ => seq(','
+      , comma_list($.pre_table_option_spec, true)),
 
     table_option: $ => choice(
       seq($.keyword_default, $.keyword_character, $.keyword_set, $.identifier),
