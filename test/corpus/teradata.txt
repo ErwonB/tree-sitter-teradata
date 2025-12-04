@@ -330,6 +330,27 @@ collect stats column(field1,field3), column(field2) on db.table1;
           (identifier))))
 
 ================================================================================
+collect stats
+================================================================================
+
+COLLECT STATISTICS ON db1.field1 COLUMN(PARTITION);
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (keyword_collect)
+        (keyword_statistics)
+        (keyword_on)
+        (object_reference
+          (identifier)
+          (identifier))
+        (keyword_column)
+        (object_reference
+          (identifier))))
+
+
+================================================================================
 interval addition
 ================================================================================
 

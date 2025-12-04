@@ -943,7 +943,7 @@ module.exports = grammar({
       $.keyword_collect,
       choice($._stats),
       choice(
-        seq($.keyword_on, $.object_reference, $.keyword_column, field('value', $.object_reference)),
+        seq($.keyword_on, $.object_reference, $.keyword_column, wrapped_in_parenthesis(comma_list(field('value', $.object_reference)))),
         seq(
           $.keyword_column, wrapped_in_parenthesis(comma_list(field('value', $.object_reference))),
           repeat(seq(',', $.keyword_column, wrapped_in_parenthesis(comma_list(field('value', $.object_reference))))),
