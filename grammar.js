@@ -20,6 +20,7 @@ module.exports = grammar({
     [$.object_reference],
     [$.between_expression, $.period_expression, $.binary_expression],
     [$._expression_base, $.binary_expression],
+    [$._collect_statement],
   ],
 
   precedences: $ => [
@@ -944,10 +945,17 @@ module.exports = grammar({
       $.keyword_collect,
       choice($._stats),
       choice(
+        seq($.keyword_on, $.object_reference, $.keyword_column, field('value', $.object_reference)),
         seq($.keyword_on, $.object_reference, $.keyword_column, wrapped_in_parenthesis(comma_list(field('value', $.object_reference)))),
         seq(
           $.keyword_column, wrapped_in_parenthesis(comma_list(field('value', $.object_reference))),
           repeat(seq(',', $.keyword_column, wrapped_in_parenthesis(comma_list(field('value', $.object_reference))))),
+          $.keyword_on,
+          $.object_reference,
+          ),
+        seq(
+          comma_list(seq($.keyword_column, field('value', $.object_reference))),
+          repeat(seq(',', $.keyword_column, field('value', $.object_reference))),
           $.keyword_on,
           $.object_reference,
           )
