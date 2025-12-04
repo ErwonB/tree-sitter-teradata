@@ -482,6 +482,8 @@
   ">="
   ">"
   "<>"
+  "**"
+  (keyword_mod)
   (op_other)
   (op_unary_other)
 ] @operator

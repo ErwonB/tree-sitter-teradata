@@ -19,6 +19,7 @@ module.exports = grammar({
     [$.object_reference, $._qualified_field],
     [$.object_reference],
     [$.between_expression, $.period_expression, $.binary_expression],
+    [$._expression_base, $.binary_expression],
   ],
 
   precedences: $ => [
@@ -3348,6 +3349,14 @@ module.exports = grammar({
               ),
               $.keyword_from,
               $.term
+            )
+          ),
+          //position
+          paren_list(
+            seq(
+              field('expression',$._expression),
+              $.keyword_in,
+              field('expression',$._expression),
             )
           ),
           // _aggregate_function, e.g. group_concat
