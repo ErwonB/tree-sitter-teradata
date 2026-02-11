@@ -3000,6 +3000,7 @@ module.exports = grammar({
                       $._integer,
                       $._decimal_number,
                       $._literal_string,
+                      $.keyword_null,
                     )
                   , true))
               )
