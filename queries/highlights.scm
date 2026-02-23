@@ -20,6 +20,10 @@
   (keyword_object_id)
   (keyword_strtok_split_to_table)
   (keyword_regexp_split_to_table)
+  (keyword_current_timestamp)
+  (keyword_current_date)
+  (keyword_session)
+  (keyword_user)
 ] @function.call
 
 (relation
@@ -85,7 +89,6 @@
  (keyword_preceding)
  (keyword_following)
  (keyword_first)
- (keyword_current_timestamp)
  (keyword_immutable)
  (keyword_atomic)
  (keyword_cost)
@@ -273,7 +276,6 @@
   (keyword_restart)
   (keyword_tablespace)
   (keyword_until)
-  (keyword_user)
   (keyword_valid)
   (keyword_action)
   (keyword_definer)
@@ -289,7 +291,6 @@
   (keyword_inout)
   (keyword_variadic)
   (keyword_ordinality)
-  (keyword_session)
   (keyword_isolation)
   (keyword_level)
   (keyword_serializable)

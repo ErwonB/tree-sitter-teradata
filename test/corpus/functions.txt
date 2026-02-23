@@ -906,7 +906,8 @@ select extract(day from current_date), extract(hour from current_timestamp)
 , extract(minute from current_timestamp), extract(second from current_timestamp);
 
 --------------------------------------------------------------------------------
-        (program
+
+    (program
       (statement
         (select
           (keyword_select)
@@ -919,8 +920,8 @@ select extract(day from current_date), extract(hour from current_timestamp)
                   (identifier))
                 (keyword_from)
                 (term
-                  (field
-                    (identifier)))))
+                  (invocation
+                    (keyword_current_date)))))
             (term
               (invocation
                 (object_reference
@@ -929,8 +930,8 @@ select extract(day from current_date), extract(hour from current_timestamp)
                   (identifier))
                 (keyword_from)
                 (term
-                  (field
-                    (identifier)))))
+                  (invocation
+                    (keyword_current_timestamp)))))
             (term
               (invocation
                 (object_reference
@@ -939,8 +940,8 @@ select extract(day from current_date), extract(hour from current_timestamp)
                   (identifier))
                 (keyword_from)
                 (term
-                  (field
-                    (identifier)))))
+                  (invocation
+                    (keyword_current_timestamp)))))
             (term
               (invocation
                 (object_reference
@@ -949,8 +950,8 @@ select extract(day from current_date), extract(hour from current_timestamp)
                   (identifier))
                 (keyword_from)
                 (term
-                  (field
-                    (identifier)))))))))
+                  (invocation
+                    (keyword_current_timestamp)))))))))
 
 ================================================================================
 translate

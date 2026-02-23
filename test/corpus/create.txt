@@ -1924,7 +1924,8 @@ CREATE MULTISET TABLE db.table1
               (keyword_not)
               (keyword_null)
               (keyword_default)
-              (keyword_current_timestamp))
+              (invocation
+                  (keyword_current_timestamp)))
             (column_definition
               (identifier)
               (varchar

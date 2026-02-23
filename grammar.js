@@ -21,6 +21,8 @@ module.exports = grammar({
     [$.between_expression, $.period_expression, $.binary_expression],
     [$._expression_base, $.binary_expression],
     [$._collect_statement],
+    [$._inner_default_expression, $._one_word_function],
+    [$._one_word_function],
   ],
 
   precedences: $ => [
@@ -273,6 +275,7 @@ module.exports = grammar({
     keyword_recursive: _ => make_keyword("recursive"),
     keyword_local: _ => make_keyword("local"),
     keyword_current_timestamp: _ => make_keyword("current_timestamp"),
+    keyword_current_date: _ => make_keyword("current_date"),
     keyword_check: _ => make_keyword("check"),
     keyword_option: _ => make_keyword("option"),
     keyword_wait: _ => make_keyword("wait"),
@@ -3319,71 +3322,82 @@ module.exports = grammar({
       wrapped_in_parenthesis($.where),
     ),
 
+    _one_word_function: $ => choice(
+      $.keyword_user,
+      seq($.keyword_current_timestamp, optional(wrapped_in_parenthesis($._integer))),
+      $.keyword_session,
+      $.keyword_current_date,
+    ),
+
+
     invocation: $ => prec(1,
-      seq(
-        $.object_reference,
-        choice(
-          // default invocation
-          paren_list(
-            seq(
-              optional($.keyword_distinct),
-              field(
-                'parameter',
-                $.term,
-              ),
-              optional($.order_by)
-            )
-          ),
-          //translate
-          paren_list(
-            seq(
-              field(
-                'expression',
-                $._expression,
-              ),
-              $.keyword_using,
-              field('encoding',$.encoding_identifier),
-              optional(seq($.keyword_with, $.keyword_error)),
-            )
-          ),
-          //trim
-          //extract
-          paren_list(
-            seq(
-              choice(
-                field('unit', $.object_reference,),
-                seq(choice($.keyword_leading, $.keyword_trailing, $.keyword_both),
-                    optional($.literal),
+      choice(
+       $._one_word_function,
+          seq(
+            $.object_reference,
+            choice(
+              // default invocation
+              paren_list(
+                seq(
+                  optional($.keyword_distinct),
+                  field(
+                    'parameter',
+                    $.term,
                   ),
+                  optional($.order_by)
+                )
               ),
-              $.keyword_from,
-              $.term
-            )
-          ),
-          //position
-          paren_list(
-            seq(
-              field('expression',$._expression),
-              $.keyword_in,
-              field('expression',$._expression),
-            )
-          ),
-          // _aggregate_function, e.g. group_concat
-          wrapped_in_parenthesis(
-            seq(
-              optional($.keyword_distinct),
-              field('parameter', $.term),
-              optional($.order_by),
-              optional(seq(
-                choice($.keyword_separator, ','),
-                alias($._literal_string, $.literal)
-              )),
+              //translate
+              paren_list(
+                seq(
+                  field(
+                    'expression',
+                    $._expression,
+                  ),
+                  $.keyword_using,
+                  field('encoding',$.encoding_identifier),
+                  optional(seq($.keyword_with, $.keyword_error)),
+                )
+              ),
+              //trim
+              //extract
+              paren_list(
+                seq(
+                  choice(
+                    field('unit', $.object_reference,),
+                    seq(choice($.keyword_leading, $.keyword_trailing, $.keyword_both),
+                        optional($.literal),
+                      ),
+                  ),
+                  $.keyword_from,
+                  $.term
+                )
+              ),
+              //position
+              paren_list(
+                seq(
+                  field('expression',$._expression),
+                  $.keyword_in,
+                  field('expression',$._expression),
+                )
+              ),
+              // _aggregate_function, e.g. group_concat
+              wrapped_in_parenthesis(
+                seq(
+                  optional($.keyword_distinct),
+                  field('parameter', $.term),
+                  optional($.order_by),
+                  optional(seq(
+                    choice($.keyword_separator, ','),
+                    alias($._literal_string, $.literal)
+                  )),
+                ),
+              ),
             ),
+            optional(
+              $.filter_expression
+            )
           ),
-        ),
-        optional(
-          $.filter_expression
-        )
       ),
     ),
 

@@ -406,12 +406,12 @@ select current_date, current_date + interval '03-01' year to month;
           (keyword_select)
           (select_expression
             (term
-              (field
-                (identifier)))
+              (invocation
+                (keyword_current_date)))
             (term
               (binary_expression
-                (field
-                  (identifier))
+                (invocation
+                (keyword_current_date))
                 (interval
                   (keyword_interval)
                   (keyword_year)
@@ -578,10 +578,7 @@ insert db.table1 (STEP_NAME, TS, STATUS)
                 (field
                   (identifier))
                 (invocation
-                  (object_reference
-                    (identifier))
-                  (term
-                    (literal)))
+                  (keyword_current_timestamp))
                 (field
                   (identifier))))))))
 
