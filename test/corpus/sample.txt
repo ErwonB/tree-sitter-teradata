@@ -1,0 +1,241 @@
+================================================================================
+Sample 1
+================================================================================
+
+
+SELECT city, state, SAMPLEID
+     FROM stores
+     SAMPLE WITH REPLACEMENT RANDOMIZED ALLOCATION
+        WHEN state = 'WI' THEN 3
+        ELSE 2
+        END
+     ORDER BY 3;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))
+            (term
+              (field
+                (identifier)))
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)))
+          (sample_clause
+            (keyword_sample)
+            (keyword_with)
+            (keyword_replacement)
+            (keyword_randomized)
+            (keyword_allocation)
+            (keyword_when)
+            (binary_expression
+              (field
+                (identifier))
+              (literal))
+            (keyword_then)
+            (sample_value)
+            (keyword_else)
+            (sample_value)
+            (keyword_end))
+          (order_by
+            (keyword_order)
+            (keyword_by)
+            (order_target
+              (literal))))))
+
+
+================================================================================
+Sample 2
+================================================================================
+
+SELECT city, state
+     FROM stores
+     SAMPLE WITH REPLACEMENT RANDOMIZED ALLOCATION 3;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)))
+          (sample_clause
+            (keyword_sample)
+            (keyword_with)
+            (keyword_replacement)
+            (keyword_randomized)
+            (keyword_allocation)
+            (sample_value)))))
+
+
+
+================================================================================
+Sample 3
+================================================================================
+
+SELECT city, state, SAMPLEID
+     FROM stores
+     SAMPLE RANDOMIZED ALLOCATION
+            WHEN state = 'WI' THEN 0.25, 0.5
+            WHEN state = 'CA' THEN 0.25, 0.25
+            END
+     ORDER BY 3;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))
+            (term
+              (field
+                (identifier)))
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)))
+          (sample_clause
+            (keyword_sample)
+            (keyword_randomized)
+            (keyword_allocation)
+            (keyword_when)
+            (binary_expression
+              (field
+                (identifier))
+              (literal))
+            (keyword_then)
+            (sample_value)
+            (keyword_when)
+            (binary_expression
+              (field
+                (identifier))
+              (literal))
+            (keyword_then)
+            (sample_value)
+            (keyword_end))
+          (order_by
+            (keyword_order)
+            (keyword_by)
+            (order_target
+              (literal))))))
+
+
+
+================================================================================
+Sample 4
+================================================================================
+
+SELECT customer_id, age, income, marital_status, SAMPLEID
+     FROM customer_table
+     SAMPLE 0.6, 0.25, 0.15;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))
+            (term
+              (field
+                (identifier)))
+            (term
+              (field
+                (identifier)))
+            (term
+              (field
+                (identifier)))
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)))
+          (sample_clause
+            (keyword_sample)
+            (sample_value)))))
+
+
+
+================================================================================
+Sample 5
+================================================================================
+
+
+SELECT COUNT (DISTINCT city)
+     FROM (SELECT city
+           FROM customer_table
+           SAMPLE 1000) TEMP;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (invocation
+                (object_reference
+                  (identifier))
+                (keyword_distinct)
+                (term
+                  (field
+                    (identifier)))))))
+        (from
+          (keyword_from)
+          (relation
+            (subquery
+              (select
+                (keyword_select)
+                (select_expression
+                  (term
+                    (field
+                      (identifier)))))
+              (from
+                (keyword_from)
+                (relation
+                  (object_reference
+                    (identifier)))
+                (sample_clause
+                  (keyword_sample)
+                  (sample_value))))
+            (identifier)))))
+
+
+

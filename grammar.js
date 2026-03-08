@@ -72,6 +72,10 @@ module.exports = grammar({
 
     keyword_strtok_split_to_table: _ => make_keyword("strtok_split_to_table"),
     keyword_pivot: _ => make_keyword("pivot"),
+    keyword_sample: _ => make_keyword("sample"),
+    keyword_replacement: _ => make_keyword("replacement"),
+    keyword_randomized: _ => make_keyword("randomized"),
+    keyword_allocation: _ => make_keyword("allocation"),
     keyword_casespecific: _ => make_keyword("casespecific"),
     keyword_regexp_split_to_table: _ => make_keyword("regexp_split_to_table"),
     keyword_collect: _ => make_keyword("collect"),
@@ -1019,7 +1023,7 @@ module.exports = grammar({
               $.select_expression,
             ),
           ),
-          $.from
+          $.from,
         ),
       ),
     ),
@@ -1131,6 +1135,44 @@ module.exports = grammar({
       optional($.keyword_percent),
       optional(seq($.keyword_with, $.keyword_ties))
     ),
+
+    sample_value: $ => comma_list(
+                    choice(
+                      $._integer,
+                      $._decimal_number,
+                      )
+                      ,true
+                    ),
+
+    sample_clause: $ => seq(
+    $.keyword_sample,
+    optional(seq($.keyword_with, $.keyword_replacement)),
+    optional(seq($.keyword_randomized, $.keyword_allocation)),
+    choice( $.sample_value,
+      seq(
+          $.keyword_when,
+          $._expression,
+          $.keyword_then,
+          $.sample_value,
+          repeat(
+            seq(
+              $.keyword_when,
+              $._expression,
+              $.keyword_then,
+              $.sample_value,
+            )
+          ),
+        optional(
+          seq(
+            $.keyword_else,
+            $.sample_value,
+          )
+        ),
+        $.keyword_end,
+      )
+    )
+  ),
+
 
     select_expression: $ => seq(
       $.term,
@@ -3525,6 +3567,7 @@ module.exports = grammar({
       optional($.having),
       optional($.window_clause),
       optional($.qualify),
+      optional($.sample_clause),
       optional($.order_by),
     ),
 
