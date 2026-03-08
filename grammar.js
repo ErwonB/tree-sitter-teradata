@@ -1265,6 +1265,13 @@ module.exports = grammar({
       ),
     ),
 
+    with_data_clause: $ => seq(
+      $.keyword_with,
+      optional($.keyword_no),
+      $.keyword_data,
+      optional(seq($.keyword_and, $.keyword_statistics)),
+    ),
+
     // left precedence because 'quoted' table options otherwise conflict with
     // `create function` string bodies; if you remove this precedence you will
     // have to also disable the `_literal_string` choice for the `name` field
@@ -1306,8 +1313,13 @@ module.exports = grammar({
             seq(
               $.keyword_as,
               $.create_query,
+              optional($.with_data_clause)
             ),
           ),
+          seq($.keyword_as,
+            $.object_reference,
+            optional($.with_data_clause),
+          )
         ),
       ),
     ),
@@ -1370,7 +1382,10 @@ module.exports = grammar({
       ),
     ),
 
-    create_query: $ => $._dml_read,
+    create_query: $ => seq(
+      $._dml_read,
+    ),
+
 
     create_view: $ => prec.right(
       seq(

@@ -2431,3 +2431,88 @@ NO FALLBACK, NO BEFORE JOURNAL,
             (field
               (identifier))))))
 
+================================================================================
+ct with 1
+================================================================================
+
+CREATE TABLE target_table AS source_table WITH NO DATA;
+
+--------------------------------------------------------------------------------
+
+
+    (program
+      (statement
+        (create_table
+          (keyword_create)
+          (keyword_table)
+          (object_reference
+            (identifier))
+          (keyword_as)
+          (object_reference
+            (identifier))
+          (with_data_clause
+            (keyword_with)
+            (keyword_no)
+            (keyword_data)))))
+
+
+================================================================================
+ct with 2
+================================================================================
+
+CREATE TABLE target_table AS source_table WITH DATA and statistics;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (create_table
+          (keyword_create)
+          (keyword_table)
+          (object_reference
+            (identifier))
+          (keyword_as)
+          (object_reference
+            (identifier))
+          (with_data_clause
+            (keyword_with)
+            (keyword_data)
+            (keyword_and)
+            (keyword_statistics)))))
+
+
+
+================================================================================
+ct with 3
+================================================================================
+
+CREATE TABLE target_table AS (
+      SELECT *
+      FROM source_table ) WITH DATA;
+
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (create_table
+          (keyword_create)
+          (keyword_table)
+          (object_reference
+            (identifier))
+          (keyword_as)
+          (create_query
+            (select
+              (keyword_select)
+              (select_expression
+                (term
+                  (all_fields))))
+            (from
+              (keyword_from)
+              (relation
+                (object_reference
+                  (identifier)))))
+          (with_data_clause
+            (keyword_with)
+            (keyword_data)))))
+
