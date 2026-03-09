@@ -1196,6 +1196,7 @@ module.exports = grammar({
     ),
 
     _delete_statement: $ => seq(
+      optional($.keyword_nontemporal),
       choice(
         seq(
           $.delete,
