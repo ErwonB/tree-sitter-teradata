@@ -70,6 +70,14 @@ module.exports = grammar({
       ),
     ),
 
+    keyword_cd: _ => make_keyword("cd"),
+    keyword_permanent: _ => make_keyword("permanent"),
+    keyword_perm: _ => make_keyword("perm"),
+    keyword_spool: _ => make_keyword("spool"),
+    keyword_account: _ => make_keyword("account"),
+    keyword_override: _ => make_keyword("override"),
+    keyword_error: _ => make_keyword("error"),
+    keyword_skew: _ => make_keyword("skew"),
     keyword_strtok_split_to_table: _ => make_keyword("strtok_split_to_table"),
     keyword_pivot: _ => make_keyword("pivot"),
     keyword_sample: _ => make_keyword("sample"),
@@ -1838,14 +1846,117 @@ module.exports = grammar({
           field('value', choice($.identifier, alias($._single_quote_string, $.literal))),
     ),
 
-    create_database: $ => seq(
-      $.keyword_create,
-      $.keyword_database,
+_database_attribute: $ => choice(
+  // SPOOL | TEMPORARY = n [BYTES] [SKEW=...]
+  seq(
+    choice($.keyword_spool, $.keyword_temporary),
+    '=',
+    $._expression,
+    optional($.keyword_bytes),
+    optional($._skew_spec)
+  ),
+
+  // ACCOUNT = 'account_string'
+  seq(
+    $.keyword_account,
+    '=',
+    alias($._single_quote_string, $.literal)
+  ),
+
+  // DEFAULT MAP = map_name | NULL [OVERRIDE [NOT] ON ERROR]
+  seq(
+    $.keyword_default,
+    $.keyword_map,
+    '=',
+    choice(
       $.identifier,
-      optional($.keyword_with),
-      repeat(
-        $._with_settings
+      $.keyword_null
+    ),
+    optional(
+      seq(
+        $.keyword_override,
+        optional($.keyword_not),
+        $.keyword_on,
+        $.keyword_error
+      )
+    )
+  ),
+
+  // [NO] FALLBACK [PROTECTION]
+  seq(
+    optional($.keyword_no),
+    $.keyword_fallback,
+    optional($.keyword_protection)
+  ),
+
+  // [NO | DUAL] [BEFORE] JOURNAL
+  seq(
+    optional(
+      choice(
+        seq($.keyword_no, $.keyword_dual),
+        $.keyword_before,
+       )
       ),
+    $.keyword_journal
+  ),
+
+  // [NO | DUAL | [NOT] LOCAL] AFTER JOURNAL
+  seq(
+    optional(choice(
+      $.keyword_no,
+      $.keyword_dual,
+      seq(optional($.keyword_not), $.keyword_local)
+    )),
+    $.keyword_after,
+    $.keyword_journal
+  ),
+
+  // DEFAULT JOURNAL TABLE = [database_name.]table_name
+  seq(
+    $.keyword_default,
+    $.keyword_journal,
+    $.keyword_table,
+    '=',
+    $.object_reference
+  )
+),
+
+  _skew_spec: $ => seq(
+      $.keyword_skew,
+      '=',
+      choice(
+        $._expression,
+        $.keyword_default
+      ),
+      optional($.keyword_percent),
+    ),
+
+    create_database: $ => seq(
+      // { CREATE DATABASE | CD }
+      choice(
+        seq($.keyword_create, $.keyword_database),
+        $.keyword_cd
+      ),
+      field('name', $.object_reference),
+      // [ FROM database_name ]
+      optional(
+        seq(
+          $.keyword_from,
+          field('from', $.object_reference)
+        )
+      ),
+      // AS
+      $.keyword_as,
+      // { PERMANENT | PERM } = { n | constant_expression } [ BYTES ] [ SKEW = ... ]
+      seq(
+        choice($.keyword_permanent, $.keyword_perm),
+        '=',
+        field('permanent_size', $._expression),
+        optional($.keyword_bytes),
+        optional($._skew_spec)
+      ),
+
+        optional(seq(',', comma_list($._database_attribute, false)))
     ),
 
     create_role: $ => seq(

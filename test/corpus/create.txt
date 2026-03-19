@@ -1580,48 +1580,158 @@ CREATE TABLE tab (
 Create database
 ================================================================================
 
-CREATE DATABASE hollywood
+    CREATE DATABASE finance FROM sysadmin
+    AS PERMANENT = 60000000,
+       SPOOL = 120000000,
+       FALLBACK PROTECTION,
+       AFTER JOURNAL,
+       BEFORE JOURNAL,
+       DEFAULT JOURNAL TABLE = finance.journals,
+       ACCOUNT = 'ACCTG';
+
 
 --------------------------------------------------------------------------------
 
-(program
-  (statement
-    (create_database
-      (keyword_create)
-      (keyword_database)
-      (identifier))))
+    (program
+      (statement
+        (create_database
+          (keyword_create)
+          (keyword_database)
+          (object_reference
+            (identifier))
+          (keyword_from)
+          (object_reference
+            (identifier))
+          (keyword_as)
+          (keyword_permanent)
+          (literal)
+          (keyword_spool)
+          (literal)
+          (keyword_fallback)
+          (keyword_protection)
+          (keyword_after)
+          (keyword_journal)
+          (keyword_before)
+          (keyword_journal)
+          (keyword_default)
+          (keyword_journal)
+          (keyword_table)
+          (object_reference
+            (identifier)
+            (identifier))
+          (keyword_account)
+          (literal))))
+
 
 ================================================================================
-Create database if not exists
+Create database with constant expression
 ================================================================================
 
-CREATE DATABASE hollywood
+CREATE DATABASE production_development AS
+  PERM = 2000000*(HASHAMP()+1),
+  SPOOL = 2000000*(HASHAMP()+1),
+  TEMPORARY = 2000000*(HASHAMP()+1);
+
 
 --------------------------------------------------------------------------------
 
-(program
-  (statement
-    (create_database
-      (keyword_create)
-      (keyword_database)
-      (identifier))))
+    (program
+      (statement
+        (create_database
+          (keyword_create)
+          (keyword_database)
+          (object_reference
+            (identifier))
+          (keyword_as)
+          (keyword_perm)
+          (binary_expression
+            (literal)
+            (parenthesized_expression
+              (binary_expression
+                (invocation
+                  (object_reference
+                    (identifier)))
+                (literal))))
+          (keyword_spool)
+          (binary_expression
+            (literal)
+            (parenthesized_expression
+              (binary_expression
+                (invocation
+                  (object_reference
+                    (identifier)))
+                (literal))))
+          (keyword_temporary)
+          (binary_expression
+            (literal)
+            (parenthesized_expression
+              (binary_expression
+                (invocation
+                  (object_reference
+                    (identifier)))
+                (literal)))))))
 
 ================================================================================
-Create database with settings
+Create database with skew limit
 ================================================================================
 
-CREATE DATABASE sales OWNER operations_dept;
+CREATE DATABASE d1 AS
+  PERM = 1e9 SKEW = 10 PERCENT;
+
 
 --------------------------------------------------------------------------------
 
-(program
-  (statement
-    (create_database
-      (keyword_create)
-      (keyword_database)
-      (identifier)
-      (identifier)
-      (identifier))))
+    (program
+      (statement
+        (create_database
+          (keyword_create)
+          (keyword_database)
+          (object_reference
+            (identifier))
+          (keyword_as)
+          (keyword_perm)
+          (literal)
+          (keyword_skew)
+          (literal)
+          (keyword_percent))))
+
+================================================================================
+Create database with fallback and journaling
+================================================================================
+
+CREATE DATABASE personnel FROM administration
+    AS PERMANENT = 5000000 BYTES, FALLBACK, BEFORE JOURNAL,
+    DUAL AFTER JOURNAL, DEFAULT JOURNAL TABLE = personnel.fin_copy;
+
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (create_database
+          (keyword_create)
+          (keyword_database)
+          (object_reference
+            (identifier))
+          (keyword_from)
+          (object_reference
+            (identifier))
+          (keyword_as)
+          (keyword_permanent)
+          (literal)
+          (keyword_bytes)
+          (keyword_fallback)
+          (keyword_before)
+          (keyword_journal)
+          (keyword_dual)
+          (keyword_after)
+          (keyword_journal)
+          (keyword_default)
+          (keyword_journal)
+          (keyword_table)
+          (object_reference
+            (identifier)
+            (identifier)))))
 
 ================================================================================
 Create user
