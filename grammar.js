@@ -170,7 +170,6 @@ module.exports = grammar({
     keyword_none: _ => make_keyword("none"),
     keyword_owned: _ => make_keyword("owned"),
     keyword_start: _ => make_keyword("start"),
-    keyword_restart: _ => make_keyword("restart"),
     keyword_key: _ => make_keyword("key"),
     keyword_duplicate: _ => make_keyword("duplicate"),
     keyword_as: _ => make_keyword("as"),
@@ -230,7 +229,6 @@ module.exports = grammar({
     keyword_global: _ => make_keyword("global"),
     keyword_temporary: _ => make_keyword("temporary"),
     keyword_unlogged: _ => make_keyword("unlogged"),
-    keyword_logged: _ => make_keyword("logged"),
     keyword_cycle: _ => make_keyword("cycle"),
     keyword_union: _ => make_keyword("union"),
     keyword_all: _ => make_keyword("all"),
@@ -2175,11 +2173,8 @@ _database_attribute: $ => choice(
     _alter_statement: $ => seq(
       choice(
         $.alter_table,
-        $.alter_view,
         $.alter_type,
-        $.alter_index,
         $.alter_role,
-        $.alter_sequence,
       ),
     ),
 
@@ -2368,18 +2363,6 @@ _database_attribute: $ => choice(
       field('new_name', $.identifier),
     ),
 
-    alter_view: $ => seq(
-      $.keyword_alter,
-      $.keyword_view,
-      $.object_reference,
-      choice(
-        // TODO Postgres allows a single "alter column" to set or drop default
-        $.rename_object,
-        $.rename_column,
-        $.change_ownership,
-      ),
-    ),
-
     alter_role: $ => seq(
       $.keyword_alter,
       choice(
@@ -2421,58 +2404,6 @@ _database_attribute: $ => choice(
             $.keyword_default
           )
         )
-      ),
-    ),
-
-    alter_index: $ => seq(
-      $.keyword_alter,
-      $.keyword_index,
-      $.identifier,
-      choice(
-        $.rename_object,
-        seq(
-          $.keyword_alter,
-          optional($.keyword_column),
-          alias($._natural_number, $.literal),
-          $.keyword_set,
-          $.keyword_statistics,
-          alias($._natural_number, $.literal),
-        ),
-        seq($.keyword_reset, paren_list($.identifier)),
-        seq(
-          $.keyword_set,
-          choice(
-            seq($.keyword_tablespace, $.identifier),
-            paren_list(seq($.identifier, '=', field("value", $.literal)))
-          ),
-        ),
-      ),
-    ),
-
-    alter_sequence: $ => seq(
-      $.keyword_alter,
-      $.keyword_sequence,
-      $.object_reference,
-      choice(
-        repeat1(
-          choice(
-            seq($.keyword_as, $._type),
-            seq($.keyword_increment, optional($.keyword_by), $.literal),
-            seq($.keyword_minvalue, choice($.literal, seq($.keyword_no, $.keyword_minvalue))),
-            seq($.keyword_maxvalue, choice($.literal, seq($.keyword_no, $.keyword_maxvalue))),
-            seq($.keyword_start, optional($.keyword_with), field("start", alias($._integer, $.literal))),
-            seq($.keyword_restart, optional($.keyword_with), field("restart", alias($._integer, $.literal))),
-            seq($.keyword_cache, field("cache", alias($._integer, $.literal))),
-            seq(optional($.keyword_no), $.keyword_cycle),
-            seq($.keyword_owned, $.keyword_by, choice($.keyword_none, $.object_reference)),
-          ),
-        ),
-        $.rename_object,
-        $.change_ownership,
-        seq(
-          $.keyword_set,
-            choice($.keyword_logged, $.keyword_unlogged),
-        ),
       ),
     ),
 
