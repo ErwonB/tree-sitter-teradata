@@ -136,7 +136,7 @@ CAST (100 AS NUMERIC(32)),
 SELECT AS UNSIGNED
 ================================================================================
 
-SELECT CAST ("1" AS UNSIGNED INTEGER);
+SELECT CAST ("1" AS INTEGER);
 
 --------------------------------------------------------------------------------
 
@@ -151,7 +151,6 @@ SELECT CAST ("1" AS UNSIGNED INTEGER);
             parameter: (literal)
             (keyword_as)
             (int
-              (keyword_unsigned)
               (keyword_int))))))))
 
 ================================================================================
