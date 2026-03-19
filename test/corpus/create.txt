@@ -182,8 +182,8 @@ CREATE TABLE my_table (
   random TEXT DEFAULT 'test',
   with_comment TEXT COMMENT 'this column has a comment',
   with_comment_and_constraint TEXT DEFAULT 'test' COMMENT 'this column also has a comment',
-  KEY `idx` (`host`, `created_date`),
-  UNIQUE KEY `unique_idx` (`host`,`with_comment`)
+  KEY idx (host, created_date),
+  UNIQUE KEY unique_idx (host,with_comment)
 );
 
 --------------------------------------------------------------------------------
@@ -312,8 +312,8 @@ CREATE TABLE products (
 Create table if not exists
 ================================================================================
 
-CREATE TABLE `addresses` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT
+CREATE TABLE addresses (
+  id bigint NOT NULL
 );
 
 --------------------------------------------------------------------------------
@@ -329,130 +329,24 @@ CREATE TABLE `addresses` (
         (column_definition
           name: (identifier)
           type: (bigint
-            (keyword_bigint)
-            size: (literal))
+            (keyword_bigint))
           (keyword_not)
-          (keyword_null)
-          (keyword_auto_increment))))))
+          (keyword_null))))))
 
-================================================================================
-Create table with unsigned zerofill types
-================================================================================
-
-CREATE TABLE `addresses` (
-  `id` bigint(20) UNSIGNED ZEROFILL,
-  `id2` int4(20) ZEROFILL,
-  `id3` UNSIGNED tinyint(20),
-  `id4` mediumint(20) UNSIGNED,
-  `id5` float(20, 3) UNSIGNED,
-  `id6` double(20,3) UNSIGNED
-);
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (create_table
-      (keyword_create)
-      (keyword_table)
-      (object_reference
-        name: (identifier))
-      (column_definitions
-        (column_definition
-          name: (identifier)
-          type: (bigint
-            (keyword_bigint)
-            size: (literal)
-            (keyword_unsigned)
-            (keyword_zerofill)))
-        (column_definition
-          name: (identifier)
-          type: (int
-            (keyword_int)
-            size: (literal)
-            (keyword_zerofill)))
-        (column_definition
-          name: (identifier)
-          type: (tinyint
-            (keyword_unsigned)
-            (keyword_tinyint)
-            size: (literal)))
-        (column_definition
-          name: (identifier)
-          type: (mediumint
-            (keyword_mediumint)
-            size: (literal)
-            (keyword_unsigned)))
-        (column_definition
-          name: (identifier)
-          type: (float
-            (keyword_float)
-            precision: (literal)
-            scale: (literal)
-            (keyword_unsigned)))
-        (column_definition
-          name: (identifier)
-          type: (double
-            (keyword_double)
-            precision: (literal)
-            scale: (literal)
-            (keyword_unsigned)))))))
-
-================================================================================
-Create table with auto increment
-================================================================================
-
-CREATE TABLE `addresses` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`),
-  KEY `addresses_s_id_index` (`s_id`)
-);
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (create_table
-      (keyword_create)
-      (keyword_table)
-      (object_reference
-        name: (identifier))
-      (column_definitions
-        (column_definition
-          name: (identifier)
-          type: (bigint
-            (keyword_bigint)
-            size: (literal))
-          (keyword_not)
-          (keyword_null)
-          (keyword_auto_increment))
-        (constraints
-          (constraint
-            (keyword_primary)
-            (keyword_key)
-            (ordered_columns
-              (column
-                name: (identifier))))
-          (constraint
-            (keyword_key)
-            name: (identifier)
-            (ordered_columns
-              (column
-                name: (identifier)))))))))
 
 ================================================================================
 Create table with multiple constraints
 ================================================================================
 
-CREATE TABLE `addresses` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `s_id` bigint(20) DEFAULT NULL,
-  `first_name` varchar(255) DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `addresses_s_id_index` (`s_id`),
-  KEY `index_addresses_on_updated_at` (`updated_at`),
-  KEY `index_addresses_on_s_id_and_id` (`s_id`, `id`)
+CREATE TABLE addresses (
+  id bigint NOT NULL ,
+  s_id bigint DEFAULT NULL,
+  first_name varchar(255) DEFAULT NULL,
+  updated_at datetime DEFAULT NULL,
+  PRIMARY KEY (id),
+  KEY addresses_s_id_index (s_id),
+  KEY index_addresses_on_updated_at (updated_at),
+  KEY index_addresses_on_s_id_and_id (s_id, id)
 );
 
 --------------------------------------------------------------------------------
@@ -468,16 +362,13 @@ CREATE TABLE `addresses` (
         (column_definition
           name: (identifier)
           type: (bigint
-            (keyword_bigint)
-            size: (literal))
+            (keyword_bigint))
           (keyword_not)
-          (keyword_null)
-          (keyword_auto_increment))
+          (keyword_null))
         (column_definition
           name: (identifier)
           type: (bigint
-            (keyword_bigint)
-            size: (literal))
+            (keyword_bigint))
           (keyword_default)
           (literal
             (keyword_null)))
@@ -523,59 +414,15 @@ CREATE TABLE `addresses` (
               (column
                 name: (identifier)))))))))
 
-================================================================================
-Debugging
-================================================================================
-
-CREATE TABLE `addresses` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `s_id` bigint(20) DEFAULT NULL,
-  `first_name` varchar(255) DEFAULT NULL
-);
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (create_table
-      (keyword_create)
-      (keyword_table)
-      (object_reference
-        name: (identifier))
-      (column_definitions
-        (column_definition
-          name: (identifier)
-          type: (bigint
-            (keyword_bigint)
-            size: (literal))
-          (keyword_not)
-          (keyword_null)
-          (keyword_auto_increment))
-        (column_definition
-          name: (identifier)
-          type: (bigint
-            (keyword_bigint)
-            size: (literal))
-          (keyword_default)
-          (literal
-            (keyword_null)))
-        (column_definition
-          name: (identifier)
-          type: (varchar
-            (keyword_varchar)
-            size: (literal))
-          (keyword_default)
-          (literal
-            (keyword_null)))))))
 
 ================================================================================
 Create table with table options
 ================================================================================
 
 CREATE TABLE my_table (
-  id BIGINT(20) NOT NULL,
+  id BIGINT NOT NULL,
   date DATE DEFAULT NULL ASC
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 --------------------------------------------------------------------------------
 
@@ -590,8 +437,7 @@ CREATE TABLE my_table (
         (column_definition
           name: (identifier)
           type: (bigint
-            (keyword_bigint)
-            size: (literal))
+            (keyword_bigint))
           (keyword_not)
           (keyword_null))
         (column_definition
@@ -602,9 +448,6 @@ CREATE TABLE my_table (
             (keyword_null))
           (direction
             (keyword_asc))))
-      (table_option
-        name: (keyword_engine)
-        value: (identifier))
       (table_option
         name: (keyword_default))
       (table_option
@@ -830,251 +673,238 @@ CREATE TABLE type_test (
   a_date DATE,
   a_datetime DATETIME,
   a_datetime2 DATETIME2,
-  a_datetimeoffset DATETIMEOFFSET,
-  a_smalldatetime SMALLDATETIME,
   a_time TIME,
   a_timestamp TIMESTAMP,
   a_verbose_timestamp TIMESTAMP WITHOUT TIME ZONE,
   a_tstz TIMESTAMPTZ,
   a_date_with_default_ts DATETIME DEFAULT CURRENT_TIMESTAMP,
   a_verbose_tstz TIMESTAMP WITH TIME ZONE,
-  a_geometry GEOMETRY,
-  a_geography GEOGRAPHY,
-  a_box2d BOX2D,
-  a_box3d BOX3D,
+  a_geometry ST_Geometry,
+  a_geography mbr,
+  a_box2d mbb,
   a_uuid UUID
 );
 
 --------------------------------------------------------------------------------
 
-(program
-  (statement
-    (create_table
-      (keyword_create)
-      (keyword_table)
-      (object_reference
-        name: (identifier))
-      (column_definitions
-        (column_definition
-          name: (identifier)
-          type: (keyword_boolean))
-        (column_definition
-          name: (identifier)
-          type: (bit
-            (keyword_bit)))
-        (column_definition
-          name: (identifier)
-          type: (bit
-            (keyword_bit)
-            precision: (literal)))
-        (column_definition
-          name: (identifier)
-          type: (bit
-            (keyword_bit)
-            (keyword_varying)
-            precision: (literal)))
-        (column_definition
-          name: (identifier)
-          type: (binary
-            (keyword_binary)))
-        (column_definition
-          name: (identifier)
-          type: (varbinary
-            (keyword_varbinary)))
-        (column_definition
-          name: (identifier)
-          type: (keyword_image))
-        (column_definition
-          name: (identifier)
-          type: (keyword_smallserial))
-        (column_definition
-          name: (identifier)
-          type: (keyword_serial))
-        (column_definition
-          name: (identifier)
-          type: (keyword_bigserial))
-        (column_definition
-          name: (identifier)
-          type: (int
-            (keyword_int)))
-        (column_definition
-          name: (identifier)
-          type: (int
-            (keyword_int)))
-        (column_definition
-          name: (identifier)
-          type: (bigint
-            (keyword_bigint)))
-        (column_definition
-          name: (identifier)
-          type: (decimal
-            (keyword_decimal)))
-        (column_definition
-          name: (identifier)
-          type: (decimal
-            (keyword_decimal)
-            precision: (literal)))
-        (column_definition
-          name: (identifier)
-          type: (decimal
-            (keyword_decimal)
-            precision: (literal)
-            scale: (literal)))
-        (column_definition
-          name: (identifier)
-          type: (numeric
-            (keyword_numeric)))
-        (column_definition
-          name: (identifier)
-          type: (numeric
-            (keyword_numeric)
-            precision: (literal)))
-        (column_definition
-          name: (identifier)
-          type: (numeric
-            (keyword_numeric)
-            precision: (literal)
-            scale: (literal)))
-        (column_definition
-          name: (identifier)
-          type: (double
-            (keyword_real)))
-        (column_definition
-          name: (identifier)
-          type: (double
-            (keyword_double)
-            (keyword_precision)))
-        (column_definition
-          name: (identifier)
-          type: (keyword_money))
-        (column_definition
-          name: (identifier)
-          type: (keyword_smallmoney))
-        (column_definition
-          name: (identifier)
-          type: (char
-            (keyword_char)))
-        (column_definition
-          name: (identifier)
-          type: (nchar
-            (keyword_nchar)))
-        (column_definition
-          name: (identifier)
-          type: (nchar
-            (keyword_nchar)
-            size: (literal)))
-        (column_definition
-          name: (identifier)
-          type: (char
-            (keyword_char)))
-        (column_definition
-          name: (identifier)
-          type: (char
-            (keyword_char)
-            size: (literal)))
-        (column_definition
-          name: (identifier)
-          type: (varchar
-            (keyword_varchar)
-            size: (literal)))
-        (column_definition
-          name: (identifier)
-          type: (nvarchar
-            (keyword_nvarchar)))
-        (column_definition
-          name: (identifier)
-          type: (nvarchar
-            (keyword_nvarchar)
-            size: (literal)))
-        (column_definition
-          name: (identifier)
-          type: (varchar
-            (keyword_varchar
-              (keyword_varying))
-            size: (literal)))
-        (column_definition
-          name: (identifier)
-          type: (keyword_text))
-        (column_definition
-          name: (identifier)
-          type: (keyword_json))
-        (column_definition
-          name: (identifier)
-          type: (keyword_jsonb))
-        (column_definition
-          name: (identifier)
-          type: (keyword_xml))
-        (column_definition
-          name: (identifier)
-          type: (keyword_bytea))
-        (column_definition
-          name: (identifier)
-          type: (enum
-            (keyword_enum)
-            value: (literal)
-            value: (literal)
-            value: (literal)))
-        (column_definition
-          name: (identifier)
-          type: (keyword_date))
-        (column_definition
-          name: (identifier)
-          type: (keyword_datetime))
-        (column_definition
-          name: (identifier)
-          type: (keyword_datetime2))
-        (column_definition
-          name: (identifier)
-          type: (datetimeoffset
-            (keyword_datetimeoffset)))
-        (column_definition
-          name: (identifier)
-          type: (keyword_smalldatetime))
-        (column_definition
-          name: (identifier)
-          type: (time
-            (keyword_time)))
-        (column_definition
-          name: (identifier)
-          type: (timestamp
-            (keyword_timestamp)))
-        (column_definition
-          name: (identifier)
-          type: (timestamp
-            (keyword_timestamp)
-            (keyword_without)
-            (keyword_time)
-            (keyword_zone)))
-        (column_definition
-          name: (identifier)
-          type: (keyword_timestamptz))
-        (column_definition
-          name: (identifier)
-          type: (keyword_datetime)
-          (keyword_default)
-          (keyword_current_timestamp))
-        (column_definition
-          name: (identifier)
-          type: (timestamp
-            (keyword_timestamp)
-            (keyword_with)
-            (keyword_time)
-            (keyword_zone)))
-        (column_definition
-          name: (identifier)
-          type: (keyword_geometry))
-        (column_definition
-          name: (identifier)
-          type: (keyword_geography))
-        (column_definition
-          name: (identifier)
-          type: (keyword_box2d))
-        (column_definition
-          name: (identifier)
-          type: (keyword_box3d))
-        (column_definition
-          name: (identifier)
-          type: (keyword_uuid))))))
+    (program
+      (statement
+        (create_table
+          (keyword_create)
+          (keyword_table)
+          (object_reference
+            (identifier))
+          (column_definitions
+            (column_definition
+              (identifier)
+              (keyword_boolean))
+            (column_definition
+              (identifier)
+              (bit
+                (keyword_bit)))
+            (column_definition
+              (identifier)
+              (bit
+                (keyword_bit)
+                (literal)))
+            (column_definition
+              (identifier)
+              (bit
+                (keyword_bit)
+                (keyword_varying)
+                (literal)))
+            (column_definition
+              (identifier)
+              (binary
+                (keyword_binary)))
+            (column_definition
+              (identifier)
+              (varbinary
+                (keyword_varbinary)))
+            (column_definition
+              (identifier)
+              (keyword_image))
+            (column_definition
+              (identifier)
+              (keyword_smallserial))
+            (column_definition
+              (identifier)
+              (keyword_serial))
+            (column_definition
+              (identifier)
+              (keyword_bigserial))
+            (column_definition
+              (identifier)
+              (int
+                (keyword_int)))
+            (column_definition
+              (identifier)
+              (int
+                (keyword_int)))
+            (column_definition
+              (identifier)
+              (bigint
+                (keyword_bigint)))
+            (column_definition
+              (identifier)
+              (decimal
+                (keyword_decimal)))
+            (column_definition
+              (identifier)
+              (decimal
+                (keyword_decimal)
+                (literal)))
+            (column_definition
+              (identifier)
+              (decimal
+                (keyword_decimal)
+                (literal)
+                (literal)))
+            (column_definition
+              (identifier)
+              (numeric
+                (keyword_numeric)))
+            (column_definition
+              (identifier)
+              (numeric
+                (keyword_numeric)
+                (literal)))
+            (column_definition
+              (identifier)
+              (numeric
+                (keyword_numeric)
+                (literal)
+                (literal)))
+            (column_definition
+              (identifier)
+              (double
+                (keyword_real)))
+            (column_definition
+              (identifier)
+              (double
+                (keyword_double)
+                (keyword_precision)))
+            (column_definition
+              (identifier)
+              (keyword_money))
+            (column_definition
+              (identifier)
+              (keyword_smallmoney))
+            (column_definition
+              (identifier)
+              (char
+                (keyword_char)))
+            (column_definition
+              (identifier)
+              (nchar
+                (keyword_nchar)))
+            (column_definition
+              (identifier)
+              (nchar
+                (keyword_nchar)
+                (literal)))
+            (column_definition
+              (identifier)
+              (char
+                (keyword_char)))
+            (column_definition
+              (identifier)
+              (char
+                (keyword_char)
+                (literal)))
+            (column_definition
+              (identifier)
+              (varchar
+                (keyword_varchar)
+                (literal)))
+            (column_definition
+              (identifier)
+              (nvarchar
+                (keyword_nvarchar)))
+            (column_definition
+              (identifier)
+              (nvarchar
+                (keyword_nvarchar)
+                (literal)))
+            (column_definition
+              (identifier)
+              (varchar
+                (keyword_varchar
+                  (keyword_varying))
+                (literal)))
+            (column_definition
+              (identifier)
+              (keyword_text))
+            (column_definition
+              (identifier)
+              (keyword_json))
+            (column_definition
+              (identifier)
+              (keyword_jsonb))
+            (column_definition
+              (identifier)
+              (keyword_xml))
+            (column_definition
+              (identifier)
+              (keyword_bytea))
+            (column_definition
+              (identifier)
+              (enum
+                (keyword_enum)
+                (literal)
+                (literal)
+                (literal)))
+            (column_definition
+              (identifier)
+              (keyword_date))
+            (column_definition
+              (identifier)
+              (keyword_datetime))
+            (column_definition
+              (identifier)
+              (keyword_datetime2))
+            (column_definition
+              (identifier)
+              (time
+                (keyword_time)))
+            (column_definition
+              (identifier)
+              (timestamp
+                (keyword_timestamp)))
+            (column_definition
+              (identifier)
+              (timestamp
+                (keyword_timestamp)
+                (keyword_without)
+                (keyword_time)
+                (keyword_zone)))
+            (column_definition
+              (identifier)
+              (keyword_timestamptz))
+            (column_definition
+              (identifier)
+              (keyword_datetime)
+              (keyword_default)
+              (keyword_current_timestamp))
+            (column_definition
+              (identifier)
+              (timestamp
+                (keyword_timestamp)
+                (keyword_with)
+                (keyword_time)
+                (keyword_zone)))
+            (column_definition
+              (identifier)
+              (keyword_st_geometry))
+            (column_definition
+              (identifier)
+              (keyword_mbr))
+            (column_definition
+              (identifier)
+              (keyword_mbb))
+            (column_definition
+              (identifier)
+              (keyword_uuid))))))
 
 ================================================================================
 Create table with nullable columns
@@ -1135,11 +965,11 @@ Create table with index
 ================================================================================
 
 CREATE TABLE some_table(
-    `id` bigint(20) NOT NULL AUTO_INCREMENT,
-    `s_id` bigint(20) DEFAULT NULL,
-    INDEX `parent`(pid),
-    INDEX `range`(publication, published_at)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;
+    id bigint NOT NULL ,
+    s_id bigint DEFAULT NULL,
+    INDEX parent(pid),
+    INDEX range(publication, published_at)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 --------------------------------------------------------------------------------
 
@@ -1154,16 +984,13 @@ CREATE TABLE some_table(
         (column_definition
           name: (identifier)
           type: (bigint
-            (keyword_bigint)
-            size: (literal))
+            (keyword_bigint))
           (keyword_not)
-          (keyword_null)
-          (keyword_auto_increment))
+          (keyword_null))
         (column_definition
           name: (identifier)
           type: (bigint
-            (keyword_bigint)
-            size: (literal))
+            (keyword_bigint))
           (keyword_default)
           (literal
             (keyword_null)))
@@ -1189,10 +1016,7 @@ CREATE TABLE some_table(
         (identifier))
       (table_option
         (keyword_collate)
-        (identifier))
-      (table_option
-        name: (keyword_engine)
-        value: (identifier)))))
+        (identifier)))))
 
 ================================================================================
 Create unique index
@@ -1816,23 +1640,6 @@ OWNED BY numbers.number_sequences;
         (identifier)
         (identifier)))))
 
-================================================================================
-Create extension with version and cascade
-================================================================================
-
-CREATE EXTENSION pg_stat_statements VERSION '12' CASCADE;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (create_extension
-      (keyword_create)
-      (keyword_extension)
-      (identifier)
-      (keyword_version)
-      (literal)
-      (keyword_cascade))))
 
 ================================================================================
 Create view rule conflict with time and timestamp rules (check create_view)

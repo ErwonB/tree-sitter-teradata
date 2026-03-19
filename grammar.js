@@ -197,12 +197,10 @@ module.exports = grammar({
     keyword_for: _ => make_keyword("for"),
     keyword_if: _ => make_keyword("if"),
     keyword_exists: _ => make_keyword("exists"),
-    keyword_auto_increment: _ => make_keyword("auto_increment"),
     keyword_generated: _ => make_keyword("generated"),
     keyword_always: _ => make_keyword("always"),
     keyword_collate: _ => make_keyword("collate"),
     keyword_character: _ => make_keyword("character"),
-    keyword_engine: _ => make_keyword("engine"),
     keyword_default: _ => make_keyword("default"),
     keyword_cascade: _ => make_keyword("cascade"),
     keyword_restrict: _ => make_keyword("restrict"),
@@ -266,16 +264,9 @@ module.exports = grammar({
     keyword_foreign: _ => make_keyword("foreign"),
     keyword_references: _ => make_keyword("references"),
     keyword_concurrently: _ => make_keyword("concurrently"),
-    keyword_btree: _ => make_keyword("btree"),
     keyword_hash: _ => make_keyword("hash"),
-    keyword_gist: _ => make_keyword("gist"),
-    keyword_spgist: _ => make_keyword("spgist"),
-    keyword_gin:  _ => make_keyword("gin"),
-    keyword_brin: _ => make_keyword("brin"),
     keyword_like: _ => choice(make_keyword("like"),make_keyword("ilike")),
     keyword_similar: _ => make_keyword("similar"),
-    keyword_unsigned: _ => make_keyword("unsigned"),
-    keyword_zerofill: _ => make_keyword("zerofill"),
     keyword_conflict: _ => make_keyword("conflict"),
     keyword_do: _ => make_keyword("do"),
     keyword_nothing: _ => make_keyword("nothing"),
@@ -293,7 +284,6 @@ module.exports = grammar({
     keyword_attribute: _ => make_keyword("attribute"),
     keyword_authorization: _ => make_keyword("authorization"),
     keyword_action: _ => make_keyword("action"),
-    keyword_extension: _ => make_keyword("extension"),
     keyword_copy: _ => make_keyword("copy"),
     keyword_stdin: _ => make_keyword("stdin"),
     keyword_freeze: _ => make_keyword("freeze"),
@@ -532,15 +522,13 @@ module.exports = grammar({
     keyword_smallserial: _ => choice(make_keyword("smallserial"),make_keyword("serial2")),
     keyword_serial: _ => choice(make_keyword("serial"),make_keyword("serial4")),
     keyword_bigserial: _ => choice(make_keyword("bigserial"),make_keyword("serial8")),
-    keyword_tinyint: _ => choice(make_keyword("tinyint"),make_keyword("int1")),
-    keyword_smallint: _ => choice(make_keyword("smallint"),make_keyword("int2")),
-    keyword_mediumint: _ => choice(make_keyword("mediumint"),make_keyword("int3")),
-    keyword_int: _ => choice(make_keyword("int"), make_keyword("integer"), make_keyword("int4")),
-    keyword_bigint: _ => choice(make_keyword("bigint"),make_keyword("int8")),
+    keyword_smallint: _ => make_keyword("smallint"),
+    keyword_int: _ => choice(make_keyword("int"), make_keyword("integer")),
+    keyword_bigint: _ => make_keyword("bigint"),
     keyword_byteint: _ => make_keyword("byteint"),
     keyword_decimal: _ => make_keyword("decimal"),
     keyword_numeric: _ => make_keyword("numeric"),
-    keyword_real: _ => choice(make_keyword("real"),make_keyword("float4")),
+    keyword_real: _ => make_keyword("real"),
     keyword_float: _ => make_keyword("float"),
     keyword_double: _ => make_keyword("double"),
     keyword_precision: _ => make_keyword("precision"),
@@ -575,25 +563,17 @@ module.exports = grammar({
     keyword_date: _ => make_keyword("date"),
     keyword_datetime: _ => make_keyword("datetime"),
     keyword_datetime2: _ => make_keyword("datetime2"),
-    keyword_smalldatetime: _ => make_keyword("smalldatetime"),
-    keyword_datetimeoffset: _ => make_keyword("datetimeoffset"),
     keyword_time: _ => make_keyword("time"),
     keyword_timestamp: _ => make_keyword("timestamp"),
     keyword_timestamptz: _ => make_keyword('timestamptz'),
     keyword_interval: _ => make_keyword("interval"),
 
-    keyword_geometry: _ => make_keyword("geometry"),
-    keyword_geography: _ => make_keyword("geography"),
-    keyword_box2d: _ => make_keyword("box2d"),
-    keyword_box3d: _ => make_keyword("box3d"),
+    keyword_st_geometry: _ => make_keyword("st_geometry"),
+    keyword_mbr: _ => make_keyword("mbr"),
+    keyword_mbb: _ => make_keyword("mbb"),
 
-    keyword_oid: _ => make_keyword("oid"),
     keyword_oids: _ => make_keyword("oids"),
     keyword_name: _ => make_keyword("name"),
-    keyword_regclass: _ => make_keyword("regclass"),
-    keyword_regnamespace: _ => make_keyword("regnamespace"),
-    keyword_regproc: _ => make_keyword("regproc"),
-    keyword_regtype: _ => make_keyword("regtype"),
 
     keyword_array: _ => make_keyword("array"), // not included in _type since it's a constructor literal
 
@@ -610,12 +590,10 @@ module.exports = grammar({
           $.keyword_serial,
           $.keyword_bigserial,
 
-          $.tinyint,
-          $.smallint,
-          $.mediumint,
-          $.int,
           $.byteint,
           $.bigint,
+          $.smallint,
+          $.int,
           $.decimal,
           $.numeric,
           $.double,
@@ -647,24 +625,14 @@ module.exports = grammar({
           $.keyword_datetime,
           $.keyword_datetime2,
           seq(optional($.keyword_as), $.keyword_transactiontime),
-          $.datetimeoffset,
-          $.keyword_smalldatetime,
           $.time,
           $.timestamp,
           $.keyword_timestamptz,
           $.keyword_interval,
 
-          $.keyword_geometry,
-          $.keyword_geography,
-          $.keyword_box2d,
-          $.keyword_box3d,
-
-          $.keyword_oid,
-          // $.keyword_name,
-          $.keyword_regclass,
-          $.keyword_regnamespace,
-          $.keyword_regproc,
-          $.keyword_regtype,
+          $.keyword_st_geometry,
+          $.keyword_mbr,
+          $.keyword_mbb,
 
           $.format,
 
@@ -688,12 +656,10 @@ module.exports = grammar({
       ']'
     ),
 
-    tinyint: $ => unsigned_type($, parametric_type($, $.keyword_tinyint)),
-    smallint: $ => unsigned_type($, parametric_type($, $.keyword_smallint)),
-    mediumint: $ => unsigned_type($, parametric_type($, $.keyword_mediumint)),
-    int: $ => unsigned_type($, parametric_type($, $.keyword_int)),
-    bigint: $ => unsigned_type($, parametric_type($, $.keyword_bigint)),
-    byteint: $ => unsigned_type($, parametric_type($, $.keyword_byteint)),
+    smallint: $ => $.keyword_smallint,
+    int: $ => $.keyword_int,
+    bigint: $ => $.keyword_bigint,
+    byteint: $ => $.keyword_byteint,
 
     bit: $ => choice(
         $.keyword_bit,
@@ -710,14 +676,14 @@ module.exports = grammar({
     // TODO: should qualify against /\\b(0?[1-9]|[1-4][0-9]|5[0-4])\\b/g
     float: $  => choice(
       parametric_type($, $.keyword_float, ['precision']),
-      unsigned_type($, parametric_type($, $.keyword_float, ['precision', 'scale'])),
+      parametric_type($, $.keyword_float, ['precision', 'scale']),
     ),
 
     double: $ => choice(
       make_keyword("float8"),
-      unsigned_type($, parametric_type($, $.keyword_double, ['precision', 'scale'])),
-      unsigned_type($, parametric_type($, seq($.keyword_double, $.keyword_precision), ['precision', 'scale'])),
-      unsigned_type($, parametric_type($, $.keyword_real, ['precision', 'scale'])),
+      parametric_type($, $.keyword_double, ['precision', 'scale']),
+      parametric_type($, seq($.keyword_double, $.keyword_precision), ['precision', 'scale']),
+      parametric_type($, $.keyword_real, ['precision', 'scale']),
     ),
 
     decimal: $ => choice(
@@ -738,7 +704,6 @@ module.exports = grammar({
       $.keyword_time,
       $.keyword_zone,
     ),
-    datetimeoffset: $ => parametric_type($, $.keyword_datetimeoffset),
     time: $ => seq(
       parametric_type($, $.keyword_time),
       optional($._include_time_zone),
@@ -1242,7 +1207,6 @@ module.exports = grammar({
         $.create_role,
         $.create_macro,
         $.create_sequence,
-        $.create_extension,
         $.create_trigger,
         $.create_join_index,
       ),
@@ -1829,12 +1793,7 @@ module.exports = grammar({
           seq(
             $.keyword_using,
             choice(
-              $.keyword_btree,
               $.keyword_hash,
-              $.keyword_gist,
-              $.keyword_spgist,
-              $.keyword_gin,
-              $.keyword_brin
             ),
           ),
         ),
@@ -2063,15 +2022,6 @@ _database_attribute: $ => choice(
           seq($.keyword_owned, $.keyword_by, choice($.keyword_none, $.object_reference)),
         )
       ),
-    ),
-
-    create_extension: $ => seq(
-      $.keyword_create,
-      $.keyword_extension,
-      $.identifier,
-      optional($.keyword_with),
-      optional(seq($.keyword_version, choice($.identifier, alias($._literal_string, $.literal)))),
-      optional($.keyword_cascade),
     ),
 
     create_trigger: $ => seq(
@@ -2480,7 +2430,6 @@ _database_attribute: $ => choice(
         $.drop_database,
         $.drop_role,
         $.drop_sequence,
-        $.drop_extension,
         $.drop_function,
         $.drop_macro,
         $.drop_stats,
@@ -2559,13 +2508,6 @@ _database_attribute: $ => choice(
             $.object_reference,
         ),
       ),
-    ),
-
-    drop_extension: $ => seq(
-      $.keyword_drop,
-      $.keyword_extension,
-      comma_list($.identifier, true),
-      optional(choice($.keyword_cascade, $.keyword_restrict)),
     ),
 
     drop_function: $ => seq(
@@ -3052,7 +2994,7 @@ _database_attribute: $ => choice(
       seq($.keyword_collate, $.identifier),
       field('name', $.keyword_default),
       seq(
-        field('name', choice($.keyword_engine, $.identifier, $._literal_string)),
+        field('name', choice($.identifier, $._literal_string)),
         '=',
         field('value', choice($.identifier, $._literal_string)),
       ),
@@ -3165,7 +3107,6 @@ _database_attribute: $ => choice(
       seq(optional($.keyword_not), $.keyword_casespecific),
       $._default_expression,
       $._primary_key,
-      $.keyword_auto_increment,
       $.direction,
       $._column_comment,
       $._check_constraint,
@@ -4218,7 +4159,6 @@ _database_attribute: $ => choice(
       $._identifier,
       $._double_quote_string,
       $._tsql_parameter,
-      seq("`", $._identifier, "`"),
       $._macro_identifier,
     ),
     _tsql_parameter: $ => seq('@', $._identifier),
@@ -4233,17 +4173,6 @@ _database_attribute: $ => choice(
   }
 
 });
-
-function unsigned_type($, type) {
-  return choice(
-    seq($.keyword_unsigned, type),
-    seq(
-      type,
-      optional($.keyword_unsigned),
-      optional($.keyword_zerofill),
-    ),
-  )
-}
 
 function optional_parenthesis(node) {
   return prec.right(
