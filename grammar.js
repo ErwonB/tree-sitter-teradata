@@ -831,6 +831,7 @@ module.exports = grammar({
 
     _ddl_statement: $ => choice(
       $._create_statement,
+      $._modify_statement,
       $._alter_statement,
       $._drop_statement,
       $._rename_statement,
@@ -1246,6 +1247,12 @@ module.exports = grammar({
         $.create_extension,
         $.create_trigger,
         $.create_join_index,
+      ),
+    ),
+
+    _modify_statement: $ => seq(
+      choice(
+        $.modify_database,
       ),
     ),
 
@@ -1955,8 +1962,36 @@ _database_attribute: $ => choice(
         optional($.keyword_bytes),
         optional($._skew_spec)
       ),
-
         optional(seq(',', comma_list($._database_attribute, false)))
+    ),
+
+    _drop_database_attribute: $ => choice(
+        seq(
+          choice($.keyword_permanent, $.keyword_perm),
+          '=',
+          field('permanent_size', $._expression),
+          optional($.keyword_bytes),
+          optional($._skew_spec)
+        ),
+        $._database_attribute,
+          // DROP DEFAULT JOURNAL TABLE = [database_name.]table_name
+          seq(
+            $.keyword_drop,
+            $.keyword_default,
+            $.keyword_journal,
+            $.keyword_table,
+            '=',
+            $.object_reference
+          )
+    ),
+
+    modify_database: $ => seq(
+      // MODIFY DATABASE
+      $.keyword_modify, $.keyword_database,
+      field('name', $.object_reference),
+      // AS
+      $.keyword_as,
+      comma_list($._drop_database_attribute, true)
     ),
 
     create_role: $ => seq(
@@ -2143,7 +2178,6 @@ _database_attribute: $ => choice(
         $.alter_view,
         $.alter_type,
         $.alter_index,
-        $.alter_database,
         $.alter_role,
         $.alter_sequence,
       ),
@@ -2345,31 +2379,6 @@ _database_attribute: $ => choice(
         $.change_ownership,
       ),
     ),
-
-    alter_database: $ => seq(
-      $.keyword_alter,
-      $.keyword_database,
-      $.identifier,
-      optional($.keyword_with),
-      choice(
-        seq($.rename_object),
-        seq($.change_ownership),
-        seq(
-          $.keyword_reset,
-          choice(
-            $.keyword_all,
-            field("configuration_parameter", $.identifier)
-          ),
-        ),
-        seq(
-          $.keyword_set,
-          choice(
-            seq($.keyword_tablespace, $.identifier),
-              $.set_configuration,
-            ),
-          ),
-        ),
-      ),
 
     alter_role: $ => seq(
       $.keyword_alter,

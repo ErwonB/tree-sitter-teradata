@@ -1,0 +1,132 @@
+
+================================================================================
+Modify database simple 1
+================================================================================
+
+MODIFY DATABASE personnel AS
+     PERMANENT = 6000000 BYTES;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (modify_database
+          (keyword_modify)
+          (keyword_database)
+          (object_reference
+            (identifier))
+          (keyword_as)
+          (keyword_permanent)
+          (literal)
+          (keyword_bytes))))
+
+
+================================================================================
+Modify database with expression
+================================================================================
+
+MODIFY DATABASE production_development AS
+  PERM = 3000000*(HASHAMP()+1),
+  SPOOL = 3000000*(HASHAMP()+1),
+  TEMPORARY = 3000000*(HASHAMP()+1);
+
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (modify_database
+          (keyword_modify)
+          (keyword_database)
+          (object_reference
+            (identifier))
+          (keyword_as)
+          (keyword_perm)
+          (binary_expression
+            (literal)
+            (parenthesized_expression
+              (binary_expression
+                (invocation
+                  (object_reference
+                    (identifier)))
+                (literal))))
+          (keyword_spool)
+          (binary_expression
+            (literal)
+            (parenthesized_expression
+              (binary_expression
+                (invocation
+                  (object_reference
+                    (identifier)))
+                (literal))))
+          (keyword_temporary)
+          (binary_expression
+            (literal)
+            (parenthesized_expression
+              (binary_expression
+                (invocation
+                  (object_reference
+                    (identifier)))
+                (literal)))))))
+
+================================================================================
+Modify database with skew
+================================================================================
+
+MODIFY DATABASE d1 AS
+PERM = 1e9,
+TEMPORARY = 1e9 SKEW = 20 PERCENT;
+
+
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (modify_database
+          (keyword_modify)
+          (keyword_database)
+          (object_reference
+            (identifier))
+          (keyword_as)
+          (keyword_perm)
+          (literal)
+          (keyword_temporary)
+          (literal)
+          (keyword_skew)
+          (literal)
+          (keyword_percent))))
+
+================================================================================
+Modify database with drop journal
+================================================================================
+
+MODIFY DATABASE finance AS
+     PERM = 75000000,
+     SPOOL = 150000000,
+     NO FALLBACK,
+     DROP DEFAULT JOURNAL TABLE = finance.journals;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (modify_database
+          (keyword_modify)
+          (keyword_database)
+          (object_reference
+            (identifier))
+          (keyword_as)
+          (keyword_perm)
+          (literal)
+          (keyword_spool)
+          (literal)
+          (keyword_no)
+          (keyword_fallback)
+          (keyword_drop)
+          (keyword_default)
+          (keyword_journal)
+          (keyword_table)
+          (object_reference
+            (identifier)
+            (identifier)))))

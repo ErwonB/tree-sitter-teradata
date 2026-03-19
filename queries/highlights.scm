@@ -124,6 +124,7 @@
   (keyword_del)
   (keyword_create)
   (keyword_ct)
+  (keyword_cd)
   (keyword_show)
   (keyword_unload)
   (keyword_insert)
