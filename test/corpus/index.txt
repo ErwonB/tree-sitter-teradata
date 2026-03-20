@@ -22,7 +22,7 @@ CREATE INDEX ON tab(col);
 Create named index with options
 ================================================================================
 
-CREATE UNIQUE INDEX CONCURRENTLY
+CREATE UNIQUE INDEX
 idx1
 ON tab USING HASH(col ASC)
 WHERE tab.col > 10;
@@ -35,7 +35,6 @@ WHERE tab.col > 10;
       (keyword_create)
       (keyword_unique)
       (keyword_index)
-      (keyword_concurrently)
       (identifier)
       (keyword_on)
       (object_reference

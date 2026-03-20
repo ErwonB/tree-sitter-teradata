@@ -342,7 +342,6 @@ CREATE TABLE addresses (
   id bigint NOT NULL ,
   s_id bigint DEFAULT NULL,
   first_name varchar(255) DEFAULT NULL,
-  updated_at datetime DEFAULT NULL,
   PRIMARY KEY (id),
   KEY addresses_s_id_index (s_id),
   KEY index_addresses_on_updated_at (updated_at),
@@ -377,12 +376,6 @@ CREATE TABLE addresses (
           type: (varchar
             (keyword_varchar)
             size: (literal))
-          (keyword_default)
-          (literal
-            (keyword_null)))
-        (column_definition
-          name: (identifier)
-          type: (keyword_datetime)
           (keyword_default)
           (literal
             (keyword_null)))
@@ -638,10 +631,6 @@ CREATE TABLE type_test (
   a_bit3 BIT VARYING(2),
   a_binary BINARY,
   a_varbinary VARBINARY,
-  a_image IMAGE,
-  a_smallser SMALLSERIAL,
-  a_serial SERIAL,
-  a_bigser BIGSERIAL,
   an_int INT,
   an_integer INTEGER,
   a_bigint BIGINT,
@@ -653,8 +642,6 @@ CREATE TABLE type_test (
   a_sized_numeric_with_scale NUMERIC (8, 4),
   a_real REAL,
   a_double_precision DOUBLE PRECISION,
-  a_money MONEY,
-  a_smallmoney SMALLMONEY,
   a_char CHAR,
   a_nchar NCHAR,
   a_nchar_precision NCHAR(8),
@@ -666,23 +653,15 @@ CREATE TABLE type_test (
   a_character_varying CHARACTER VARYING (10),
   a_text TEXT,
   a_json JSON,
-  a_jsonb JSONB,
   an_xml XML,
-  a_bytea BYTEA,
-  a_enum ENUM('one','two','three'),
   a_date DATE,
-  a_datetime DATETIME,
-  a_datetime2 DATETIME2,
   a_time TIME,
   a_timestamp TIMESTAMP,
   a_verbose_timestamp TIMESTAMP WITHOUT TIME ZONE,
-  a_tstz TIMESTAMPTZ,
-  a_date_with_default_ts DATETIME DEFAULT CURRENT_TIMESTAMP,
   a_verbose_tstz TIMESTAMP WITH TIME ZONE,
   a_geometry ST_Geometry,
   a_geography mbr,
-  a_box2d mbb,
-  a_uuid UUID
+  a_box2d mbb
 );
 
 --------------------------------------------------------------------------------
@@ -721,18 +700,6 @@ CREATE TABLE type_test (
               (identifier)
               (varbinary
                 (keyword_varbinary)))
-            (column_definition
-              (identifier)
-              (keyword_image))
-            (column_definition
-              (identifier)
-              (keyword_smallserial))
-            (column_definition
-              (identifier)
-              (keyword_serial))
-            (column_definition
-              (identifier)
-              (keyword_bigserial))
             (column_definition
               (identifier)
               (int
@@ -786,12 +753,6 @@ CREATE TABLE type_test (
                 (keyword_precision)))
             (column_definition
               (identifier)
-              (keyword_money))
-            (column_definition
-              (identifier)
-              (keyword_smallmoney))
-            (column_definition
-              (identifier)
               (char
                 (keyword_char)))
             (column_definition
@@ -840,29 +801,10 @@ CREATE TABLE type_test (
               (keyword_json))
             (column_definition
               (identifier)
-              (keyword_jsonb))
-            (column_definition
-              (identifier)
               (keyword_xml))
             (column_definition
               (identifier)
-              (keyword_bytea))
-            (column_definition
-              (identifier)
-              (enum
-                (keyword_enum)
-                (literal)
-                (literal)
-                (literal)))
-            (column_definition
-              (identifier)
               (keyword_date))
-            (column_definition
-              (identifier)
-              (keyword_datetime))
-            (column_definition
-              (identifier)
-              (keyword_datetime2))
             (column_definition
               (identifier)
               (time
@@ -880,14 +822,6 @@ CREATE TABLE type_test (
                 (keyword_zone)))
             (column_definition
               (identifier)
-              (keyword_timestamptz))
-            (column_definition
-              (identifier)
-              (keyword_datetime)
-              (keyword_default)
-              (keyword_current_timestamp))
-            (column_definition
-              (identifier)
               (timestamp
                 (keyword_timestamp)
                 (keyword_with)
@@ -901,10 +835,7 @@ CREATE TABLE type_test (
               (keyword_mbr))
             (column_definition
               (identifier)
-              (keyword_mbb))
-            (column_definition
-              (identifier)
-              (keyword_uuid))))))
+              (keyword_mbb))))))
 
 ================================================================================
 Create table with nullable columns
@@ -936,29 +867,6 @@ CREATE TABLE tableName (
             (keyword_varchar))
           (keyword_null))))))
 
-================================================================================
-Create unlogged table
-================================================================================
-
-CREATE UNLOGGED TABLE tableName (
-    id NUMERIC
-);
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (create_table
-      (keyword_create)
-      (keyword_unlogged)
-      (keyword_table)
-      (object_reference
-        (identifier))
-      (column_definitions
-        (column_definition
-          (identifier)
-          (numeric
-            (keyword_numeric)))))))
 
 ================================================================================
 Create table with index
@@ -1309,29 +1217,6 @@ CREATE TABLE "Role" (
               (keyword_end)))
           (keyword_virtual))))))
 
-================================================================================
-Inet type
-================================================================================
-
-CREATE TABLE "Session" (
-  "ip" inet NOT NULL
-);
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (create_table
-      (keyword_create)
-      (keyword_table)
-      (object_reference
-        name: (identifier))
-      (column_definitions
-        (column_definition
-          name: (literal)
-          type: (keyword_inet)
-          (keyword_not)
-          (keyword_null))))))
 
 ================================================================================
 Create table with arrays and matrix

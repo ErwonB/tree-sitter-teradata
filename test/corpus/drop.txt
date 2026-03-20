@@ -152,7 +152,7 @@ DROP INDEX idx ON tbl;
 Drop index cascade full sequence
 ================================================================================
 
-DROP INDEX CONCURRENTLY idx CASCADE ON tbl;
+DROP INDEX idx CASCADE ON tbl;
 
 --------------------------------------------------------------------------------
 
@@ -161,7 +161,6 @@ DROP INDEX CONCURRENTLY idx CASCADE ON tbl;
     (drop_index
       (keyword_drop)
       (keyword_index)
-      (keyword_concurrently)
       name: (identifier)
       (keyword_cascade)
       (keyword_on)
@@ -172,7 +171,7 @@ DROP INDEX CONCURRENTLY idx CASCADE ON tbl;
 Drop index restrict full sequence
 ================================================================================
 
-DROP INDEX CONCURRENTLY idx RESTRICT ON tbl;
+DROP INDEX idx RESTRICT ON tbl;
 
 --------------------------------------------------------------------------------
 
@@ -181,7 +180,6 @@ DROP INDEX CONCURRENTLY idx RESTRICT ON tbl;
     (drop_index
       (keyword_drop)
       (keyword_index)
-      (keyword_concurrently)
       name: (identifier)
       (keyword_restrict)
       (keyword_on)

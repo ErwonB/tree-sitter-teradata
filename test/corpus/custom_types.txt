@@ -14,31 +14,6 @@ Create type
       (object_reference
         (identifier)))))
 
-================================================================================
-Create type enum
-================================================================================
-
-CREATE TYPE colors as ENUM (
-    'red',
-    'green',
-    'blue'
-);
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (create_type
-      (keyword_create)
-      (keyword_type)
-      (object_reference
-        (identifier))
-      (keyword_as)
-      (keyword_enum)
-      (enum_elements
-        (literal)
-        (literal)
-        (literal)))))
 
 ================================================================================
 Create type object

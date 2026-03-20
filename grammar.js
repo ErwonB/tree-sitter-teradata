@@ -10,9 +10,6 @@ module.exports = grammar({
 
 
   externals: $ => [
-    $._dollar_quoted_string_start_tag,
-    $._dollar_quoted_string_end_tag,
-    $._dollar_quoted_string,
   ],
 
   conflicts: $ => [
@@ -76,7 +73,6 @@ module.exports = grammar({
     keyword_spool: _ => make_keyword("spool"),
     keyword_account: _ => make_keyword("account"),
     keyword_override: _ => make_keyword("override"),
-    keyword_error: _ => make_keyword("error"),
     keyword_skew: _ => make_keyword("skew"),
     keyword_strtok_split_to_table: _ => make_keyword("strtok_split_to_table"),
     keyword_pivot: _ => make_keyword("pivot"),
@@ -162,7 +158,6 @@ module.exports = grammar({
     keyword_format: _ => make_keyword("format"),
     keyword_title: _ => make_keyword("title"),
     keyword_column: _ => make_keyword("column"),
-    keyword_tablespace: _ => make_keyword("tablespace"),
     keyword_sequence: _ => make_keyword("sequence"),
     keyword_increment: _ => make_keyword("increment"),
     keyword_minvalue: _ => make_keyword("minvalue"),
@@ -198,7 +193,6 @@ module.exports = grammar({
     keyword_if: _ => make_keyword("if"),
     keyword_exists: _ => make_keyword("exists"),
     keyword_generated: _ => make_keyword("generated"),
-    keyword_always: _ => make_keyword("always"),
     keyword_collate: _ => make_keyword("collate"),
     keyword_character: _ => make_keyword("character"),
     keyword_default: _ => make_keyword("default"),
@@ -226,7 +220,6 @@ module.exports = grammar({
     keyword_temp: _ => make_keyword("temp"),
     keyword_global: _ => make_keyword("global"),
     keyword_temporary: _ => make_keyword("temporary"),
-    keyword_unlogged: _ => make_keyword("unlogged"),
     keyword_cycle: _ => make_keyword("cycle"),
     keyword_union: _ => make_keyword("union"),
     keyword_all: _ => make_keyword("all"),
@@ -263,16 +256,11 @@ module.exports = grammar({
     keyword_unique: _ => make_keyword("unique"),
     keyword_foreign: _ => make_keyword("foreign"),
     keyword_references: _ => make_keyword("references"),
-    keyword_concurrently: _ => make_keyword("concurrently"),
     keyword_hash: _ => make_keyword("hash"),
-    keyword_like: _ => choice(make_keyword("like"),make_keyword("ilike")),
+    keyword_like: _ => make_keyword("like"),
     keyword_similar: _ => make_keyword("similar"),
-    keyword_conflict: _ => make_keyword("conflict"),
     keyword_do: _ => make_keyword("do"),
     keyword_nothing: _ => make_keyword("nothing"),
-    keyword_high_priority: _ => make_keyword("high_priority"),
-    keyword_low_priority: _ => make_keyword("low_priority"),
-    keyword_delayed: _ => make_keyword("delayed"),
     keyword_recursive: _ => make_keyword("recursive"),
     keyword_local: _ => make_keyword("local"),
     keyword_current_timestamp: _ => make_keyword("current_timestamp"),
@@ -332,7 +320,6 @@ module.exports = grammar({
     keyword_out: _ => make_keyword("out"),
     keyword_inout: _ => make_keyword("inout"),
     keyword_variadic: _ => make_keyword("variadic"),
-    keyword_ordinality: _ => make_keyword("ordinality"),
     keyword_csv: _ => make_keyword("csv"),
 
     keyword_session: _ => make_keyword("session"),
@@ -517,11 +504,7 @@ module.exports = grammar({
     keyword_bit: _ => make_keyword("bit"),
     keyword_binary: _ => make_keyword("binary"),
     keyword_varbinary: _ => make_keyword("varbinary"),
-    keyword_image: _ => make_keyword("image"),
 
-    keyword_smallserial: _ => choice(make_keyword("smallserial"),make_keyword("serial2")),
-    keyword_serial: _ => choice(make_keyword("serial"),make_keyword("serial4")),
-    keyword_bigserial: _ => choice(make_keyword("bigserial"),make_keyword("serial8")),
     keyword_smallint: _ => make_keyword("smallint"),
     keyword_int: _ => choice(make_keyword("int"), make_keyword("integer")),
     keyword_bigint: _ => make_keyword("bigint"),
@@ -532,10 +515,7 @@ module.exports = grammar({
     keyword_float: _ => make_keyword("float"),
     keyword_double: _ => make_keyword("double"),
     keyword_precision: _ => make_keyword("precision"),
-    keyword_inet: _ => make_keyword("inet"),
 
-    keyword_money: _ => make_keyword("money"),
-    keyword_smallmoney: _ => make_keyword("smallmoney"),
     keyword_varying: _ => make_keyword("varying"),
 
     keyword_char: _ => choice(make_keyword("char"), make_keyword("character")),
@@ -549,30 +529,19 @@ module.exports = grammar({
     ),
     keyword_nvarchar: _ => make_keyword("nvarchar"),
     keyword_text: _ => make_keyword("text"),
-    keyword_string: _ => make_keyword("string"),
-    keyword_uuid: _ => make_keyword("uuid"),
 
     keyword_json: _ => make_keyword("json"),
-    keyword_jsonb: _ => make_keyword("jsonb"),
     keyword_xml: _ => make_keyword("xml"),
 
-    keyword_bytea: _ => make_keyword("bytea"),
-
-    keyword_enum: _ => make_keyword("enum"),
-
     keyword_date: _ => make_keyword("date"),
-    keyword_datetime: _ => make_keyword("datetime"),
-    keyword_datetime2: _ => make_keyword("datetime2"),
     keyword_time: _ => make_keyword("time"),
     keyword_timestamp: _ => make_keyword("timestamp"),
-    keyword_timestamptz: _ => make_keyword('timestamptz'),
     keyword_interval: _ => make_keyword("interval"),
 
     keyword_st_geometry: _ => make_keyword("st_geometry"),
     keyword_mbr: _ => make_keyword("mbr"),
     keyword_mbb: _ => make_keyword("mbb"),
 
-    keyword_oids: _ => make_keyword("oids"),
     keyword_name: _ => make_keyword("name"),
 
     keyword_array: _ => make_keyword("array"), // not included in _type since it's a constructor literal
@@ -584,11 +553,6 @@ module.exports = grammar({
           $.bit,
           $.binary,
           $.varbinary,
-          $.keyword_image,
-
-          $.keyword_smallserial,
-          $.keyword_serial,
-          $.keyword_bigserial,
 
           $.byteint,
           $.bigint,
@@ -599,35 +563,20 @@ module.exports = grammar({
           $.double,
           $.float,
 
-          $.keyword_money,
-          $.keyword_smallmoney,
-
           $.char,
           $.varchar,
           $.nchar,
           $.nvarchar,
           $.numeric,
-          $.keyword_string,
           $.keyword_text,
 
-          $.keyword_uuid,
-
           $.keyword_json,
-          $.keyword_jsonb,
           $.keyword_xml,
 
-          $.keyword_bytea,
-          $.keyword_inet,
-
-          $.enum,
-
           $.keyword_date,
-          $.keyword_datetime,
-          $.keyword_datetime2,
           seq(optional($.keyword_as), $.keyword_transactiontime),
           $.time,
           $.timestamp,
-          $.keyword_timestamptz,
           $.keyword_interval,
 
           $.keyword_st_geometry,
@@ -711,12 +660,6 @@ module.exports = grammar({
     timestamp: $ => seq(
       parametric_type($, $.keyword_timestamp),
       optional($._include_time_zone),
-    ),
-    timestamptz: $ => parametric_type($, $.keyword_timestamptz),
-
-    enum: $ => seq(
-      $.keyword_enum,
-      paren_list(field("value", alias($._literal_string, $.literal)), true)
     ),
 
     array: $ => seq(
@@ -1066,7 +1009,6 @@ module.exports = grammar({
       // TODO: statistics
       // TODO: subscription
       seq($.keyword_table, $.object_reference),
-      seq($.keyword_tablespace, $.identifier),
       // TODO: text search (configuration|dictionary|parser|template)
       // TODO: transform for
       seq($.keyword_trigger, $.identifier, $.keyword_on, $.object_reference),
@@ -1227,7 +1169,6 @@ module.exports = grammar({
         $.keyword_tblproperties,
         paren_list($.table_option, true),
       ),
-      seq($.keyword_without, $.keyword_oids),
       $.storage_parameters,
       $.table_option,
       $.primary_index_clause,
@@ -1262,7 +1203,6 @@ module.exports = grammar({
               optional(
                 choice(
                   $._temporary,
-                  $.keyword_unlogged,
                   $.keyword_external,
                   $.keyword_multiset,
                   $.keyword_set,
@@ -1536,10 +1476,6 @@ module.exports = grammar({
       false,
     ),
 
-    // This is only used in create function statement, it is not needed to check
-    // the start tag match the end one. The usage of this syntax in other
-    // context is done by _dollar_string.
-    dollar_quote: () => /\$[^\$]*\$/,
 
     create_function: $ => seq(
       choice($.keyword_create, $.keyword_replace),
@@ -1589,23 +1525,6 @@ module.exports = grammar({
       $._expression,
     ),
 
-    function_declaration: $ => seq(
-      $.identifier,
-      $._type,
-      optional(
-        seq(
-          ':=',
-          choice(
-            wrapped_in_parenthesis($.statement),
-            // TODO are there more possibilities here? We can't use `_expression` since
-            // that includes subqueries
-            $.literal,
-          ),
-        ),
-      ),
-      ';',
-    ),
-
     _function_body_statement: $ => choice(
       $.statement,
       $._function_return,
@@ -1629,28 +1548,6 @@ module.exports = grammar({
       ),
       seq(
         $.keyword_as,
-        alias($._dollar_quoted_string_start_tag, $.dollar_quote),
-        optional(
-          seq(
-            $.keyword_declare,
-            repeat1(
-              $.function_declaration,
-            ),
-          ),
-        ),
-        $.keyword_begin,
-        repeat1(
-          seq(
-            $._function_body_statement,
-            ';',
-          ),
-        ),
-        $.keyword_end,
-        optional(';'),
-        alias($._dollar_quoted_string_end_tag, $.dollar_quote),
-      ),
-      seq(
-        $.keyword_as,
         alias(
           choice(
             $._single_quote_string,
@@ -1658,13 +1555,6 @@ module.exports = grammar({
           ),
           $.literal
         ),
-      ),
-      seq(
-        $.keyword_as,
-        alias($._dollar_quoted_string_start_tag, $.dollar_quote),
-        $._function_body_statement,
-        optional(';'),
-        alias($._dollar_quoted_string_end_tag, $.dollar_quote),
       ),
     ),
 
@@ -1780,7 +1670,6 @@ module.exports = grammar({
       $.keyword_create,
       optional($.keyword_unique),
       $.keyword_index,
-      optional($.keyword_concurrently),
       optional(
         seq(
           field("column", $._column),
@@ -2001,10 +1890,7 @@ _database_attribute: $ => choice(
     create_sequence: $ => seq(
       $.keyword_create,
       optional(
-        choice(
           choice($.keyword_temporary, $.keyword_temp),
-          $.keyword_unlogged,
-        )
       ),
       $.keyword_sequence,
       $.object_reference,
@@ -2096,11 +1982,6 @@ _database_attribute: $ => choice(
               optional(seq($.keyword_collate, $.identifier))
             ),
             seq(
-              $.keyword_as,
-              $.keyword_enum,
-              $.enum_elements,
-            ),
-            seq(
               optional(
                 seq(
                   $.keyword_as,
@@ -2114,10 +1995,6 @@ _database_attribute: $ => choice(
           ),
         ),
       ),
-    ),
-
-    enum_elements: $ => seq(
-      paren_list(field("enum_element", alias($._literal_string, $.literal))),
     ),
 
     _alter_statement: $ => seq(
@@ -2499,7 +2376,6 @@ _database_attribute: $ => choice(
     drop_index: $ => seq(
       $.keyword_drop,
       $.keyword_index,
-      optional($.keyword_concurrently),
       field("name", $.identifier),
       optional($._drop_behavior),
       optional(
@@ -2638,13 +2514,6 @@ _database_attribute: $ => choice(
         $._insert,
         $.keyword_replace
       ),
-      optional(
-        choice(
-          $.keyword_low_priority,
-          $.keyword_delayed,
-          $.keyword_high_priority,
-        ),
-      ),
       optional($.keyword_ignore),
       optional(
         choice(
@@ -2667,24 +2536,7 @@ _database_attribute: $ => choice(
       ),
       optional(
         choice(
-          $._on_conflict,
           $._on_duplicate_key_update,
-        ),
-      ),
-    ),
-
-    _on_conflict: $ => seq(
-      $.keyword_on,
-      $.keyword_conflict,
-      seq(
-        $.keyword_do,
-        choice(
-          $.keyword_nothing,
-          seq(
-            $._update,
-            $._set_values,
-            optional($.where),
-          ),
         ),
       ),
     ),
@@ -3660,19 +3512,6 @@ _database_attribute: $ => choice(
         $.keyword_cross,
         $.keyword_join,
         $.relation,
-        optional(
-          seq(
-            $.keyword_with,
-            $.keyword_ordinality,
-            optional(
-              seq(
-                $.keyword_as,
-                field("alias", $.identifier),
-                paren_list($.identifier),
-              )
-            )
-          )
-        )
       )
     ),
 
@@ -4129,7 +3968,6 @@ _database_attribute: $ => choice(
       choice(
         $._single_quote_string,
         $._double_quote_string,
-        $._dollar_quoted_string,
         $._postgres_escape_string,
       ),
     ),

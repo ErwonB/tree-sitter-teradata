@@ -58,42 +58,4 @@ created_at
 
 (program (ERROR))
 
-================================================================================
-Function body with a $$ string literal with the same name
-================================================================================
-
-replace function public.do_stuff()
-  returns trigger
-  language plpgsql
-as $a$
-begin
-  return $a$text$a$;
-end;
-$a$
-
---------------------------------------------------------------------------------
-
-(program
-  (ERROR
-    (keyword_replace)
-    (keyword_function)
-    (object_reference
-      (identifier)
-      (identifier))
-    (function_arguments)
-    (keyword_returns)
-    (keyword_trigger)
-    (function_language
-      (keyword_language)
-      (identifier))
-    (keyword_as)
-    (ERROR
-      (dollar_quote)
-      (keyword_begin)
-      (keyword_return)
-      (dollar_quote)
-      (keyword_text))
-    (dollar_quote)
-    (keyword_end)
-    (dollar_quote)))
 
