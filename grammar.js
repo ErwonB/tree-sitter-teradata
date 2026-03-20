@@ -3668,25 +3668,10 @@ _database_attribute: $ => choice(
         ),
       ),
 
-    _expression: $ =>
-      choice(seq(
-          choice(
-            prec(2, seq(
-              $._expression_base,
-              $.keyword_escape,
-              $._literal_string
-            )),
-            prec(1, $._expression_base)
-          ),
-          $._temporal_qualifier),
-      choice(
-        prec(2, seq(
-          $._expression_base,
-          $.keyword_escape,
-          $._literal_string
-        )),
-        prec(1, $._expression_base)
-      ),
+    _expression: $ => choice(
+      prec(3, seq($._expression_base, $._temporal_qualifier)),
+      prec(2, seq($._expression_base, $.keyword_escape, $._literal_string)),
+      prec(1, $._expression_base),
     ),
 
     period_expression: $ => prec.left(seq(
