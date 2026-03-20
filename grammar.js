@@ -17,7 +17,6 @@ module.exports = grammar({
     [$.object_reference],
     [$.between_expression, $.period_expression, $.binary_expression],
     [$._expression_base, $.binary_expression],
-    [$._inner_default_expression, $._one_word_function],
   ],
 
   precedences: $ => [
@@ -3005,7 +3004,7 @@ _database_attribute: $ => choice(
       $.keyword_default,
       optional_parenthesis($._inner_default_expression),
     ),
-    _inner_default_expression: $ => choice(
+    _inner_default_expression: $ => prec(1, choice(
         $.literal,
         $.list,
         $.cast,
@@ -3015,6 +3014,7 @@ _database_attribute: $ => choice(
         $.invocation,
         $.keyword_user,
         alias($.implicit_cast, $.cast),
+     )
     ),
 
     constraints: $ => seq(
@@ -3238,13 +3238,14 @@ _database_attribute: $ => choice(
       wrapped_in_parenthesis($.where),
     ),
 
-    _one_word_function: $ => choice(
+    _one_word_function: $ => prec(0, choice(
       $.keyword_user,
       $.keyword_session,
       $.keyword_role,
       $.keyword_current_date,
       $.keyword_current_time,
       $.keyword_current_user,
+     ),
     ),
 
     _one_word_function_with_parens: $ => choice(
@@ -3638,7 +3639,7 @@ _database_attribute: $ => choice(
       ),
     ),
 
-    _expression_base: $ => prec(1, choice(
+    _expression_base: $ => prec(2, choice(
           $.literal,
           alias(
             $._qualified_field,
