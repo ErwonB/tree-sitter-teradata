@@ -18,7 +18,6 @@ module.exports = grammar({
     [$.between_expression, $.period_expression, $.binary_expression],
     [$._expression_base, $.binary_expression],
     [$._inner_default_expression, $._one_word_function],
-    [$._one_word_function],
   ],
 
   precedences: $ => [
@@ -264,6 +263,8 @@ module.exports = grammar({
     keyword_local: _ => make_keyword("local"),
     keyword_current_timestamp: _ => make_keyword("current_timestamp"),
     keyword_current_date: _ => make_keyword("current_date"),
+    keyword_current_time: _ => make_keyword("current_time"),
+    keyword_current_user: _ => make_keyword("current_user"),
     keyword_check: _ => make_keyword("check"),
     keyword_option: _ => make_keyword("option"),
     keyword_wait: _ => make_keyword("wait"),
@@ -321,6 +322,7 @@ module.exports = grammar({
     keyword_variadic: _ => make_keyword("variadic"),
     keyword_csv: _ => make_keyword("csv"),
 
+    keyword_role: _ => make_keyword("role"),
     keyword_session: _ => make_keyword("session"),
     keyword_isolation: _ => make_keyword("isolation"),
     keyword_level: _ => make_keyword("level"),
@@ -3012,7 +3014,6 @@ _database_attribute: $ => choice(
         $.array,
         $.invocation,
         $.keyword_user,
-        seq($.keyword_current_timestamp, optional(wrapped_in_parenthesis($._integer))),
         alias($.implicit_cast, $.cast),
     ),
 
@@ -3239,15 +3240,22 @@ _database_attribute: $ => choice(
 
     _one_word_function: $ => choice(
       $.keyword_user,
-      seq($.keyword_current_timestamp, optional(wrapped_in_parenthesis($._integer))),
       $.keyword_session,
+      $.keyword_role,
       $.keyword_current_date,
+      $.keyword_current_time,
+      $.keyword_current_user,
+    ),
+
+    _one_word_function_with_parens: $ => choice(
+      prec(1, seq($.keyword_current_timestamp, '(', $._integer, ')')),
+      prec(0, $.keyword_current_timestamp),
     ),
 
 
     invocation: $ => prec(1,
       choice(
-       $._one_word_function,
+       choice($._one_word_function, $._one_word_function_with_parens),
           seq(
             $.object_reference,
             choice(
