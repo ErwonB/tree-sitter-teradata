@@ -841,13 +841,13 @@ module.exports = grammar({
       ),
     ),
 
-    // athena
+    // UNLOAD [ database. ] table FILE = filepath [ f ] ;
     _unload_statement: $ => seq(
       $.keyword_unload,
-      wrapped_in_parenthesis($._select_statement),
-      $.keyword_to,
-      $._single_quote_string,
-      $.storage_parameters,
+      $.object_reference,
+      $.keyword_file,
+      '=',
+      $.literal
     ),
 
     _show_statement: $ => seq(
