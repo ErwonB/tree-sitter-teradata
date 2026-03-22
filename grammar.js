@@ -17,6 +17,7 @@ module.exports = grammar({
     [$.object_reference],
     [$.between_expression, $.period_expression, $.binary_expression],
     [$._expression_base, $.binary_expression],
+    [$.copy_options]
   ],
 
   precedences: $ => [
@@ -272,17 +273,7 @@ module.exports = grammar({
     keyword_authorization: _ => make_keyword("authorization"),
     keyword_action: _ => make_keyword("action"),
     keyword_copy: _ => make_keyword("copy"),
-    keyword_stdin: _ => make_keyword("stdin"),
-    keyword_freeze: _ => make_keyword("freeze"),
     keyword_escape: _ => make_keyword("escape"),
-    keyword_encoding: _ => make_keyword("encoding"),
-    keyword_force_quote: _ => make_keyword("force_quote"),
-    keyword_quote: _ => make_keyword("quote"),
-    keyword_force_null: _ => make_keyword("force_null"),
-    keyword_force_not_null: _ => make_keyword("force_not_null"),
-    keyword_header: _ => make_keyword("header"),
-    keyword_match: _ => make_keyword("match"),
-    keyword_program: _ => make_keyword("program"),
     keyword_plain: _ => make_keyword("plain"),
     keyword_extended: _ => make_keyword("extended"),
     keyword_main: _ => make_keyword("main"),
@@ -319,7 +310,6 @@ module.exports = grammar({
     keyword_out: _ => make_keyword("out"),
     keyword_inout: _ => make_keyword("inout"),
     keyword_variadic: _ => make_keyword("variadic"),
-    keyword_csv: _ => make_keyword("csv"),
 
     keyword_role: _ => make_keyword("role"),
     keyword_session: _ => make_keyword("session"),
@@ -369,7 +359,6 @@ module.exports = grammar({
     keyword_comment: _ => make_keyword("comment"),
     keyword_sort: _ => make_keyword("sort"),
     keyword_delimited: _ => make_keyword("delimited"),
-    keyword_delimiter: _ => make_keyword("delimiter"),
     keyword_fields: _ => make_keyword("fields"),
     keyword_terminated: _ => make_keyword("terminated"),
     keyword_escaped: _ => make_keyword("escaped"),
@@ -458,6 +447,21 @@ module.exports = grammar({
     keyword_protection: _ => make_keyword("protection"),
     keyword_fallback: _ => make_keyword("fallback"),
     keyword_colocate: _ => make_keyword("colocate"),
+
+    // Teradata copy
+    keyword_dictionary: _ => make_keyword("dictionary"),
+    keyword_archive: _ => make_keyword("archive"),
+    keyword_apply: _ => make_keyword("apply"),
+    keyword_partitions: _ => make_keyword("partitions"),
+    keyword_qualified: _ => make_keyword("qualified"),
+    keyword_errordb: _ => make_keyword("errordb"),
+    keyword_cluster: _ => make_keyword("cluster"),
+    keyword_clusters: _ => make_keyword("clusters"),
+    keyword_build: _ => make_keyword("build"),
+    keyword_amp: _ => make_keyword("amp"),
+    keyword_release: _ => make_keyword("release"),
+    keyword_stat: _ => make_keyword("stat"),
+    keyword_collection: _ => make_keyword("collection"),
 
     // Period operators
     keyword_overlaps: _ => make_keyword("overlaps"),
@@ -2456,67 +2460,67 @@ _database_attribute: $ => choice(
       field('name', choice($.identifier, alias($._interpolated_var, $.identifier))),
     ),
 
-    _copy_statement: $ => seq(
-      $.keyword_copy,
-      $.object_reference,
-      $._column_list,
-      $.keyword_from,
-      choice(
-        $.keyword_stdin,
-        alias($._literal_string, "filename"),
-        seq($.keyword_program, alias($._literal_string, "command")),
-      ),
-      optional($.keyword_with),
-      wrapped_in_parenthesis(
-        repeat1(
+      _copy_statement: $ => seq(
+        $.keyword_copy,
           choice(
-            seq(
-              $.keyword_format,
-              choice(
-                $.keyword_csv,
-                $.keyword_binary,
-                $.keyword_text,
-              ),
-            ),
-            seq(
-              $.keyword_freeze,
-              choice(
-                $.keyword_true,
-                $.keyword_false
-              )
-            ),
-            seq(
-              $.keyword_header,
-              choice(
-                $.keyword_true,
-                $.keyword_false,
-                $.keyword_match
-              ),
-            ),
-            seq(
-              choice(
-                $.keyword_delimiter,
-                $.keyword_null,
-                $.keyword_default,
-                $.keyword_escape,
-                $.keyword_quote,
-                $.keyword_encoding,
-              ),
-              alias($._literal_string, $.identifier)
-            ),
-            seq(
-              choice(
-                $.keyword_force_null,
-                $.keyword_force_not_null,
-                $.keyword_force_quote,
-              ),
-              $._column_list
-            ),
+            $.keyword_data,
+            $.keyword_dictionary,
+            $.keyword_journal,
+            seq($.keyword_no, $.keyword_fallback)
           ),
+          choice(
+            $.keyword_table,
+            $.keyword_tables
+          ),
+        choice(
+          seq($.keyword_all, $.keyword_from, $.keyword_archive),
+          comma_list(
+            seq(
+              wrapped_in_parenthesis($.object_reference),
+                optional(wrapped_in_parenthesis(comma_list($.copy_table_options, true)))
+              )
+          , true)
         ),
-      ),
-      optional($.where),
-    ),
+        optional(seq(',' , comma_list($.copy_options, true)))
+  ),
+
+  copy_table_options: $ => choice(
+  	seq($.keyword_from, wrapped_in_parenthesis($.object_reference)),
+  	seq($.keyword_no, $.keyword_fallback),
+  	seq($.keyword_no, $.keyword_journal),
+  	seq($.keyword_with, $.keyword_journal, $.keyword_table, '=', wrapped_in_parenthesis($.object_reference)),
+  	seq($.keyword_apply, $.keyword_to, wrapped_in_parenthesis(comma_list($.object_reference, true))),
+  	seq($.keyword_replace, $.keyword_creator),
+  	seq($.keyword_exclude, $.keyword_tables, wrapped_in_parenthesis(comma_list($.object_reference, true))),
+  	seq($.keyword_all, $.keyword_partitions),
+  	seq($.keyword_qualified, $.keyword_partitions),
+  	seq($.keyword_errordb, $.object_reference),
+  	seq($.keyword_error, $.keyword_tables, $.object_reference),
+  	seq($.keyword_partitions, $.keyword_where, wrapped_in_parenthesis(seq('!', $._expression, '!'))),
+  	seq($.keyword_log, $.keyword_where, wrapped_in_parenthesis(seq('!', $._expression, '!'))),
+  ),
+
+  copy_options: $ => choice(
+   seq(
+   	$.keyword_exclude,
+   	comma_list(
+   		choice(
+   			wrapped_in_parenthesis($.object_reference),
+   			seq(wrapped_in_parenthesis($.object_reference), $.keyword_to,wrapped_in_parenthesis($.object_reference))
+   		)
+   	)
+   ),
+   seq($.keyword_cluster, '=', $._integer),
+   seq($.keyword_clusters, '=', $._integer),
+   $.keyword_abort,
+   seq($.keyword_no, $.keyword_build),
+   seq($.keyword_amp, '=', $._integer),
+   seq($.keyword_release, $.keyword_lock),
+   seq($.keyword_skip, $.keyword_join, $.keyword_index),
+   seq($.keyword_skip, $.keyword_stat, $.keyword_collection),
+   seq($.keyword_file, '=', choice($.literal, $.object_reference)),
+  ),
+
 
     _insert_statement: $ => seq(
       optional($.keyword_nontemporal),

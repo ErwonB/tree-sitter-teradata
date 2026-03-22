@@ -1,0 +1,192 @@
+================================================================================
+COPY ARC 1
+================================================================================
+
+COPY DATA TABLES (test.test1) (FROM (oldtest.test1))
+,(test2.test)
+,(test3.test)
+,RELEASE LOCK
+,FILE = ARCHIVE;
+
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (keyword_copy)
+        (keyword_data)
+        (keyword_tables)
+        (object_reference
+          (identifier)
+          (identifier))
+        (copy_table_options
+          (keyword_from)
+          (object_reference
+            (identifier)
+            (identifier)))
+        (object_reference
+          (identifier)
+          (identifier))
+        (object_reference
+          (identifier)
+          (identifier))
+        (copy_options
+          (keyword_release)
+          (keyword_lock))
+        (copy_options
+          (keyword_file)
+          (object_reference
+            (identifier)))))
+
+================================================================================
+COPY ARC 2
+================================================================================
+
+COPY DATA TABLES (test.test1) (FROM (Sales_Hist)
+  , PARTITIONS WHERE (! SaleDate >= '2025-01-01' AND SaleDate <= '2025-03-31' !)
+  )
+  , RELEASE LOCK
+  , FILE=ARCHIVE_S1;
+
+
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (keyword_copy)
+        (keyword_data)
+        (keyword_tables)
+        (object_reference
+          (identifier)
+          (identifier))
+        (copy_table_options
+          (keyword_from)
+          (object_reference
+            (identifier)))
+        (copy_table_options
+          (keyword_partitions)
+          (keyword_where)
+          (binary_expression
+            (binary_expression
+              (field
+                (identifier))
+              (literal))
+            (keyword_and)
+            (binary_expression
+              (field
+                (identifier))
+              (literal))))
+        (copy_options
+          (keyword_release)
+          (keyword_lock))
+        (copy_options
+          (keyword_file)
+          (object_reference
+            (identifier)))))
+
+================================================================================
+COPY ARC 3
+================================================================================
+
+COPY DATA TABLE (Personnel.Department)
+   (FROM (OldPersonnel), NO JOURNAL, NO FALLBACK)
+   ,FILE = ARCHIVE;
+
+--------------------------------------------------------------------------------
+    (program
+      (statement
+        (keyword_copy)
+        (keyword_data)
+        (keyword_table)
+        (object_reference
+          (identifier)
+          (identifier))
+        (copy_table_options
+          (keyword_from)
+          (object_reference
+            (identifier)))
+        (copy_table_options
+          (keyword_no)
+          (keyword_journal))
+        (copy_table_options
+          (keyword_no)
+          (keyword_fallback))
+        (copy_options
+          (keyword_file)
+          (object_reference
+            (identifier)))))
+
+================================================================================
+COPY ARC 4
+================================================================================
+
+   COPY DATA TABLE (Personnel.Department)
+   (FROM (OldPersonnel.Dept)
+   ,WITH JOURNAL TABLE = ( PersonnelJnlDB.PermanentJournal )
+   ,NO FALLBACK)
+   ,FILE = ARCHIVE;
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (keyword_copy)
+        (keyword_data)
+        (keyword_table)
+        (object_reference
+          (identifier)
+          (identifier))
+        (copy_table_options
+          (keyword_from)
+          (object_reference
+            (identifier)
+            (identifier)))
+        (copy_table_options
+          (keyword_with)
+          (keyword_journal)
+          (keyword_table)
+          (object_reference
+            (identifier)
+            (identifier)))
+        (copy_table_options
+          (keyword_no)
+          (keyword_fallback))
+        (copy_options
+          (keyword_file)
+          (object_reference
+            (identifier)))))
+
+================================================================================
+COPY ARC 5
+================================================================================
+
+COPY JOURNAL TABLE (PersonnelJnlDB.PermanentJournal)
+   (APPLY TO (Personnel.Employee, Personnel.Department))
+   ,NO BUILD
+   ,FILE = ARCHIVE1;
+
+--------------------------------------------------------------------------------
+    (program
+      (statement
+        (keyword_copy)
+        (keyword_journal)
+        (keyword_table)
+        (object_reference
+          (identifier)
+          (identifier))
+        (copy_table_options
+          (keyword_apply)
+          (keyword_to)
+          (object_reference
+            (identifier)
+            (identifier))
+          (object_reference
+            (identifier)
+            (identifier)))
+        (copy_options
+          (keyword_no)
+          (keyword_build))
+        (copy_options
+          (keyword_file)
+          (object_reference
+            (identifier)))))
