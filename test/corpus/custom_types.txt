@@ -1,90 +1,385 @@
 ================================================================================
-Create type
+Create type structured form
 ================================================================================
 
- CREATE TYPE sports
+CREATE TYPE address AS (
+street VARCHAR(20),
+zip CHARACTER(5) )
+NOT FINAL
+CONSTRUCTOR METHOD address( VARCHAR(20), CHARACTER(5) )
+    RETURNS address
+    SPECIFIC address_constructor_1
+    SELF AS RESULT
+    LANGUAGE C
+    PARAMETER STYLE SQL
+    DETERMINISTIC
+    NO SQL,
+INSTANCE METHOD city()
+    RETURNS VARCHAR(20)
+    LANGUAGE C
+    PARAMETER STYLE SQL
+    DETERMINISTIC
+    NO SQL,
+METHOD state()
+    RETURNS CHARACTER(2)
+    SPECIFIC address_state
+    RETURNS NULL ON NULL INPUT
+    LANGUAGE C
+    PARAMETER STYLE SQL
+    DETERMINISTIC
+    NO SQL,
+METHOD in_state(CHARACTER(2))
+    RETURNS CHARACTER(1)
+    LANGUAGE C
+    PARAMETER STYLE SQL
+    DETERMINISTIC
+    NO SQL;
 
 --------------------------------------------------------------------------------
 
-(program
-  (statement
-    (create_type
-      (keyword_create)
-      (keyword_type)
-      (object_reference
-        (identifier)))))
+    (program
+      (statement
+        (create_type
+          (keyword_create)
+          (keyword_type)
+          (object_reference
+            (identifier))
+          (keyword_as)
+          (attribute_specification
+            (identifier)
+            (varchar
+              (keyword_varchar)
+              (literal)))
+          (attribute_specification
+            (identifier)
+            (char
+              (keyword_char)
+              (literal)))
+          (keyword_not)
+          (keyword_final)
+          (method_specification
+            (keyword_constructor)
+            (keyword_method)
+            (object_reference
+              (identifier))
+            (parameter_specification
+              (varchar
+                (keyword_varchar)
+                (literal)))
+            (parameter_specification
+              (char
+                (keyword_char)
+                (literal)))
+            (keyword_returns)
+            (returns_parameter_specification
+              (object_reference
+                (identifier)))
+            (keyword_specific)
+            (object_reference
+              (identifier))
+            (keyword_self)
+            (keyword_as)
+            (keyword_result)
+            (language_and_access_specification
+              (keyword_language)
+              (keyword_c))
+            (type_attribute
+              (keyword_parameter)
+              (keyword_style)
+              (keyword_sql))
+            (type_attribute
+              (keyword_deterministic))
+            (language_and_access_specification
+              (keyword_no)
+              (keyword_sql)))
+          (method_specification
+            (keyword_instance)
+            (keyword_method)
+            (object_reference
+              (identifier))
+            (keyword_returns)
+            (returns_parameter_specification
+              (varchar
+                (keyword_varchar)
+                (literal)))
+            (language_and_access_specification
+              (keyword_language)
+              (keyword_c))
+            (type_attribute
+              (keyword_parameter)
+              (keyword_style)
+              (keyword_sql))
+            (type_attribute
+              (keyword_deterministic))
+            (language_and_access_specification
+              (keyword_no)
+              (keyword_sql)))
+          (method_specification
+            (keyword_method)
+            (object_reference
+              (identifier))
+            (keyword_returns)
+            (returns_parameter_specification
+              (char
+                (keyword_char)
+                (literal)))
+            (keyword_specific)
+            (object_reference
+              (identifier))
+            (type_attribute
+              (keyword_returns)
+              (keyword_null)
+              (keyword_on)
+              (keyword_null)
+              (keyword_input))
+            (language_and_access_specification
+              (keyword_language)
+              (keyword_c))
+            (type_attribute
+              (keyword_parameter)
+              (keyword_style)
+              (keyword_sql))
+            (type_attribute
+              (keyword_deterministic))
+            (language_and_access_specification
+              (keyword_no)
+              (keyword_sql)))
+          (method_specification
+            (keyword_method)
+            (object_reference
+              (identifier))
+            (parameter_specification
+              (char
+                (keyword_char)
+                (literal)))
+            (keyword_returns)
+            (returns_parameter_specification
+              (char
+                (keyword_char)
+                (literal)))
+            (language_and_access_specification
+              (keyword_language)
+              (keyword_c))
+            (type_attribute
+              (keyword_parameter)
+              (keyword_style)
+              (keyword_sql))
+            (type_attribute
+              (keyword_deterministic))
+            (language_and_access_specification
+              (keyword_no)
+              (keyword_sql))))))
+
 
 
 ================================================================================
-Create type object
+Create type with predefined type
 ================================================================================
-CREATE TYPE cities AS (
-    cityname text,
-    population INTEGER
-);
+
+CREATE TYPE SYSUDTLIB.person AS (
+       ssn         CHARACTER(11),
+       first_name  VARCHAR(20),
+       middle_name VARCHAR(20),
+       last_name   VARCHAR(20),
+       domicile    address )
+    NOT FINAL;
+
 --------------------------------------------------------------------------------
 
-(program
-  (statement
-    (create_type
-      (keyword_create)
-      (keyword_type)
-      (object_reference
-        (identifier))
-      (keyword_as)
-      (column_definitions
-        (column_definition
-          (identifier)
-          (keyword_text))
-        (column_definition
-          (identifier)
-          (int
-            (keyword_int)))))))
+    (program
+      (statement
+        (create_type
+          (keyword_create)
+          (keyword_type)
+          (object_reference
+            (identifier)
+            (identifier))
+          (keyword_as)
+          (attribute_specification
+            (identifier)
+            (char
+              (keyword_char)
+              (literal)))
+          (attribute_specification
+            (identifier)
+            (varchar
+              (keyword_varchar)
+              (literal)))
+          (attribute_specification
+            (identifier)
+            (varchar
+              (keyword_varchar)
+              (literal)))
+          (attribute_specification
+            (identifier)
+            (varchar
+              (keyword_varchar)
+              (literal)))
+          (attribute_specification
+            (identifier)
+            (object_reference
+              (identifier)))
+          (keyword_not)
+          (keyword_final))))
 
 ================================================================================
-Create type range
+Create type distinct form
 ================================================================================
 
-CREATE TYPE marathon AS RANGE (
-    SUBTYPE = sports
-)
+CREATE TYPE euro
+    AS DECIMAL(8, 2)
+    FINAL
+    METHOD toUS()
+    RETURNS us_dollar CAST FROM DECIMAL(8,2)
+    LANGUAGE C
+    NO SQL
+    DETERMINISTIC
+    RETURNS NULL ON NULL INPUT;
+
 
 --------------------------------------------------------------------------------
 
-(program
-  (statement
-    (create_type
-      (keyword_create)
-      (keyword_type)
-      (object_reference
-        (identifier))
-      (keyword_as)
-      (keyword_range)
-      (identifier)
-      (identifier))))
+    (program
+      (statement
+        (create_type
+          (keyword_create)
+          (keyword_type)
+          (object_reference
+            (identifier))
+          (keyword_as)
+          (decimal
+            (keyword_decimal)
+            (literal)
+            (literal))
+          (keyword_final)
+          (method_specification
+            (keyword_method)
+            (object_reference
+              (identifier))
+            (keyword_returns)
+            (returns_parameter_specification
+              (object_reference
+                (identifier)))
+            (keyword_cast)
+            (keyword_from)
+            (decimal
+              (keyword_decimal)
+              (literal)
+              (literal))
+            (language_and_access_specification
+              (keyword_language)
+              (keyword_c))
+            (language_and_access_specification
+              (keyword_no)
+              (keyword_sql))
+            (type_attribute
+              (keyword_deterministic))
+            (type_attribute
+              (keyword_returns)
+              (keyword_null)
+              (keyword_on)
+              (keyword_null)
+              (keyword_input))))))
 
 ================================================================================
-Create type io
+Create type array td style
 ================================================================================
-CREATE TYPE bigobj (
-    INPUT = lo_filein, OUTPUT = lo_fileout,
-    INTERNALLENGTH = VARIABLE
-);
+CREATE TYPE phonenumbers_ary AS
+     CHARACTER(10) ARRAY[5]
+     DEFAULT NULL;
+
+
 --------------------------------------------------------------------------------
 
-(program
-  (statement
-    (create_type
-      (keyword_create)
-      (keyword_type)
-      (object_reference
-        (identifier))
-      (identifier)
-      (identifier)
-      (identifier)
-      (identifier)
-      (identifier)
-      (identifier))))
+    (program
+      (statement
+        (create_type
+          (keyword_create)
+          (keyword_type)
+          (object_reference
+            (identifier))
+          (keyword_as)
+          (char
+            (keyword_char)
+            (literal))
+          (keyword_array)
+          (keyword_default)
+          (keyword_null))))
+
+================================================================================
+Create type varray td style
+================================================================================
+CREATE TYPE phonenumbers_ary AS
+     VARRAY(5) OF CHARACTER(10)
+     DEFAULT NULL;
+
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (create_type
+          (keyword_create)
+          (keyword_type)
+          (object_reference
+            (identifier))
+          (keyword_as)
+          (keyword_varray)
+          (keyword_of)
+          (char
+            (keyword_char)
+            (literal))
+          (keyword_default)
+          (keyword_null))))
+
+================================================================================
+Create type 3 dimensional array
+================================================================================
+CREATE TYPE seismic_cube AS
+       measures_udt ARRAY [1:5][1:7][1:20]
+     DEFAULT NULL;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (create_type
+          (keyword_create)
+          (keyword_type)
+          (object_reference
+            (identifier))
+          (keyword_as)
+          (object_reference
+            (identifier))
+          (keyword_array)
+          (keyword_default)
+          (keyword_null))))
+
+
+================================================================================
+Create type 3 dimensional varray
+================================================================================
+
+CREATE TYPE seismic_cube AS
+     VARRAY (1:5)(1:7)(1:20) OF measures_udt
+     DEFAULT NULL;
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (create_type
+          (keyword_create)
+          (keyword_type)
+          (object_reference
+            (identifier))
+          (keyword_as)
+          (keyword_varray)
+          (keyword_of)
+          (object_reference
+            (identifier))
+          (keyword_default)
+          (keyword_null))))
+
 
 ================================================================================
 Drop type

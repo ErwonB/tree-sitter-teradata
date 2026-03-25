@@ -463,6 +463,17 @@ module.exports = grammar({
     keyword_stat: _ => make_keyword("stat"),
     keyword_collection: _ => make_keyword("collection"),
 
+    // Teradata create type
+    keyword_instantiable: _ => make_keyword("instantiable"),
+    keyword_final: _ => make_keyword("final"),
+    keyword_method: _ => make_keyword("method"),
+    keyword_locator: _ => make_keyword("locator"),
+    keyword_specific: _ => make_keyword("specific"),
+    keyword_self: _ => make_keyword("self"),
+    keyword_varray: _ => make_keyword("varray"),
+    keyword_constructor: _ => make_keyword("constructor"),
+    keyword_instance: _ => make_keyword("instance"),
+
     // Period operators
     keyword_overlaps: _ => make_keyword("overlaps"),
     keyword_equals: _ => make_keyword("equals"),
@@ -550,63 +561,50 @@ module.exports = grammar({
 
     keyword_array: _ => make_keyword("array"), // not included in _type since it's a constructor literal
 
+    _castable_type: $ => choice(
+        $.keyword_boolean,
+        $.bit,
+        $.binary,
+        $.varbinary,
+
+        $.byteint,
+        $.bigint,
+        $.smallint,
+        $.int,
+        $.decimal,
+        $.numeric,
+        $.double,
+        $.float,
+
+        $.char,
+        $.varchar,
+        $.nchar,
+        $.nvarchar,
+        $.numeric,
+        $.keyword_text,
+
+        $.keyword_json,
+        $.keyword_xml,
+
+        $.keyword_date,
+        seq(optional($.keyword_as), $.keyword_transactiontime),
+        $.time,
+        $.timestamp,
+        $.keyword_interval,
+
+        $.keyword_st_geometry,
+        $.keyword_mbr,
+        $.keyword_mbb,
+
+        $.format,
+
+      ),
+
     _type: $ => prec.left(
-      seq(
-        choice(
-          $.keyword_boolean,
-          $.bit,
-          $.binary,
-          $.varbinary,
-
-          $.byteint,
-          $.bigint,
-          $.smallint,
-          $.int,
-          $.decimal,
-          $.numeric,
-          $.double,
-          $.float,
-
-          $.char,
-          $.varchar,
-          $.nchar,
-          $.nvarchar,
-          $.numeric,
-          $.keyword_text,
-
-          $.keyword_json,
-          $.keyword_xml,
-
-          $.keyword_date,
-          seq(optional($.keyword_as), $.keyword_transactiontime),
-          $.time,
-          $.timestamp,
-          $.keyword_interval,
-
-          $.keyword_st_geometry,
-          $.keyword_mbr,
-          $.keyword_mbb,
-
-          $.format,
-
-          // TODO : find a way to make this work with teradata implicit cast
-          // field("custom_type", $.object_reference)
-        ),
-        optional($.array_size_definition)
-      ),
-    ),
-
-    array_size_definition: $ => prec.left(
       choice(
-        seq($.keyword_array, optional($._array_size_definition)),
-        repeat1($._array_size_definition),
+        $._castable_type,
+        field("custom_type", $.object_reference)
       ),
-    ),
-
-    _array_size_definition: $ => seq(
-      '[',
-      optional(field("size", alias($._integer, $.literal))),
-      ']'
     ),
 
     smallint: $ => $.keyword_smallint,
@@ -1990,29 +1988,129 @@ _database_attribute: $ => choice(
     create_type: $ => seq(
       $.keyword_create,
       $.keyword_type,
-      $.object_reference,
-      optional(
+      field('name', $.object_reference),
+      $.keyword_as,
+      choice(
+        $._type_structured_form,
+        $._type_distinct_form,
+        $._type_array_form
+      )
+    ),
+
+    // --- Structured Form ---
+    _type_structured_form: $ => seq(
+      wrapped_in_parenthesis(comma_list($.attribute_specification, true)),
+      optional($.keyword_instantiable),
+      $.keyword_not,
+      $.keyword_final,
+      optional(comma_list($.method_specification, true))
+    ),
+
+    attribute_specification: $ => prec(2, seq(
+      field('name', $.identifier),
+      choice(
+        seq($._type, optional(seq($.keyword_character, $.keyword_set, $.identifier))),
+        field('udt_name', $.object_reference)
+      )
+     )
+    ),
+
+    method_specification: $ => prec(1, seq(
+        optional(choice($.keyword_instance, $.keyword_constructor)),
+        $.keyword_method,
+        field('method_name', $.object_reference),
+        wrapped_in_parenthesis(optional(comma_list($.parameter_specification, true))),
+        $.keyword_returns,
+        $.returns_parameter_specification,
+        optional(seq(
+          $.keyword_cast,
+          $.keyword_from,
+          choice($._type, $.object_reference),
+          optional(seq($.keyword_as, $.keyword_locator))
+        )),
+        optional(seq($.keyword_specific, $.object_reference)),
+        optional(seq($.keyword_self, $.keyword_as, $.keyword_result)),
+        optional(repeat1(choice($.language_and_access_specification, $.type_attribute))),
+      ),
+    ),
+
+    // --- Distinct Form ---
+    _type_distinct_form: $ => seq(
+      $._type,
+      optional(seq($.keyword_character, $.keyword_set, $.identifier)),
+      $.keyword_final,
+      optional($.method_specification)
+    ),
+
+    // --- Common Components for Structured/Distinct ---
+    parameter_specification: $ => prec(1, choice(
+        // Case 1: Just the type (UDT or Predefined)
         seq(
           choice(
-            seq(
-              $.keyword_as,
-              $.column_definitions,
-              optional(seq($.keyword_collate, $.identifier))
-            ),
-            seq(
-              optional(
-                seq(
-                  $.keyword_as,
-                  $.keyword_range,
-                )
-              ),
-              paren_list(
-                $._with_settings
-              ),
-            ),
+            seq($._type, optional(seq($.keyword_character, $.keyword_set, $.identifier))),
+            $.object_reference
           ),
+          optional(seq($.keyword_as, $.keyword_locator))
         ),
+        // Case 2: Name followed by the type
+        seq(
+          field('name', $.identifier),
+          choice(
+            seq($._type, optional(seq($.keyword_character, $.keyword_set, $.identifier))),
+            $.object_reference
+          ),
+          optional(seq($.keyword_as, $.keyword_locator))
+        )
       ),
+    ),
+
+    returns_parameter_specification: $ => prec(2, seq(
+      choice(
+        seq($._type, optional(seq($.keyword_character, $.keyword_set, $.identifier))),
+        $.object_reference
+      ),
+      optional(seq($.keyword_as, $.keyword_locator))
+     )
+    ),
+
+    language_and_access_specification: $ => choice(
+      seq($.keyword_language, choice($.keyword_c, $.keyword_cpp)),
+      seq($.keyword_no, $.keyword_sql),
+    ),
+
+    type_attribute: $ => choice(
+      seq($.keyword_specific, $.object_reference),
+      seq($.keyword_parameter, $.keyword_style, choice($.keyword_sql, $.keyword_td_general)),
+      seq(optional($.keyword_not), $.keyword_deterministic),
+      seq($.keyword_called, $.keyword_on, $.keyword_null, $.keyword_input),
+      seq($.keyword_returns, $.keyword_null, $.keyword_on, $.keyword_null, $.keyword_input)
+    ),
+
+    // --- Array / Varray Form ---
+    _type_array_form: $ => choice(
+      // Form 1: data_type ARRAY [ size ]
+      seq(
+        $._type,
+        $.keyword_array,
+        repeat1( seq('[',
+        $._array_bounds,
+        ']')
+        ),
+        optional($._default_null)
+      ),
+      // Form 2: {VARYING ARRAY | VARRAY} ( size ) OF data_type
+      seq(
+        choice(seq($.keyword_varying, $.keyword_array), $.keyword_varray),
+        repeat1(wrapped_in_parenthesis($._array_bounds)),
+        $.keyword_of,
+        $._type,
+        optional($._default_null)
+      )
+    ),
+
+    _array_bounds: $ => choice(
+      seq(field('lower', $._integer), ':', field('upper', $._integer)),
+      field('max_size', $._integer)
     ),
 
     _alter_statement: $ => seq(
@@ -3212,7 +3310,7 @@ _database_attribute: $ => choice(
 
     implicit_cast: $ =>  seq(
       $._expression,
-      wrapped_in_parenthesis($._type)
+      wrapped_in_parenthesis($._castable_type)
     ),
 
     // Postgres syntax for intervals
