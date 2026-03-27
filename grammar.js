@@ -342,7 +342,6 @@ module.exports = grammar({
     keyword_exec: _ => make_keyword("exec"),
     keyword_execute: _ => make_keyword("execute"),
     keyword_procedure: _ => make_keyword("procedure"),
-    keyword_object_id: _ => make_keyword("object_id"),
 
     // Hive Keywords
     keyword_external: _ => make_keyword("external"),
@@ -471,6 +470,7 @@ module.exports = grammar({
     keyword_specific: _ => make_keyword("specific"),
     keyword_self: _ => make_keyword("self"),
     keyword_varray: _ => make_keyword("varray"),
+    keyword_array: _ => make_keyword("array"),
     keyword_constructor: _ => make_keyword("constructor"),
     keyword_instance: _ => make_keyword("instance"),
 
@@ -559,7 +559,6 @@ module.exports = grammar({
 
     keyword_name: _ => make_keyword("name"),
 
-    keyword_array: _ => make_keyword("array"), // not included in _type since it's a constructor literal
 
     _castable_type: $ => choice(
         $.keyword_boolean,
@@ -662,22 +661,6 @@ module.exports = grammar({
     timestamp: $ => seq(
       parametric_type($, $.keyword_timestamp),
       optional($._include_time_zone),
-    ),
-
-    array: $ => seq(
-      $.keyword_array,
-      choice(
-        seq(
-          "[",
-          comma_list($._expression),
-          "]"
-        ),
-        seq(
-          "(",
-          $._dml_read,
-          ")",
-        )
-      )
     ),
 
     comment: _ => /--.*/,
@@ -1195,7 +1178,7 @@ module.exports = grammar({
     storage_parameters: $ => seq(
       $.keyword_with,
       paren_list(
-        seq($.identifier, optional(seq('=', choice($.literal, $.array)))),
+        seq($.identifier, optional(seq('=', $.literal))),
         true
       ),
     ),
@@ -2527,21 +2510,6 @@ _database_attribute: $ => choice(
       $.identifier,
     ),
 
-    object_id: $ => seq(
-      $.keyword_object_id,
-      wrapped_in_parenthesis(
-        seq(
-          alias($._literal_string, $.literal),
-          optional(
-            seq(
-              ',',
-              alias($._literal_string, $.literal),
-            ),
-          ),
-        ),
-      ),
-    ),
-
     object_reference: $ => choice(
       seq(
         field('database', $.identifier),
@@ -3112,7 +3080,6 @@ _database_attribute: $ => choice(
         $.cast,
         $.binary_expression,
         $.unary_expression,
-        $.array,
         $.invocation,
         $.keyword_user,
         alias($.implicit_cast, $.cast),
@@ -3759,11 +3726,9 @@ _database_attribute: $ => choice(
           $.binary_expression,
           $.subscript,
           $.unary_expression,
-          $.array,
           $.interval,
           $.between_expression,
           $.parenthesized_expression,
-          $.object_id,
           $.interval_expression,
           $.attribute_expression,
           $.period_expression,

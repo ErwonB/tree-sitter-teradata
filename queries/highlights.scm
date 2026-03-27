@@ -12,7 +12,6 @@
 [
   (keyword_hash)
   (keyword_array)
-  (keyword_object_id)
   (keyword_strtok_split_to_table)
   (keyword_regexp_split_to_table)
   (keyword_current_timestamp)
