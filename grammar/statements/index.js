@@ -11,9 +11,10 @@ const show_rules      = require('./show.js');
 const collect_rules   = require('./collect.js');
 const comment_rules   = require('./comment.js');
 const misc_rules      = require('./misc.js');
-const create_rules    = require('./create.js');
-// Note: create-procedure.js, create-function.js, create-macro.js are
-// kept as reference modules but their rules are already included in create.js
+const create_rules           = require('./create.js');
+const create_procedure_rules = require('./create-procedure.js');
+const create_function_rules  = require('./create-function.js');
+const create_macro_rules     = require('./create-macro.js');
 const alter_rules     = require('./alter.js');
 const drop_rules      = require('./drop.js');
 const rename_rules    = require('./rename.js');
@@ -120,6 +121,9 @@ module.exports = {
   ...comment_rules,
   ...misc_rules,
   ...create_rules,
+  ...create_procedure_rules,
+  ...create_function_rules,
+  ...create_macro_rules,
   ...alter_rules,
   ...drop_rules,
   ...rename_rules,

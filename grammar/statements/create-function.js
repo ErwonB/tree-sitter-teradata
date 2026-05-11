@@ -1,145 +1,147 @@
 module.exports = {
 
-  create_function: $ => seq(
-    choice($.keyword_create, $.keyword_replace),
-    $.keyword_function,
-    $.object_reference,
-    $.function_arguments,
-    $.keyword_returns,
-    choice(
-      $._type,
-      seq($.keyword_setof, $._type),
-      seq($.keyword_table, $.column_definitions),
-      $.keyword_trigger,
-    ),
-    repeat(
+    create_function: $ => seq(
+      choice($.keyword_create, $.keyword_replace),
+      $.keyword_function,
+      $.object_reference,
+      $.function_arguments,
+      $.keyword_returns,
       choice(
-        $.function_language,
-        $.function_volatility,
-        $.function_security,
-        $.function_mandatory,
-        $.function_strictness,
-        $.function_cost,
-        $.function_rows,
-        $.function_support,
-        $.function_deterministic,
+        $._type,
+        seq($.keyword_setof, $._type),
+        seq($.keyword_table, $.column_definitions),
+        $.keyword_trigger,
       ),
-    ),
-    $.function_body,
-    repeat(
-      choice(
-        $.function_language,
-        $.function_volatility,
-        $.function_security,
-        $.function_mandatory,
-        $.function_strictness,
-        $.function_cost,
-        $.function_rows,
-        $.function_support,
-        $.function_deterministic,
-      ),
-    ),
-  ),
-
-  _function_return: $ => seq(
-    $.keyword_return,
-    $._expression,
-  ),
-
-  _function_body_statement: $ => choice(
-    $.statement,
-    $._function_return,
-  ),
-
-  function_body: $ => choice(
-    seq(
-      $._function_return,
-      ';'
-    ),
-    seq(
-      $.keyword_begin,
-      $.keyword_atomic,
-      repeat1(
-        seq(
-          $._function_body_statement,
-          ';',
-        ),
-      ),
-      $.keyword_end,
-    ),
-    seq(
-      $.keyword_as,
-      alias(
+      repeat(
         choice(
-          $._single_quote_string,
-          $._double_quote_string,
+          $.function_language,
+          $.function_volatility,
+          $.function_security,
+          $.function_mandatory,
+          $.function_strictness,
+          $.function_cost,
+          $.function_rows,
+          $.function_support,
+          $.function_deterministic,
         ),
-        $.literal
+      ),
+      // ensure that there's only one function body -- other specifiers are less
+      // variable but the body can have all manner of conflicting stuff
+      $.function_body,
+      repeat(
+        choice(
+          $.function_language,
+          $.function_volatility,
+          $.function_security,
+          $.function_mandatory,
+          $.function_strictness,
+          $.function_cost,
+          $.function_rows,
+          $.function_support,
+          $.function_deterministic,
+        ),
       ),
     ),
-  ),
 
-  function_language: $ => seq(
-    $.keyword_language,
-    $.identifier,
-    optional(seq($.keyword_contains,
-            $.identifier,))
-  ),
+    _function_return: $ => seq(
+      $.keyword_return,
+      $._expression,
+    ),
 
-  function_volatility: $ => choice(
-    $.keyword_immutable,
-    $.keyword_stable,
-    $.keyword_volatile,
-  ),
+    _function_body_statement: $ => choice(
+      $.statement,
+      $._function_return,
+    ),
 
-  function_security: $ => seq(
-    optional($.keyword_external),
-    optional($.keyword_sql),
-    $.keyword_security,
-    choice($.keyword_invoker, $.keyword_definer),
-  ),
+    function_body: $ => choice(
+      seq(
+        $._function_return,
+        ';'
+      ),
+      seq(
+        $.keyword_begin,
+        $.keyword_atomic,
+        repeat1(
+          seq(
+            $._function_body_statement,
+            ';',
+          ),
+        ),
+        $.keyword_end,
+      ),
+      seq(
+        $.keyword_as,
+        alias(
+          choice(
+            $._single_quote_string,
+            $._double_quote_string,
+          ),
+          $.literal
+        ),
+      ),
+    ),
 
-  function_mandatory: $ => seq(
-    choice(
-      seq($.keyword_collation, $.keyword_invoker),
-      seq($.keyword_inline, $.keyword_type, '1')
-    )
-  ),
+    function_language: $ => seq(
+      $.keyword_language,
+      $.identifier,
+      optional(seq($.keyword_contains,
+              $.identifier,))
+    ),
 
-  function_deterministic: $ => seq(
-    optional($.keyword_not),
-    $.keyword_deterministic,
-  ),
+    function_volatility: $ => choice(
+      $.keyword_immutable,
+      $.keyword_stable,
+      $.keyword_volatile,
+    ),
 
-  function_strictness: $ => choice(
-    seq(
+    function_security: $ => seq(
+      optional($.keyword_external),
+      optional($.keyword_sql),
+      $.keyword_security,
+      choice($.keyword_invoker, $.keyword_definer),
+    ),
+
+    function_mandatory: $ => seq(
       choice(
-        $.keyword_called,
-        seq(
-          $.keyword_returns,
-          $.keyword_null,
-        ),
-      ),
-      $.keyword_on,
-      $.keyword_null,
-      $.keyword_input,
+        seq($.keyword_collation, $.keyword_invoker),
+        seq($.keyword_inline, $.keyword_type, '1')
+      )
     ),
-    $.keyword_strict,
-  ),
 
-  function_cost: $ => seq(
-    $.keyword_cost,
-    $._natural_number,
-  ),
+    function_deterministic: $ => seq(
+      optional($.keyword_not),
+      $.keyword_deterministic,
+    ),
 
-  function_rows: $ => seq(
-    $.keyword_rows,
-    $._natural_number,
-  ),
+    function_strictness: $ => choice(
+      seq(
+        choice(
+          $.keyword_called,
+          seq(
+            $.keyword_returns,
+            $.keyword_null,
+          ),
+        ),
+        $.keyword_on,
+        $.keyword_null,
+        $.keyword_input,
+      ),
+      $.keyword_strict,
+    ),
 
-  function_support: $ => seq(
-    $.keyword_support,
-    alias($._literal_string, $.literal),
-  ),
+    function_cost: $ => seq(
+      $.keyword_cost,
+      $._natural_number,
+    ),
+
+    function_rows: $ => seq(
+      $.keyword_rows,
+      $._natural_number,
+    ),
+
+    function_support: $ => seq(
+      $.keyword_support,
+      alias($._literal_string, $.literal),
+    ),
 
 };
