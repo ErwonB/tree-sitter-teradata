@@ -398,7 +398,9 @@ module.exports = {
     keyword_stat: _ => make_keyword("stat"),
     keyword_collection: _ => make_keyword("collection"),
 
-    // Teradata create type
+    // Teradata create type / alter type
+    keyword_compile: _ => make_keyword("compile"),
+    keyword_only: _ => make_keyword("only"),
     keyword_instantiable: _ => make_keyword("instantiable"),
     keyword_final: _ => make_keyword("final"),
     keyword_method: _ => make_keyword("method"),

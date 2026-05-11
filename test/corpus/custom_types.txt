@@ -399,114 +399,10 @@ DROP TYPE boxes CASCADE;
       (keyword_cascade))))
 
 ================================================================================
-Alter type rename
-================================================================================
-
-ALTER TYPE boxes RENAME TO cubes;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (alter_type
-      (keyword_alter)
-      (keyword_type)
-      (identifier)
-      (rename_object
-        (keyword_rename)
-        (keyword_to)
-        (object_reference
-          (identifier))))))
-
-================================================================================
-Alter type rename attribute
-================================================================================
-
-ALTER TYPE boxes
-RENAME ATTRIBUTE width TO height;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (alter_type
-      (keyword_alter)
-      (keyword_type)
-      (identifier)
-      (keyword_rename)
-      (keyword_attribute)
-      (identifier)
-      (keyword_to)
-      (identifier))))
-
-================================================================================
-Alter type change owner
-================================================================================
-
-ALTER TYPE boxes
-OWNER TO user2
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (alter_type
-      (keyword_alter)
-      (keyword_type)
-      (identifier)
-      (change_ownership
-        (keyword_owner)
-        (keyword_to)
-        (identifier)))))
-
-================================================================================
-Alter type add value
-================================================================================
-
-ALTER TYPE boxes
-ADD VALUE  'color' AFTER 'weight'
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (alter_type
-      (keyword_alter)
-      (keyword_type)
-      (identifier)
-      (keyword_add)
-      (keyword_value)
-      (literal)
-      (keyword_after)
-      (literal))))
-
-================================================================================
-Alter type rename value
-================================================================================
-
-ALTER TYPE boxes
-RENAME VALUE 'weight' TO 'mass'
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (alter_type
-      (keyword_alter)
-      (keyword_type)
-      (identifier)
-      (keyword_rename)
-      (keyword_value)
-      (literal)
-      (keyword_to)
-      (literal))))
-
-================================================================================
 Alter type add attribute
 ================================================================================
 
-ALTER TYPE boxes
-ADD ATTRIBUTE label text
+ALTER TYPE circle_udt ADD ATTRIBUTE radius INTEGER;
 
 --------------------------------------------------------------------------------
 
@@ -515,17 +411,44 @@ ADD ATTRIBUTE label text
     (alter_type
       (keyword_alter)
       (keyword_type)
-      (identifier)
+      (object_reference
+        (identifier))
       (keyword_add)
       (keyword_attribute)
-      (identifier)
-      (keyword_text))))
+      (attribute_specification
+        (identifier)
+        (int
+          (keyword_int))))))
+
+================================================================================
+Alter type add attribute with compile
+================================================================================
+
+ALTER TYPE circle_udt ADD ATTRIBUTE radius INTEGER COMPILE;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (alter_type
+      (keyword_alter)
+      (keyword_type)
+      (object_reference
+        (identifier))
+      (keyword_add)
+      (keyword_attribute)
+      (attribute_specification
+        (identifier)
+        (int
+          (keyword_int)))
+      (keyword_compile))))
 
 ================================================================================
 Alter type drop attribute
 ================================================================================
 
-ALTER TYPE boxes DROP ATTRIBUTE label
+ALTER TYPE circle_udt DROP ATTRIBUTE radius COMPILE;
+
 --------------------------------------------------------------------------------
 
 (program
@@ -533,17 +456,26 @@ ALTER TYPE boxes DROP ATTRIBUTE label
     (alter_type
       (keyword_alter)
       (keyword_type)
-      (identifier)
+      (object_reference
+        (identifier))
       (keyword_drop)
       (keyword_attribute)
-      (identifier))))
+      (identifier)
+      (keyword_compile))))
 
 ================================================================================
-Alter type alter attribute
+Alter type add instance method
 ================================================================================
 
-ALTER TYPE boxes
-ADD ATTRIBUTE label varchar(255)
+ALTER TYPE circle_udt
+ADD INSTANCE METHOD area()
+RETURNS FLOAT
+SPECIFIC area_circle
+LANGUAGE C
+PARAMETER STYLE TD_GENERAL
+DETERMINISTIC
+NO SQL
+COMPILE;
 
 --------------------------------------------------------------------------------
 
@@ -552,13 +484,102 @@ ADD ATTRIBUTE label varchar(255)
     (alter_type
       (keyword_alter)
       (keyword_type)
-      (identifier)
+      (object_reference
+        (identifier))
       (keyword_add)
-      (keyword_attribute)
-      (identifier)
-      (varchar
-        (keyword_varchar)
-        (literal)))))
+      (method_specification
+        (keyword_instance)
+        (keyword_method)
+        (object_reference
+          (identifier))
+        (keyword_returns)
+        (returns_parameter_specification
+          (float
+            (keyword_float)))
+        (keyword_specific)
+        (object_reference
+          (identifier))
+        (language_and_access_specification
+          (keyword_language)
+          (keyword_c))
+        (type_attribute
+          (keyword_parameter)
+          (keyword_style)
+          (keyword_td_general))
+        (type_attribute
+          (keyword_deterministic))
+        (language_and_access_specification
+          (keyword_no)
+          (keyword_sql)))
+      (keyword_compile))))
+
+================================================================================
+Alter type drop instance method
+================================================================================
+
+ALTER TYPE circle_udt DROP INSTANCE METHOD area() COMPILE;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (alter_type
+      (keyword_alter)
+      (keyword_type)
+      (object_reference
+        (identifier))
+      (keyword_drop)
+      (keyword_instance)
+      (keyword_method)
+      (object_reference
+        (identifier))
+      (keyword_compile))))
+
+================================================================================
+Alter type drop constructor method with specific
+================================================================================
+
+ALTER TYPE circle_udt DROP CONSTRUCTOR METHOD new_circle(INTEGER) SPECIFIC new_circle_int COMPILE;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (alter_type
+      (keyword_alter)
+      (keyword_type)
+      (object_reference
+        (identifier))
+      (keyword_drop)
+      (keyword_constructor)
+      (keyword_method)
+      (object_reference
+        (identifier))
+      (parameter_specification
+        (int
+          (keyword_int)))
+      (keyword_specific)
+      (object_reference
+        (identifier))
+      (keyword_compile))))
+
+================================================================================
+Alter type compile only
+================================================================================
+
+ALTER TYPE circle_udt COMPILE ONLY;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (alter_type
+      (keyword_alter)
+      (keyword_type)
+      (object_reference
+        (identifier))
+      (keyword_compile)
+      (keyword_only))))
 
 ================================================================================
 Create table with custom type

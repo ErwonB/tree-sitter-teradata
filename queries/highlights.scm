@@ -127,7 +127,6 @@
   (keyword_overwrite)
   (keyword_matched)
   (keyword_values)
-  (keyword_value)
   (keyword_attribute)
   (keyword_set)
   (keyword_multiset)

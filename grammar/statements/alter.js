@@ -210,60 +210,38 @@ module.exports = {
     alter_type: $ => seq(
       $.keyword_alter,
       $.keyword_type,
-      $.identifier,
+      field('name', $.object_reference),
       choice(
-        $.change_ownership,
-        $.rename_object,
+        // ADD <method_specification>
+        seq($.keyword_add, $.method_specification),
+
+        // DROP [INSTANCE | CONSTRUCTOR] METHOD name(params) [SPECIFIC name]
         seq(
-          $.keyword_rename,
+          $.keyword_drop,
+          optional(choice($.keyword_instance, $.keyword_constructor)),
+          $.keyword_method,
+          field('method_name', $.object_reference),
+          wrapped_in_parenthesis(
+            optional(comma_list($.parameter_specification, true))
+          ),
+          optional(seq($.keyword_specific, $.object_reference)),
+        ),
+
+        // ADD ATTRIBUTE <attribute_specification>
+        seq($.keyword_add, $.keyword_attribute, $.attribute_specification),
+
+        // DROP ATTRIBUTE attribute_name
+        seq(
+          $.keyword_drop,
           $.keyword_attribute,
-          $.identifier,
-          $.keyword_to,
-          $.identifier,
-          optional($._drop_behavior)
+          field('attribute_name', $.identifier),
         ),
-        seq(
-          $.keyword_add,
-          $.keyword_value,
-            alias($._single_quote_string,$.literal),
-          optional(
-            seq(
-              choice($.keyword_before, $.keyword_after),
-              alias($._single_quote_string,$.literal),
-            )
-          ),
-        ),
-        seq(
-          $.keyword_rename,
-          $.keyword_value,
-          alias($._single_quote_string,$.literal),
-          $.keyword_to,
-          alias($._single_quote_string,$.literal),
-        ),
-        seq(
-          choice(
-            seq(
-              $.keyword_add,
-              $.keyword_attribute,
-              $.identifier,
-              $._type
-            ),
-            seq($.keyword_drop,
-              $.keyword_attribute,
-              $.identifier),
-            seq(
-              $.keyword_alter,
-              $.keyword_attribute,
-              $.identifier,
-              optional(seq($.keyword_set, $.keyword_data)),
-              $.keyword_type,
-              $._type
-            ),
-          ),
-          optional(seq($.keyword_collate, $.identifier)),
-          optional($._drop_behavior)
-        )
+
+        // COMPILE [ONLY] standalone
+        seq($.keyword_compile, optional($.keyword_only)),
       ),
+      // optional trailing COMPILE [ONLY]
+      optional(seq($.keyword_compile, optional($.keyword_only))),
     ),
 
 };
