@@ -76,10 +76,10 @@ module.exports = {
       field('name', $.identifier),
     ),
 
-    implicit_cast: $ =>  seq(
+    implicit_cast: $ => prec.dynamic(1, seq(
       $._expression,
       wrapped_in_parenthesis($._castable_type)
-    ),
+    )),
 
     // Postgres syntax for intervals
     interval: $ => seq(
@@ -676,5 +676,21 @@ module.exports = {
     _interpolated_identifier1: _ => /\$\{[a-zA-Z_][0-9a-zA-Z_]*\}/,
     _interpolated_identifier: _ => /\$\{[a-zA-Z_][0-9a-zA-Z_]*\}_[a-zA-Z_][0-9a-zA-Z_]*/,
     encoding_identifier: _ => /[a-zA-Z_][0-9a-zA-Z_]*_TO_[a-zA-Z_][0-9a-zA-Z_]*/,
+
+    object_reference: $ => choice(
+      seq(
+        field('database', $.identifier),
+        '.',
+        field('schema', $.identifier),
+        '.',
+        field('name', $.identifier),
+      ),
+      seq(
+        field('schema', choice($.identifier, alias($._interpolated_var, $.identifier))),
+        '.',
+        field('name', choice($.identifier, alias($._interpolated_var, $.identifier))),
+      ),
+      field('name', choice($.identifier, alias($._interpolated_var, $.identifier))),
+    ),
 
 };
