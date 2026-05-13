@@ -568,6 +568,8 @@ module.exports = {
         [$.keyword_some, 'unary_not'],
         [$.keyword_all, 'unary_not'],
         [$.op_unary_other, 'unary_other'],
+        ['-', 'unary_other'],
+        ['+', 'unary_other'],
       ].map(([operator, precedence]) =>
         prec.left(precedence, seq(
           field('operator', operator),
