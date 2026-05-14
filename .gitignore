@@ -13,4 +13,5 @@ package-lock.json
 /src/parser.c
 /src/*.json
 sql.so
+teradata.so
 test.sql

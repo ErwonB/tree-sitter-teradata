@@ -14,7 +14,7 @@ const bteq_rules = require('./grammar/bteq.js');
 const statement_rules = require('./grammar/statements/index.js');
 
 module.exports = grammar({
-  name: 'sql',
+  name: 'teradata',
 
   extras: $ => [
     /\s\n/,

@@ -18,14 +18,14 @@ Tree-sitter parsers need to be compiled as a shared-object / dynamic-library, yo
 `-shared` & `-fPIC` flags to your compiler.
 
 ```bash
-cc -shared -fPIC -I./src src/parser.c src/scanner.c -o sql.so
+cc -shared -fPIC -I./src src/parser.c src/scanner.c -o teradata.so
 ```
 
 ### Step 3: Deploy so and queries
 
 ```bash
-cp sql.so .../parser/sql.so
-cp queries/*.scm .../queries/sql/*.scm
+cp teradata.so .../parser/teradata.so
+cp queries/*.scm .../queries/teradata/*.scm
 ```
 
 ## BTEQ

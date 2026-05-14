@@ -21,11 +21,11 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            asset: sql-linux-x64.so
+            asset: teradata-linux-x64.so
           - os: macos-latest
-            asset: sql-macos.dylib
+            asset: teradata-macos.dylib
           - os: windows-latest
-            asset: sql-windows-x64.dll
+            asset: teradata-windows-x64.dll
 
     steps:
       - name: Checkout
