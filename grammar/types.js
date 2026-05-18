@@ -1,4 +1,4 @@
-const { make_keyword, parametric_type } = require('./helpers.js');
+const { wrapped_in_parenthesis, make_keyword, parametric_type } = require('./helpers.js');
 
 module.exports = {
 
@@ -38,6 +38,8 @@ module.exports = {
       $.keyword_mbb,
 
       $.format,
+
+      $.period,
 
     ),
 
@@ -108,5 +110,17 @@ module.exports = {
     parametric_type($, $.keyword_timestamp),
     optional($._include_time_zone),
   ),
+
+  period: $ => seq(
+    $.keyword_period,
+    wrapped_in_parenthesis(
+      choice(
+        $.keyword_date,
+        $.time,
+        $.timestamp,
+      ),
+    ),
+  ),
+
 
 };

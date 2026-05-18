@@ -660,6 +660,11 @@ CREATE TABLE type_test (
   a_timestamp TIMESTAMP,
   a_verbose_timestamp TIMESTAMP WITHOUT TIME ZONE,
   a_verbose_tstz TIMESTAMP WITH TIME ZONE,
+  employee_duration   PERIOD(DATE),
+  job_hours     PERIOD(TIME),
+  job_hours     PERIOD(TIME WITH TIME ZONE),
+  employee_duration   PERIOD(TIMESTAMP(3)),
+  employee_duration   PERIOD(TIMESTAMP(3) WITH TIME ZONE),
   a_geometry ST_Geometry,
   a_geography mbr,
   a_box2d mbb
@@ -834,6 +839,43 @@ CREATE TABLE type_test (
                 (keyword_with)
                 (keyword_time)
                 (keyword_zone)))
+            (column_definition
+              (identifier)
+              (period
+                (keyword_period)
+                (keyword_date)))
+            (column_definition
+              (identifier)
+              (period
+                (keyword_period)
+                (time
+                  (keyword_time))))
+            (column_definition
+              (identifier)
+              (period
+                (keyword_period)
+                (time
+                  (keyword_time)
+                  (keyword_with)
+                  (keyword_time)
+                  (keyword_zone))))
+            (column_definition
+              (identifier)
+              (period
+                (keyword_period)
+                (timestamp
+                  (keyword_timestamp)
+                  (literal))))
+            (column_definition
+              (identifier)
+              (period
+                (keyword_period)
+                (timestamp
+                  (keyword_timestamp)
+                  (literal)
+                  (keyword_with)
+                  (keyword_time)
+                  (keyword_zone))))
             (column_definition
               (identifier)
               (keyword_st_geometry))
