@@ -24,7 +24,7 @@ module.exports = {
       $.numeric,
       $.keyword_text,
 
-      $.keyword_json,
+      $.json,
       $.keyword_xml,
 
       $.keyword_date,
@@ -85,6 +85,10 @@ module.exports = {
   numeric: $ => choice(
     parametric_type($, $.keyword_numeric, ['precision']),
     parametric_type($, $.keyword_numeric, ['precision', 'scale']),
+  ),
+  json: $ => choice(
+    $.keyword_json,
+    parametric_type($, $.keyword_json, ['precision'])
   ),
   char: $ => parametric_type($, $.keyword_char),
   varchar: $ => parametric_type($, $.keyword_varchar),

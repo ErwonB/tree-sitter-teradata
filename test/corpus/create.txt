@@ -653,6 +653,7 @@ CREATE TABLE type_test (
   a_character_varying CHARACTER VARYING (10),
   a_text TEXT,
   a_json JSON,
+  a_json JSON(32000),
   an_xml XML,
   a_date DATE,
   a_time TIME,
@@ -798,7 +799,13 @@ CREATE TABLE type_test (
               (keyword_text))
             (column_definition
               (identifier)
-              (keyword_json))
+              (json
+                (keyword_json)))
+            (column_definition
+              (identifier)
+              (json
+                (keyword_json)
+                (literal)))
             (column_definition
               (identifier)
               (keyword_xml))
