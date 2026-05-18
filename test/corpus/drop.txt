@@ -284,3 +284,20 @@ drop macro db.my_macro;
             (identifier)
             (identifier)))))
 
+================================================================================
+Drop procedure
+================================================================================
+
+drop procedure my_db.my_proc;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (drop_procedure
+      (keyword_drop)
+      (keyword_procedure)
+          (object_reference
+            (identifier)
+            (identifier)))))
+
