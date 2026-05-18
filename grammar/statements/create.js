@@ -760,33 +760,33 @@ _database_attribute: $ => choice(
         $.keyword_primary,
         $.keyword_index,
         optional($.object_reference),
-        '(',
+        wrapped_in_parenthesis(
           seq(
             field('value', $._expression),
             repeat(seq(',', field('value', $._expression)))
           ),
-        ')',
+        ),
       ),
 
       partition_by_clause: $ => seq(
         $.keyword_partition,
         $.keyword_by,
-        '(',
-        seq(
-          field('partition_expression', $._expression),
-          repeat(seq(
-            ',',
-            field('partition_expression', $._expression)
-          ))
+        wrapped_in_parenthesis(
+          seq(
+            field('partition_expression', $._expression),
+            repeat(seq(
+              ',',
+              field('partition_expression', $._expression)
+            ))
+          ),
         ),
-        ')'
       ),
 
-    column_definitions: $ => seq(
-      '(',
-      comma_list($.column_definition, true),
-      optional($.constraints),
-      ')',
+    column_definitions: $ => wrapped_in_parenthesis(
+       seq(
+        comma_list($.column_definition, true),
+        optional($.constraints),
+      )
     ),
 
     column_definition: $ => seq(
