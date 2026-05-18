@@ -722,8 +722,8 @@ _database_attribute: $ => choice(
         seq(optional($.keyword_no), $.keyword_fallback, optional($.keyword_protection)),
         seq($.keyword_with, $.keyword_journal, $.keyword_table, '=', $.literal),
         seq(optional($.keyword_no), $.keyword_log),
-        seq(choice($.keyword_no, $.keyword_dual), optional($.keyword_before), $.keyword_journal),
-        seq(choice($.keyword_no, $.keyword_dual, seq(optional($.keyword_not), $.keyword_local)), $.keyword_after, $.keyword_journal),
+        seq(optional(choice($.keyword_no, $.keyword_dual)), optional($.keyword_before), $.keyword_journal),
+        seq(optional(choice($.keyword_no, $.keyword_dual, seq(optional($.keyword_not), $.keyword_local))), $.keyword_after, $.keyword_journal),
         seq($.keyword_checksum, '=', choice($.keyword_default, $.keyword_on, $.keyword_off)),
         seq($.keyword_freespace, '=', $._integer, optional($.keyword_percent)),
         seq(choice(
