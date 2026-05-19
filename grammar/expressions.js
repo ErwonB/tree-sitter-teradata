@@ -101,6 +101,18 @@ module.exports = {
       ),
     ),
 
+    new_expression: $ => seq(
+      $.keyword_new,
+      $._type,
+      optional(
+        seq(
+          '(',
+          optional(comma_list($._expression, false)),
+          ')'
+        )
+      )
+    ),
+
     format: $ => seq($.keyword_format, $._literal_string),
 
     filter_expression : $ => seq(
@@ -304,6 +316,7 @@ module.exports = {
     ),
 
     _expression_base: $ => prec(2, choice(
+          $.new_expression,
           $.literal,
           alias(
             $._qualified_field,

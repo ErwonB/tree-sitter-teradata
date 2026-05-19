@@ -33,7 +33,22 @@ module.exports = grammar({
     [$.between_expression, $.period_expression, $.binary_expression],
     [$._expression_base, $.binary_expression],
     [$.copy_options],
-    [$._integer], [$._decimal_number]
+    [$._integer], [$._decimal_number],
+    [$.new_expression],
+    [$.bit],
+    [$.binary],
+    [$.varbinary],
+    [$.float],
+    [$.double],
+    [$.decimal],
+    [$.numeric],
+    [$.json],
+    [$.char],
+    [$.varchar],
+    [$.nchar],
+    [$.nvarchar],
+    [$.time],
+    [$.timestamp]
   ],
 
   precedences: $ => [
