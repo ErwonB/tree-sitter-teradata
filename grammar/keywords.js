@@ -364,6 +364,7 @@ module.exports = {
     keyword_blockcompressionalgorithm: _ => make_keyword("blockcompressionalgorithm"),
     keyword_never: _ => make_keyword("never"),
     keyword_always: _ => make_keyword("always"),
+    keyword_identity: _ => make_keyword("identity"),
     keyword_manual: _ => make_keyword("manual"),
     keyword_autotemp: _ => make_keyword("autotemp"),
     keyword_blockcompression: _ => make_keyword("blockcompression"),

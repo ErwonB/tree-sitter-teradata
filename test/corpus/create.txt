@@ -1191,82 +1191,56 @@ CREATE TABLE "Role" (
 Create table with generated always
 ================================================================================
 
-CREATE TABLE "Role" (
-  "roleId" bigint generated always as identity,
-  "name" varchar NOT NULL,
-  height_in numeric GENERATED ALWAYS AS (height_cm / 2.54) STORED,
-  item_type_name TEXT GENERATED ALWAYS AS (
-     CASE item_type
-       WHEN 1 THEN 'foo'
-       WHEN 2 THEN 'bar'
-       ELSE 'UNKNOWN'
-     END
-  ) VIRTUAL
-);
+CREATE MULTISET TABLE edw_dim.dim_customer_scd2, FALLBACK
+(
+    scd_key       BIGINT GENERATED ALWAYS AS IDENTITY
+                  (START WITH 1 INCREMENT BY 1 NO CYCLE) NOT NULL,
+    customer_id   INTEGER NOT NULL
+)
+PRIMARY INDEX (customer_id);
 
 --------------------------------------------------------------------------------
 
-(program
-  (statement
-    (create_table
-      (keyword_create)
-      (keyword_table)
-      (object_reference
-        name: (identifier))
-      (column_definitions
-        (column_definition
-          name: (literal)
-          type: (bigint
-            (keyword_bigint))
-          (keyword_generated)
-          (keyword_always)
-          (keyword_as)
-          (field
-            name: (identifier)))
-        (column_definition
-          name: (literal)
-          type: (varchar
-            (keyword_varchar))
-          (keyword_not)
-          (keyword_null))
-        (column_definition
-          name: (identifier)
-          type: (numeric
-            (keyword_numeric))
-          (keyword_generated)
-          (keyword_always)
-          (keyword_as)
-          (parenthesized_expression
-            (binary_expression
-              left: (field
-                name: (identifier))
-              right: (literal)))
-          (keyword_stored))
-        (column_definition
-          name: (identifier)
-          type: (keyword_text)
-          (keyword_generated)
-          (keyword_always)
-          (keyword_as)
-          (parenthesized_expression
-            (case
-              (keyword_case)
-              (field
-                name: (identifier))
-              (keyword_when)
-              (literal)
-              (keyword_then)
-              (literal)
-              (keyword_when)
-              (literal)
-              (keyword_then)
-              (literal)
-              (keyword_else)
-              (literal)
-              (keyword_end)))
-          (keyword_virtual))))))
-
-
+    (program
+      (statement
+        (create_table
+          (keyword_create)
+          (keyword_multiset)
+          (keyword_table)
+          (object_reference
+            (identifier)
+            (identifier))
+          (pre_table_option
+            (pre_table_option_spec
+              (keyword_fallback)))
+          (column_definitions
+            (column_definition
+              (identifier)
+              (bigint
+                (keyword_bigint))
+              (keyword_generated)
+              (keyword_always)
+              (keyword_as)
+              (keyword_identity)
+              (keyword_start)
+              (keyword_with)
+              (keyword_increment)
+              (keyword_by)
+              (keyword_no)
+              (keyword_cycle)
+              (keyword_not)
+              (keyword_null))
+            (column_definition
+              (identifier)
+              (int
+                (keyword_int))
+              (keyword_not)
+              (keyword_null)))
+          (primary_index_clause
+            (keyword_primary)
+            (keyword_index)
+            (field
+              (identifier))))))
 
 ================================================================================
 Create database

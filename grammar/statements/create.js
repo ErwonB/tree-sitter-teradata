@@ -881,8 +881,8 @@ _database_attribute: $ => choice(
       $.direction,
       $._column_comment,
       $._check_constraint,
+      $._generated_identity,
       seq(
-        optional(seq($.keyword_generated, $.keyword_always)),
         $.keyword_as,
         $._expression,
       ),
@@ -904,6 +904,26 @@ _database_attribute: $ => choice(
       $.keyword_check,
       wrapped_in_parenthesis($.binary_expression)
     ),
+
+   _generated_identity: $ => seq(
+     $.keyword_generated,
+     choice($.keyword_always, seq($.keyword_by, $.keyword_default)),
+     $.keyword_as,
+     $.keyword_identity,
+     optional_parenthesis(
+       repeat(
+         choice(
+           seq($.keyword_start, $.keyword_with, $._integer),
+           seq($.keyword_increment, $.keyword_by, $._integer),
+           seq($.keyword_minvalue, $._integer),
+           seq($.keyword_maxvalue, $._integer),
+           seq($.keyword_no, choice($.keyword_minvalue,$.keyword_maxvalue)),
+           seq(optional($.keyword_no), $.keyword_cycle),
+          )
+        )
+     )
+    ),
+
 
     _default_expression: $ => seq(
       $.keyword_default,
