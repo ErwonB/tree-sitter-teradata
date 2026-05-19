@@ -43,6 +43,7 @@ module.exports = {
       $.storage_parameters,
       $.table_option,
       $.primary_index_clause,
+      $.index_clause,
       $.partition_by_clause,
       seq($.keyword_no, $.keyword_primary, $.keyword_index),
     ),
@@ -768,18 +769,33 @@ _database_attribute: $ => choice(
         ),
       ),
 
+      index_clause:$ => seq(
+        $.keyword_index,
+        optional($.object_reference),
+        wrapped_in_parenthesis(
+          seq(
+            field('value', $._expression),
+            repeat(seq(',', field('value', $._expression)))
+          ),
+        ),
+      ),
+
+
       partition_by_clause: $ => seq(
         $.keyword_partition,
         $.keyword_by,
-        wrapped_in_parenthesis(
-          seq(
-            field('partition_expression', $._expression),
-            repeat(seq(
-              ',',
-              field('partition_expression', $._expression)
-            ))
+        choice(
+          wrapped_in_parenthesis(
+            seq(
+              field('partition_expression', $._expression),
+              repeat(seq(
+                ',',
+                field('partition_expression', $._expression)
+              ))
+            ),
           ),
-        ),
+         $.keyword_column,
+        )
       ),
 
     column_definitions: $ => wrapped_in_parenthesis(
