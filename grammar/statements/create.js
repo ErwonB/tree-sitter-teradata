@@ -819,13 +819,14 @@ primary_index_clause: $ => choice(
           wrapped_in_parenthesis(
             seq(
               field('partition_expression', $._expression),
-              repeat(seq(
+              repeat(prec.left(1, seq(
                 ',',
                 field('partition_expression', $._expression)
-              ))
+              )))
             ),
           ),
-         $.keyword_column,
+          field('partition_expression', $._expression),
+          $.keyword_column,
         )
       ),
 

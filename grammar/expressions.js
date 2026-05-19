@@ -654,7 +654,7 @@ module.exports = {
     ),
     _bit_string: $ => seq(/[bBxX]'([^']|'')*'/, repeat(/'([^']|'')*'/)),
     // The identifier should be followed by a string (no parenthesis allowed)
-    _string_casting: $ => seq($.identifier, $._single_quote_string),
+    _string_casting: $ => prec(1, seq($.identifier, $._single_quote_string)),
 
     bang: _ => '!',
 
