@@ -382,6 +382,7 @@ module.exports = {
     keyword_journal: _ => make_keyword("journal"),
     keyword_protection: _ => make_keyword("protection"),
     keyword_fallback: _ => make_keyword("fallback"),
+    keyword_queue: _ => make_keyword("queue"),
     keyword_colocate: _ => make_keyword("colocate"),
 
     // Teradata copy
