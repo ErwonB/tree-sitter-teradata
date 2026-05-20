@@ -32,19 +32,6 @@ module.exports = {
       $._insert_values,
       $._set_values,
     ),
-    optional(
-      choice(
-        $._on_duplicate_key_update,
-      ),
-    ),
-  ),
-
-  _on_duplicate_key_update: $ => seq(
-    $.keyword_on,
-    $.keyword_duplicate,
-    $.keyword_key,
-    $._update,
-    $.assignment_list,
   ),
 
   assignment_list: $ => seq(

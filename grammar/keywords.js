@@ -100,7 +100,6 @@ module.exports = {
     keyword_owned: _ => make_keyword("owned"),
     keyword_start: _ => make_keyword("start"),
     keyword_key: _ => make_keyword("key"),
-    keyword_duplicate: _ => make_keyword("duplicate"),
     keyword_as: _ => make_keyword("as"),
     keyword_distinct: _ => make_keyword("distinct"),
     keyword_constraint: _ => make_keyword("constraint"),

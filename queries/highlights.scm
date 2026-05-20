@@ -304,7 +304,6 @@
   (keyword_plain)
   (keyword_storage)
   (keyword_compression)
-  (keyword_duplicate)
   (keyword_year)
   (keyword_month)
   (keyword_day)
