@@ -23,8 +23,7 @@ function wrapped_in_parenthesis(node) {
 }
 
 function parametric_type($, type, params = ['size']) {
-  return prec.right(1,
-    choice(
+  return prec.right(1, choice(
       type,
       seq(
         type,
@@ -35,8 +34,7 @@ function parametric_type($, type, params = ['size']) {
           ),
         ),
       ),
-    ),
-  );
+    ));
 }
 
 function comma_list(field, requireFirst) {

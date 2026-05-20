@@ -409,3 +409,34 @@ ON DUPLICATE KEY UPDATE
             name: (identifier))
           right: (literal))))))
 
+================================================================================
+insert with new_expression
+================================================================================
+
+INSERT INTO edw_fact.fact_events VALUES (1, TIMESTAMP '2025-01-10 09:15:00.000000',DATE '2025-01-10',1001,'LOGIN',  'NA',  1,NEW JSON('{"src":"web"}'));
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (insert
+          (keyword_insert)
+          (keyword_into)
+          (object_reference
+            (identifier)
+            (identifier))
+          (keyword_values)
+          (list
+            (literal)
+            (literal
+              (identifier))
+            (literal
+              (identifier))
+            (literal)
+            (literal)
+            (literal)
+            (literal)
+            (new_expression
+              (keyword_new)
+              (keyword_json)
+              (literal))))))

@@ -101,6 +101,24 @@ module.exports = {
       ),
     ),
 
+    _constructor_type: $ => choice(
+      $.keyword_json,
+      $.keyword_xml,
+      $.keyword_st_geometry,
+      $.keyword_mbr,
+      $.keyword_mbb,
+      $.keyword_period,
+      $.object_reference
+    ),
+
+    new_expression: $ => prec.right(1, seq(
+      $.keyword_new,
+      field('type', $._constructor_type),
+      optional(
+        paren_list($._expression)
+      )
+    )),
+
     format: $ => seq($.keyword_format, $._literal_string),
 
     filter_expression : $ => seq(
@@ -304,6 +322,7 @@ module.exports = {
     ),
 
     _expression_base: $ => prec(2, choice(
+          $.new_expression,
           $.literal,
           alias(
             $._qualified_field,
