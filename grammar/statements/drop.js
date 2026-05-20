@@ -1,3 +1,8 @@
+const {
+  comma_list,
+  wrapped_in_parenthesis,
+} = require('../helpers.js');
+
 module.exports = {
 
     _drop_behavior: $ => choice(
@@ -37,12 +42,56 @@ module.exports = {
       $.object_reference,
     ),
 
-    drop_stats: $ => seq(
-      $.keyword_drop,
-      $._stats,
-      $.keyword_on,
-      $.object_reference,
+  drop_stats: $ => seq(
+    $.keyword_drop,
+    choice($._stats, $.keyword_stat),
+    optional(
+      comma_list(
+        choice(
+          seq(
+            optional($.keyword_unique),
+            $.keyword_index,
+            optional(field('index_name', $.identifier)),
+            optional($.keyword_all),
+            wrapped_in_parenthesis(comma_list(field('column', $.identifier), true)),
+            optional(
+              seq(
+                $.keyword_order,
+                $.keyword_by,
+                optional(choice($.keyword_values, $.keyword_hash)),
+                wrapped_in_parenthesis(field('order_column', $.identifier)),
+              )
+            ),
+          ),
+          seq(
+            $.keyword_column,
+            choice(
+              field('column', $.identifier),
+              wrapped_in_parenthesis(comma_list(field('column', $.identifier), true)),
+            ),
+          ),
+        ),
+        false,
+      )
     ),
+    $.keyword_on,
+    optional($.keyword_temporary),
+    field('table', $.object_reference),
+    optional(
+      choice(
+        seq(
+          field('column', $.identifier),
+          optional(
+            seq(
+              optional($.keyword_as),
+              field('statistics_name', $.identifier),
+            )
+          ),
+        ),
+        $.keyword_partition,
+      ),
+    ),
+  ),
 
     drop_table: $ => seq(
       $.keyword_drop,
