@@ -432,6 +432,13 @@ module.exports = {
     keyword_min: _ => make_keyword("min"),
     keyword_sum: _ => make_keyword("sum"),
 
+    keyword_summary:        _ => make_keyword("summary"),
+    keyword_system:         _ => make_keyword("system"),
+    keyword_threshold:      _ => make_keyword("threshold"),
+    keyword_days:           _ => make_keyword("days"),
+    keyword_maxintervals:   _ => make_keyword("maxintervals"),
+    keyword_maxvaluelength: _ => make_keyword("maxvaluelength"),
+
     // Operators
     is_not: $ => prec.left(seq($.keyword_is, $.keyword_not)),
     not_like: $ => seq($.keyword_not, $.keyword_like),
