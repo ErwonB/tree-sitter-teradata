@@ -159,10 +159,12 @@ module.exports = {
       seq(
         $.keyword_create, $.keyword_join, $.keyword_index,
         $.object_reference,
-        //missing table options
+        optional($.pre_table_option),
         $.keyword_as,
         $.create_query,
-        optional(seq($.primary_index_clause, $.partition_by_clause)),
+        optional($.primary_index_clause),
+        optional($.index_clause),
+        optional($.partition_by_clause),
       ),
     ),
 
