@@ -22,6 +22,7 @@ module.exports = {
         $.create_sequence,
         $.create_trigger,
         $.create_join_index,
+        $.create_hash_index,
       ),
     ),
 
@@ -168,6 +169,63 @@ module.exports = {
       ),
     ),
 
+   create_hash_index: $ => prec.right(
+      seq(
+        $.keyword_create,
+        $.keyword_hash,
+        $.keyword_index,
+        $.object_reference,
+        optional($.hash_index_option),
+        $._index_column_list,
+        $.keyword_on,
+        $.object_reference,
+        optional(
+          seq(
+            $.keyword_by,
+            $._index_column_list,
+          ),
+        ),
+        optional($.hash_index_order_by_clause),
+      ),
+    ),
+
+    hash_index_order_by_clause: $ => seq(
+      $.keyword_order,
+      $.keyword_by,
+      choice(
+        seq(
+          $.keyword_values,
+          optional($._index_column_list),
+        ),
+        seq(
+          $.keyword_hash,
+          $._index_column_list,
+        ),
+        $._index_column_list,
+      ),
+    ),
+
+    hash_index_option: $ => seq(
+      ',',
+      comma_list(
+        choice(
+          seq(
+            $.keyword_map,
+            '=',
+            $.literal,
+            optional(seq($.keyword_colocate, $.keyword_using, $.literal)),
+          ),
+          seq(optional($.keyword_no), $.keyword_fallback, optional($.keyword_protection)),
+          seq($.keyword_checksum, '=', choice($.keyword_on, $.keyword_default, $.keyword_off)),
+          seq(
+            $.keyword_blockcompression,
+            '=',
+            choice($.keyword_autotemp, $.keyword_default, $.keyword_manual, $.keyword_never),
+          ),
+        ),
+        true,
+      ),
+    ),
 
     _operator_class: $ => seq(
       field("opclass", $.identifier),

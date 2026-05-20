@@ -85,3 +85,40 @@ CREATE INDEX (a), UNIQUE INDEX idx2 ALL (b, c) ON TEMPORARY db.tab;
             (identifier)))))
 
 
+================================================================================
+Create hash index
+================================================================================
+
+CREATE HASH INDEX edw_dim.hi_cust_region (region, customer_id)
+ON edw_dim.dim_customer BY (customer_id) ORDER BY HASH (customer_id);
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (create_hash_index
+          (keyword_create)
+          (keyword_hash)
+          (keyword_index)
+          (object_reference
+            (identifier)
+            (identifier))
+          (field
+            (identifier))
+          (field
+            (identifier))
+          (keyword_on)
+          (object_reference
+            (identifier)
+            (identifier))
+          (keyword_by)
+          (field
+            (identifier))
+          (hash_index_order_by_clause
+            (keyword_order)
+            (keyword_by)
+            (keyword_hash)
+            (field
+              (identifier))))))
+
+
