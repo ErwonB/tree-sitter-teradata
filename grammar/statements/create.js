@@ -63,6 +63,17 @@ module.exports = {
       optional(seq($.keyword_and, $.keyword_statistics)),
     ),
 
+    _multiset_or_set: $ => choice(
+      $.keyword_multiset,
+      $.keyword_set,
+    ),
+
+    _volatile_or_global_temp : $ => choice(
+      $.keyword_volatile,
+      seq($.keyword_global, $.keyword_temporary),
+    ),
+
+
     // left precedence because 'quoted' table options otherwise conflict with
     // `create function` string bodies; if you remove this precedence you will
     // have to also disable the `_literal_string` choice for the `name` field
@@ -74,13 +85,9 @@ module.exports = {
               $.keyword_create,
               optional(
                 choice(
-                  $._temporary,
-                  $.keyword_external,
-                  $.keyword_multiset,
-                  $.keyword_set,
-                  $.keyword_volatile,
-                  seq($.keyword_global, $.keyword_temporary),
-                )
+                  seq($._multiset_or_set, optional($._volatile_or_global_temp)),
+                  seq($._volatile_or_global_temp, optional($._multiset_or_set)),
+                ),
               ),
               $.keyword_table,
             ),
