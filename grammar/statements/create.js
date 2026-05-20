@@ -46,6 +46,7 @@ module.exports = {
       $.index_clause,
       $.partition_by_clause,
       seq($.keyword_no, $.keyword_primary, $.keyword_index),
+      $._table_preservation
     ),
 
     storage_parameters: $ => seq(
@@ -73,6 +74,12 @@ module.exports = {
       seq($.keyword_global, $.keyword_temporary),
     ),
 
+    _table_preservation: $ => seq(
+      $.keyword_on,
+      $.keyword_commit,
+      choice($.keyword_delete, $.keyword_preserve),
+      $.keyword_rows
+    ),
 
     // left precedence because 'quoted' table options otherwise conflict with
     // `create function` string bodies; if you remove this precedence you will
@@ -764,61 +771,61 @@ _database_attribute: $ => choice(
       ),
     ),
 
-_index_column_list: $ => wrapped_in_parenthesis(
-  seq(
-    field('value', $._expression),
-    repeat(seq(',', field('value', $._expression)))
-  )
-),
+    _index_column_list: $ => wrapped_in_parenthesis(
+      seq(
+        field('value', $._expression),
+        repeat(seq(',', field('value', $._expression)))
+      )
+    ),
 
-index_order_by_clause: $ => seq(
-  $.keyword_order,
-  $.keyword_by,
-  optional(choice($.keyword_values, $.keyword_hash)),
-  optional(wrapped_in_parenthesis($._expression)),
-),
+    index_order_by_clause: $ => seq(
+      $.keyword_order,
+      $.keyword_by,
+      optional(choice($.keyword_values, $.keyword_hash)),
+      optional(wrapped_in_parenthesis($._expression)),
+    ),
 
-index_load_identity_clause: $ => seq(
-  $.keyword_with,
-  optional($.keyword_no),
-  $.keyword_loading,
-  $.keyword_identity,
-),
+    index_load_identity_clause: $ => seq(
+      $.keyword_with,
+      optional($.keyword_no),
+      $.keyword_loading,
+      $.keyword_identity,
+    ),
 
-primary_index_clause: $ => choice(
-  seq(
-    optional($.keyword_unique),
-    $.keyword_primary,
-    $.keyword_index,
-    optional($.object_reference),
-    $._index_column_list,
+  primary_index_clause: $ => choice(
+    seq(
+      optional($.keyword_unique),
+      $.keyword_primary,
+      $.keyword_index,
+      optional($.object_reference),
+      $._index_column_list,
+    ),
+    seq(
+      $.keyword_primary,
+      $.keyword_amp,
+      optional($.keyword_index),
+      optional($.object_reference),
+      $._index_column_list,
+    ),
   ),
-  seq(
-    $.keyword_primary,
-    $.keyword_amp,
-    optional($.keyword_index),
-    optional($.object_reference),
-    $._index_column_list,
-  ),
-),
 
   index_clause: $ => choice(
-  prec.right(seq(
-    $.keyword_unique,
-    $.keyword_index,
-    optional($.object_reference),
-    optional($._index_column_list),
-    optional($.index_load_identity_clause),
-  )),
-  prec.right(seq(
-    $.keyword_index,
-    optional($.object_reference),
-    optional($.keyword_all),
-    $._index_column_list,
-    optional($.index_order_by_clause),
-    optional($.index_load_identity_clause),
-  )),
-),
+      prec.right(seq(
+        $.keyword_unique,
+        $.keyword_index,
+        optional($.object_reference),
+        optional($._index_column_list),
+        optional($.index_load_identity_clause),
+      )),
+      prec.right(seq(
+        $.keyword_index,
+        optional($.object_reference),
+        optional($.keyword_all),
+        $._index_column_list,
+        optional($.index_order_by_clause),
+        optional($.index_load_identity_clause),
+      )),
+    ),
 
       partition_by_clause: $ => seq(
         $.keyword_partition,

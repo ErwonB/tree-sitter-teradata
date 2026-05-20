@@ -273,6 +273,8 @@
   (keyword_repeatable)
   (keyword_read)
   (keyword_write)
+  (keyword_preserve)
+  (keyword_commit)
   (keyword_committed)
   (keyword_uncommitted)
   (keyword_deferrable)
