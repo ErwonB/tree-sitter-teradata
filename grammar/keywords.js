@@ -358,6 +358,7 @@ module.exports = {
     keyword_map: _ => make_keyword("map"),
     keyword_isolated: _ => make_keyword("isolated"),
     keyword_loading: _ => make_keyword("loading"),
+    keyword_load: _ => make_keyword("load"),
     keyword_concurrent: _ => make_keyword("concurrent"),
     keyword_blockcompressionlevel: _ => make_keyword("blockcompressionlevel"),
     keyword_elzs_h: _ => make_keyword("elzs_h"),

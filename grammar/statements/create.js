@@ -198,38 +198,24 @@ module.exports = {
 
     index_fields: $ => wrapped_in_parenthesis(comma_list(alias($._index_field, $.field))),
 
-    create_index: $ => seq(
-      $.keyword_create,
+    _index_specification: $ => seq(
       optional($.keyword_unique),
       $.keyword_index,
-      optional(
-        seq(
-          field("column", $._column),
-        ),
-      ),
-      $.keyword_on,
-      seq(
-        $.object_reference,
-        optional(
-          seq(
-            $.keyword_using,
-            choice(
-              $.keyword_hash,
-            ),
-          ),
-        ),
-        $.index_fields
-      ),
-      optional(
-        $.where,
-      ),
+      optional(field("name", $._column)),
+      optional($.keyword_all),
+      $.index_fields,
+      optional($.index_order_by_clause),
+      optional($.index_load_identity_clause),
     ),
 
-    _with_settings: $ => seq(
-          field('name', $.identifier),
-          optional('='),
-          field('value', choice($.identifier, alias($._single_quote_string, $.literal))),
-    ),
+    create_index: $ => seq(
+        $.keyword_create,
+        comma_list($._index_specification, false),
+        $.keyword_on,
+        optional($.keyword_temporary),
+        $.object_reference,
+      ),
+
 
 _database_attribute: $ => choice(
   // SPOOL | TEMPORARY = n [BYTES] [SKEW=...]
@@ -790,7 +776,7 @@ _database_attribute: $ => choice(
     index_load_identity_clause: $ => seq(
       $.keyword_with,
       optional($.keyword_no),
-      $.keyword_loading,
+      choice($.keyword_load, $.keyword_loading),
       $.keyword_identity,
     ),
 
