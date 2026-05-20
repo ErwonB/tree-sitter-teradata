@@ -301,3 +301,22 @@ drop procedure my_db.my_proc;
             (identifier)
             (identifier)))))
 
+================================================================================
+Drop hash index
+================================================================================
+
+drop hash index DB.TABLE1;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (drop_hash_index
+          (keyword_drop)
+          (keyword_hash)
+          (keyword_index)
+          (object_reference
+            (identifier)
+            (identifier)))))
+
+

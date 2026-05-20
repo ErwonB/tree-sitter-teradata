@@ -18,6 +18,7 @@ module.exports = {
         $.drop_macro,
         $.drop_stats,
         $.drop_join_index,
+        $.drop_hash_index,
         $.drop_procedure,
       ),
     ),
@@ -25,6 +26,13 @@ module.exports = {
     drop_join_index: $ => seq(
       $.keyword_drop,
       $.keyword_join,
+      $.keyword_index,
+      $.object_reference,
+    ),
+
+    drop_hash_index: $ => seq(
+      $.keyword_drop,
+      $.keyword_hash,
       $.keyword_index,
       $.object_reference,
     ),
