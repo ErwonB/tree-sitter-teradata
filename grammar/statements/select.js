@@ -80,11 +80,22 @@ module.exports = {
         ),
         ),
 
+    _lock_type: $ => choice(
+      $.keyword_access,
+      $.keyword_exclusive,
+      $.keyword_excl,
+      seq($.keyword_read, optional($.keyword_override)),
+      $.keyword_share,
+      $.keyword_write,
+      $.keyword_checksum,
+      seq($.keyword_load, $.keyword_committed),
+    ),
+
     lock_clause: $ => choice(
-      seq($._lock, $.keyword_row, $.keyword_for, choice($.keyword_read, $.keyword_write, $.keyword_access)),
+      seq($._lock, $.keyword_row, choice($.keyword_for, $.keyword_in), $._lock_type, optional($.keyword_mode), optional($.keyword_nowait)),
         repeat1(
-          seq($._lock, optional(choice($.keyword_table, $.keyword_view)), $.object_reference, $.keyword_for,
-            choice($.keyword_read, $.keyword_write, $.keyword_access)),
+          seq($._lock, optional(choice($.keyword_table, $.keyword_view, $.keyword_database)), $.object_reference, choice($.keyword_for, $.keyword_in),
+            $._lock_type, optional($.keyword_mode), optional($.keyword_nowait)),
           ),
       ),
 
