@@ -3,62 +3,6 @@ Alter table and add column
 ================================================================================
 
 ALTER TABLE my_table
-  ADD COLUMN val3 VARCHAR(100) NOT NULL;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (alter_table
-      (keyword_alter)
-      (keyword_table)
-      (object_reference
-        name: (identifier))
-      (add_column
-        (keyword_add)
-        (keyword_column)
-        (column_definition
-          name: (identifier)
-          type: (varchar
-            (keyword_varchar)
-            size: (literal))
-          (keyword_not)
-          (keyword_null))))))
-
-================================================================================
-Alter table and add column with FQN
-================================================================================
-
-ALTER TABLE my_database.my_table.my_table
-  ADD COLUMN val3 VARCHAR(100) NOT NULL;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (alter_table
-      (keyword_alter)
-      (keyword_table)
-      (object_reference
-        database: (identifier)
-        schema: (identifier)
-        name: (identifier))
-      (add_column
-        (keyword_add)
-        (keyword_column)
-        (column_definition
-          name: (identifier)
-          type: (varchar
-            (keyword_varchar)
-            size: (literal))
-          (keyword_not)
-          (keyword_null))))))
-
-================================================================================
-Alter table and add column, eliding column keyword
-================================================================================
-
-ALTER TABLE my_table
   ADD val3 VARCHAR(100) NOT NULL;
 
 --------------------------------------------------------------------------------
@@ -80,13 +24,12 @@ ALTER TABLE my_table
           (keyword_not)
           (keyword_null))))))
 
-
 ================================================================================
-Alter table and alter column setting default
+Alter table and add column with FQN
 ================================================================================
 
-ALTER TABLE my_table
-  ALTER COLUMN val3 SET DEFAULT 'hi';
+ALTER TABLE my_database.my_table.my_table
+  ADD val3 VARCHAR(100) NOT NULL;
 
 --------------------------------------------------------------------------------
 
@@ -96,161 +39,21 @@ ALTER TABLE my_table
       (keyword_alter)
       (keyword_table)
       (object_reference
+        database: (identifier)
+        schema: (identifier)
         name: (identifier))
-      (alter_column
-        (keyword_alter)
-        (keyword_column)
-        name: (identifier)
-        (keyword_set)
-        (keyword_default)
-        (literal)))))
-
-================================================================================
-Alter table and alter column dropping default
-================================================================================
-
-ALTER TABLE my_table
-  ALTER COLUMN val3 DROP DEFAULT;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (alter_table
-      (keyword_alter)
-      (keyword_table)
-      (object_reference
-        name: (identifier))
-      (alter_column
-        (keyword_alter)
-        (keyword_column)
-        name: (identifier)
-        (keyword_drop)
-        (keyword_default)))))
-
-================================================================================
-Alter table and alter column changing type
-================================================================================
-
-ALTER TABLE my_table
-  ALTER COLUMN val3 TYPE VARCHAR(255);
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (alter_table
-      (keyword_alter)
-      (keyword_table)
-      (object_reference
-        name: (identifier))
-      (alter_column
-        (keyword_alter)
-        (keyword_column)
-        name: (identifier)
-        (keyword_type)
-        type: (varchar
-          (keyword_varchar)
-          size: (literal))))))
-
-================================================================================
-Alter table and change column renaming and changing type
-================================================================================
-
-ALTER TABLE my_table
-  CHANGE COLUMN val3 val4 INT NOT NULL;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (alter_table
-      (keyword_alter)
-      (keyword_table)
-      (object_reference
-        name: (identifier))
-      (change_column
-        (keyword_change)
-        (keyword_column)
-        old_name: (identifier)
+      (add_column
+        (keyword_add)
         (column_definition
           name: (identifier)
-          type: (int
-            (keyword_int))
+          type: (varchar
+            (keyword_varchar)
+            size: (literal))
           (keyword_not)
           (keyword_null))))))
 
 ================================================================================
-Alter table and alter column changing type, eliding column keyword
-================================================================================
-
-ALTER TABLE my_table
-  ALTER val3 TYPE VARCHAR(255);
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (alter_table
-      (keyword_alter)
-      (keyword_table)
-      (object_reference
-        name: (identifier))
-      (alter_column
-        (keyword_alter)
-        name: (identifier)
-        (keyword_type)
-        type: (varchar
-          (keyword_varchar)
-          size: (literal))))))
-
-================================================================================
-Alter table and alter column dropping not-null constraint
-================================================================================
-
-ALTER TABLE my_table
-  ALTER COLUMN val3 DROP NOT NULL;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (alter_table
-      (keyword_alter)
-      (keyword_table)
-      (object_reference
-        name: (identifier))
-      (alter_column
-        (keyword_alter)
-        (keyword_column)
-        name: (identifier)
-        (keyword_drop)
-        (keyword_not)
-        (keyword_null)))))
-
-================================================================================
 Alter table and drop column
-================================================================================
-
-ALTER TABLE my_table
-  DROP COLUMN val3;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (alter_table
-      (keyword_alter)
-      (keyword_table)
-      (object_reference
-        name: (identifier))
-      (drop_column
-        (keyword_drop)
-        (keyword_column)
-        name: (identifier)))))
-
-================================================================================
-Alter table and drop column, eliding column keyword
 ================================================================================
 
 ALTER TABLE my_table
@@ -274,7 +77,7 @@ Alter table and rename column
 ================================================================================
 
 ALTER TABLE my_table
-  RENAME COLUMN val3 TO valthree;
+  RENAME val3 TO valthree;
 
 --------------------------------------------------------------------------------
 
@@ -287,62 +90,18 @@ ALTER TABLE my_table
         name: (identifier))
       (rename_column
         (keyword_rename)
-        (keyword_column)
         old_name: (identifier)
         (keyword_to)
         new_name: (identifier)))))
-
-================================================================================
-Alter and rename table
-================================================================================
-
-ALTER TABLE my_table
-  RENAME TO my_new_and_improved_table;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (alter_table
-      (keyword_alter)
-      (keyword_table)
-      (object_reference
-        name: (identifier))
-      (rename_object
-        (keyword_rename)
-        (keyword_to)
-        (object_reference
-          name: (identifier))))))
-
-================================================================================
-Alter table and change owner
-================================================================================
-
-ALTER TABLE my_table
-  OWNER TO someone_else;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (alter_table
-      (keyword_alter)
-      (keyword_table)
-      (object_reference
-        name: (identifier))
-      (change_ownership
-        (keyword_owner)
-        (keyword_to)
-        (identifier)))))
 
 ================================================================================
 Alter table and multiple
 ================================================================================
 
 ALTER TABLE my_table
-  ADD COLUMN val4 DATE,
-  ALTER COLUMN val5 DROP NOT NULL, -- comment, ignore me!
-  DROP COLUMN val8;
+  ADD val4 DATE,
+  RENAME val5 TO val5_renamed, -- comment, ignore me!
+  DROP val8;
 
 --------------------------------------------------------------------------------
 
@@ -355,21 +114,17 @@ ALTER TABLE my_table
         name: (identifier))
       (add_column
         (keyword_add)
-        (keyword_column)
         (column_definition
           name: (identifier)
           type: (keyword_date)))
-      (alter_column
-        (keyword_alter)
-        (keyword_column)
-        name: (identifier)
-        (keyword_drop)
-        (keyword_not)
-        (keyword_null))
+      (rename_column
+        (keyword_rename)
+        old_name: (identifier)
+        (keyword_to)
+        new_name: (identifier))
       (comment)
       (drop_column
         (keyword_drop)
-        (keyword_column)
         name: (identifier)))))
 
 ================================================================================
@@ -422,6 +177,30 @@ ALTER TABLE posts DROP CONSTRAINT posts_user_id_fkey;
 )
 
 ================================================================================
+Drop check constraint with CHECK keyword
+================================================================================
+
+ALTER TABLE TEST2 DROP CONSTRAINT ch3 CHECK;
+
+--------------------------------------------------------------------------------
+
+(program
+    (statement
+        (alter_table
+            (keyword_alter)
+            (keyword_table)
+            (object_reference
+                name: (identifier))
+            (drop_constraint
+                (keyword_drop)
+                (keyword_constraint)
+                (identifier)
+                (keyword_check))
+        )
+    )
+)
+
+================================================================================
 Add foreign key constraint
 ================================================================================
 
@@ -454,6 +233,77 @@ FOREIGN KEY ("accountId") REFERENCES "Account" ("accountId") ON DELETE CASCADE;
           (keyword_on)
           (keyword_delete)
           (keyword_cascade))))))
+
+================================================================================
+Add foreign key constraint with ON DELETE SET NULL ON UPDATE SET DEFAULT
+================================================================================
+
+ALTER TABLE "AccountRole" ADD CONSTRAINT "fkAccountRoleAccount"
+FOREIGN KEY ("accountId") REFERENCES "Account" ("accountId")
+ON DELETE SET NULL
+ON UPDATE SET DEFAULT;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (alter_table
+      (keyword_alter)
+      (keyword_table)
+      (object_reference
+        (identifier))
+      (add_constraint
+        (keyword_add)
+        (keyword_constraint)
+        (identifier)
+        (constraint
+          (keyword_foreign)
+          (keyword_key)
+          (ordered_columns
+            (column
+              (literal)))
+          (keyword_references)
+          (object_reference
+            (identifier))
+          (identifier)
+          (keyword_on)
+          (keyword_delete)
+          (keyword_set)
+          (keyword_null)
+          (keyword_on)
+          (keyword_update)
+          (keyword_set)
+          (keyword_default))))))
+
+================================================================================
+Add unique constraint
+================================================================================
+
+ALTER TABLE table_name
+    ADD CONSTRAINT constraint_name UNIQUE (col1, col2, col3);
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (alter_table
+      (keyword_alter)
+      (keyword_table)
+      (object_reference
+        (identifier))
+      (add_constraint
+        (keyword_add)
+        (keyword_constraint)
+        (identifier)
+        (constraint
+          (keyword_unique)
+          (ordered_columns
+            (column
+              (identifier))
+            (column
+              (identifier))
+            (column
+              (identifier))))))))
 
 ================================================================================
 MySQL: Rename table
@@ -629,205 +479,3 @@ ALTER ROLE rapunzel SUPERUSER NOLOGIN ;
       (identifier)
       (identifier)
       )))
-
-================================================================================
-Add foreign key constraint
-================================================================================
-
-ALTER TABLE "AccountRole" ADD CONSTRAINT "fkAccountRoleAccount"
-FOREIGN KEY ("accountId") REFERENCES "Account" ("accountId")
-ON DELETE SET NULL
-ON UPDATE SET DEFAULT;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (alter_table
-      (keyword_alter)
-      (keyword_table)
-      (object_reference
-        (identifier))
-      (add_constraint
-        (keyword_add)
-        (keyword_constraint)
-        (identifier)
-        (constraint
-          (keyword_foreign)
-          (keyword_key)
-          (ordered_columns
-            (column
-              (literal)))
-          (keyword_references)
-          (object_reference
-            (identifier))
-          (identifier)
-          (keyword_on)
-          (keyword_delete)
-          (keyword_set)
-          (keyword_null)
-          (keyword_on)
-          (keyword_update)
-          (keyword_set)
-          (keyword_default))))))
-
-================================================================================
-Add unique constraint
-================================================================================
-
-ALTER TABLE table_name
-    ADD CONSTRAINT constraint_name UNIQUE (col1, col2, col3);
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (alter_table
-      (keyword_alter)
-      (keyword_table)
-      (object_reference
-        (identifier))
-      (add_constraint
-        (keyword_add)
-        (keyword_constraint)
-        (identifier)
-        (constraint
-          (keyword_unique)
-          (ordered_columns
-            (column
-              (identifier))
-            (column
-              (identifier))
-            (column
-              (identifier))))))))
-
-
-================================================================================
-Alter Column Set Storage
-================================================================================
-
-ALTER TABLE table_name
-    ALTER COLUMN col1 SET STORAGE PLAIN;
-ALTER TABLE table_name
-    ALTER COLUMN col1 SET STORAGE EXTERNAL;
-ALTER TABLE table_name
-    ALTER COLUMN col1 SET STORAGE EXTENDED;
-ALTER TABLE table_name
-    ALTER COLUMN col1 SET STORAGE MAIN;
-ALTER TABLE table_name
-    ALTER COLUMN col1 SET STORAGE DEFAULT;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (alter_table
-      (keyword_alter)
-      (keyword_table)
-      (object_reference
-        (identifier))
-      (alter_column
-        (keyword_alter)
-        (keyword_column)
-        (identifier)
-        (keyword_set)
-        (keyword_storage)
-        (keyword_plain))))
-  (statement
-    (alter_table
-      (keyword_alter)
-      (keyword_table)
-      (object_reference
-        (identifier))
-      (alter_column
-        (keyword_alter)
-        (keyword_column)
-        (identifier)
-        (keyword_set)
-        (keyword_storage)
-        (keyword_external))))
-  (statement
-    (alter_table
-      (keyword_alter)
-      (keyword_table)
-      (object_reference
-        (identifier))
-      (alter_column
-        (keyword_alter)
-        (keyword_column)
-        (identifier)
-        (keyword_set)
-        (keyword_storage)
-        (keyword_extended))))
-  (statement
-    (alter_table
-      (keyword_alter)
-      (keyword_table)
-      (object_reference
-        (identifier))
-      (alter_column
-        (keyword_alter)
-        (keyword_column)
-        (identifier)
-        (keyword_set)
-        (keyword_storage)
-        (keyword_main))))
-  (statement
-    (alter_table
-      (keyword_alter)
-      (keyword_table)
-      (object_reference
-        (identifier))
-      (alter_column
-        (keyword_alter)
-        (keyword_column)
-        (identifier)
-        (keyword_set)
-        (keyword_storage)
-        (keyword_default)))))
-
-================================================================================
-Alter Column Set Compression
-================================================================================
-
-ALTER TABLE table_name
-    ALTER COLUMN col1 SET COMPRESSION lz4;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (alter_table
-      (keyword_alter)
-      (keyword_table)
-      (object_reference
-        (identifier))
-      (alter_column
-        (keyword_alter)
-        (keyword_column)
-        (identifier)
-        (keyword_set)
-        (keyword_compression)))))
-
-================================================================================
-Alter Column Set Statistics
-================================================================================
-
-ALTER TABLE table_name
-    ALTER COLUMN col1 SET STATISTICS 100;
-
---------------------------------------------------------------------------------
-
-(program
-  (statement
-    (alter_table
-      (keyword_alter)
-      (keyword_table)
-      (object_reference
-        (identifier))
-      (alter_column
-        (keyword_alter)
-        (keyword_column)
-        (identifier)
-        (keyword_set)
-        (keyword_statistics)))))

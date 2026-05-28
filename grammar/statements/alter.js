@@ -10,6 +10,33 @@ module.exports = {
       ),
     ),
 
+    // Teradata ALTER TABLE (Basic) — see:
+    // https://docs.teradata.com/r/Enterprise_IntelliFlex_VMware/SQL-Data-Definition-Language-Syntax-and-Examples/Table-Statements/ALTER-TABLE
+    //
+    //   [NONTEMPORAL] ALTER TABLE [database.]table_name
+    //       <alter_specification> [, <alter_specification> ...]
+    //
+    // where <alter_specification> is one of:
+    //   ADD column_name <column_attributes>          (also used to modify existing column)
+    //   ADD CONSTRAINT name <constraint>             (named PK/UNIQUE/FK/CHECK)
+    //   ADD <constraint>                             (unnamed constraint)
+    //   DROP column_name
+    //   DROP CONSTRAINT name [CHECK]
+    //   RENAME old_column_name TO new_column_name
+    //
+    // Notes on what is intentionally NOT supported here because it is not
+    // Teradata syntax (handled by other dialects only):
+    //   * ALTER COLUMN ... SET/DROP DEFAULT/NOT NULL/TYPE/STORAGE/...   (PostgreSQL)
+    //   * MODIFY COLUMN ...                                             (MySQL/others)
+    //   * CHANGE COLUMN ...                                             (MySQL)
+    //   * ALTER TABLE ... RENAME TO ...                                 (Teradata uses
+    //                                                                    the separate
+    //                                                                    RENAME TABLE
+    //                                                                    statement)
+    //   * OWNER TO ...                                                  (PostgreSQL)
+    //   * DROP CONSTRAINT ... CASCADE | RESTRICT                        (PostgreSQL)
+    //   * ADD COLUMN / DROP COLUMN / RENAME COLUMN with the COLUMN
+    //     keyword (Teradata syntax omits the COLUMN keyword)
     alter_table: $ => seq(
       optional($.keyword_nontemporal),
       $.keyword_alter,
@@ -32,25 +59,19 @@ module.exports = {
       $.add_column,
       $.add_constraint,
       $.drop_constraint,
-      $.alter_column,
-      $.modify_column,
-      $.change_column,
       $.drop_column,
-      $.rename_object,
       $.rename_column,
-      $.change_ownership,
     ),
 
-    // TODO: optional `keyword_add` is necessary to allow for chained alter statements in t-sql
-    // maybe needs refactoring
+    // ADD column_name <column_attributes>
+    // The optional keyword_add allows for chained ALTER TABLE specifications
+    // where ADD applies to the first column only (e.g. ADD c1 INT, c2 INT).
     add_column: $ => seq(
       optional($.keyword_add),
-      optional(
-        $.keyword_column,
-      ),
       $.column_definition,
     ),
 
+    // ADD [CONSTRAINT name] <constraint>
     add_constraint: $ => seq(
       $.keyword_add,
       optional($.keyword_constraint),
@@ -58,106 +79,23 @@ module.exports = {
       $.constraint,
     ),
 
+    // DROP CONSTRAINT name [CHECK]
     drop_constraint: $ => seq(
       $.keyword_drop,
       $.keyword_constraint,
       $.identifier,
-      optional($._drop_behavior),
+      optional($.keyword_check),
     ),
 
-    alter_column: $ => seq(
-      // TODO constraint management
-      $.keyword_alter,
-      optional(
-        $.keyword_column,
-      ),
-      field('name', $.identifier),
-      choice(
-        seq(
-          choice(
-            $.keyword_set,
-            $.keyword_drop,
-          ),
-          $.keyword_not,
-          $.keyword_null,
-        ),
-        seq(
-          optional(
-            seq(
-              $.keyword_set,
-              $.keyword_data,
-            ),
-          ),
-          $.keyword_type,
-          field('type', $._type),
-        ),
-        seq(
-          $.keyword_set,
-          choice(
-            seq(
-              $.keyword_statistics,
-              field('statistics', $._integer)
-            ),
-            seq(
-              $.keyword_storage,
-              choice(
-                $.keyword_plain,
-                $.keyword_external,
-                $.keyword_extended,
-                $.keyword_main,
-                $.keyword_default,
-              ),
-            ),
-            seq(
-              $.keyword_compression,
-              field('compression_method', $._identifier)
-            ),
-            seq(
-              paren_list($._key_value_pair, true),
-            ),
-            seq(
-              $.keyword_default,
-              $._expression,
-            ),
-          )
-        ),
-        seq(
-          $.keyword_drop,
-          $.keyword_default,
-        ),
-      ),
-    ),
-
-    modify_column: $ => seq(
-      $.keyword_modify,
-      optional(
-        $.keyword_column,
-      ),
-      $.column_definition,
-    ),
-
-    change_column: $ => seq(
-      $.keyword_change,
-      optional(
-        $.keyword_column,
-      ),
-      field('old_name', $.identifier),
-      $.column_definition,
-    ),
-
+    // DROP column_name
     drop_column: $ => seq(
       $.keyword_drop,
-      optional(
-        $.keyword_column,
-      ),
       field('name', $.identifier),
     ),
 
+    // RENAME old_column_name TO new_column_name
     rename_column: $ => seq(
       $.keyword_rename,
-      optional(
-        $.keyword_column,
-      ),
       field('old_name', $.identifier),
       $.keyword_to,
       field('new_name', $.identifier),

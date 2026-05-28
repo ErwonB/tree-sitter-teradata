@@ -38,10 +38,4 @@ module.exports = {
     $.object_reference,
   ),
 
-  change_ownership: $ => seq(
-    $.keyword_owner,
-    $.keyword_to,
-    $.identifier,
-  ),
-
 };
