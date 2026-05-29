@@ -157,15 +157,15 @@ module.exports = {
             $.object_reference,
             choice(
               // default invocation
-              paren_list(
-                seq(
-                  optional($.keyword_distinct),
-                  field(
-                    'parameter',
-                    $.term,
-                  ),
-                  optional($.order_by)
-                )
+              seq(
+                paren_list(
+                  seq(
+                    optional($.keyword_distinct),
+                    field('parameter', $.term),
+                    optional($.order_by)
+                  )
+                ),
+                optional($.within_group),
               ),
               //translate
               paren_list(
@@ -199,6 +199,15 @@ module.exports = {
                   field('expression',$._expression),
                   $.keyword_in,
                   field('expression',$._expression),
+                )
+              ),
+              //substring
+              paren_list(
+                seq(
+                  field('expression', $._expression),
+                  $.keyword_from,
+                  field('from', $._expression),
+                  optional(seq($.keyword_for, field('for', $._expression))),
                 )
               ),
               // _aggregate_function, e.g. group_concat
@@ -322,6 +331,12 @@ module.exports = {
             $.identifier,
             $.window_specification,
         ),
+    ),
+
+  within_group: $ => seq(
+      $.keyword_within,
+      $.keyword_group,
+      wrapped_in_parenthesis($.order_by),
     ),
 
     _alias: $ => seq(

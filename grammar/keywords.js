@@ -75,6 +75,7 @@ module.exports = {
     keyword_where: _ => make_keyword("where"),
     keyword_order: _ => make_keyword("order"),
     keyword_group: _ => make_keyword("group"),
+    keyword_within: _ => make_keyword("within"),
     keyword_partition: _ => make_keyword("partition"),
     keyword_by: _ => make_keyword("by"),
     keyword_having: _ => make_keyword("having"),
