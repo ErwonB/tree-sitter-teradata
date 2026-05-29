@@ -206,8 +206,7 @@ END;
                 (keyword_into)
                 (select_expression
                   (term
-                    (field
-                      (identifier))))
+                    (parameter)))
                 (from
                   (keyword_from)
                   (relation
@@ -242,8 +241,7 @@ END;
                                   (binary_expression
                                     (field
                                       (identifier))
-                                    (field
-                                      (identifier)))
+                                    (parameter))
                                   (keyword_and)
                                   (parenthesized_expression
                                     (binary_expression
@@ -259,8 +257,7 @@ END;
                                           (object_reference
                                             (identifier))
                                           (term
-                                            (field
-                                              (identifier))))
+                                            (parameter)))
                                         (keyword_escape))
                                       (keyword_or)
                                       (binary_expression
@@ -268,8 +265,7 @@ END;
                                           (object_reference
                                             (identifier))
                                           (term
-                                            (field
-                                              (identifier))))
+                                            (parameter)))
                                         (literal)))))
                                 (keyword_and)
                                 (binary_expression
@@ -322,8 +318,7 @@ END;
                                             (binary_expression
                                               (field
                                                 (identifier))
-                                              (field
-                                                (identifier)))
+                                              (parameter))
                                             (keyword_and)
                                             (parenthesized_expression
                                               (binary_expression
@@ -339,8 +334,7 @@ END;
                                                     (object_reference
                                                       (identifier))
                                                     (term
-                                                      (field
-                                                        (identifier))))
+                                                      (parameter)))
                                                   (keyword_escape))
                                                 (keyword_or)
                                                 (binary_expression
@@ -348,8 +342,7 @@ END;
                                                     (object_reference
                                                       (identifier))
                                                     (term
-                                                      (field
-                                                        (identifier))))
+                                                      (parameter)))
                                                   (literal)))))
                                           (keyword_and)
                                           (binary_expression
@@ -398,8 +391,7 @@ END;
                                                     (binary_expression
                                                       (field
                                                         (identifier))
-                                                      (field
-                                                        (identifier)))
+                                                      (parameter))
                                                     (keyword_and)
                                                     (parenthesized_expression
                                                       (binary_expression
@@ -415,8 +407,7 @@ END;
                                                             (object_reference
                                                               (identifier))
                                                             (term
-                                                              (field
-                                                                (identifier))))
+                                                              (parameter)))
                                                           (keyword_escape))
                                                         (keyword_or)
                                                         (binary_expression
@@ -424,8 +415,7 @@ END;
                                                             (object_reference
                                                               (identifier))
                                                             (term
-                                                              (field
-                                                                (identifier))))
+                                                              (parameter)))
                                                           (literal)))))
                                                   (keyword_and)
                                                   (binary_expression
@@ -444,7 +434,7 @@ END;
                                                 (literal)
                                                 (literal)
                                                 (literal))
-                                                (having
+                                              (having
                                                 (keyword_having)
                                                 (binary_expression
                                                   (invocation
@@ -497,8 +487,7 @@ END;
                                   (object_reference
                                     (identifier))
                                   (identifier))
-                                (field
-                                  (identifier)))
+                                (parameter))
                               (keyword_and)
                               (parenthesized_expression
                                 (binary_expression
@@ -516,8 +505,7 @@ END;
                                       (object_reference
                                         (identifier))
                                       (term
-                                        (field
-                                          (identifier))))
+                                        (parameter)))
                                     (keyword_escape))
                                   (keyword_or)
                                   (binary_expression
@@ -525,8 +513,7 @@ END;
                                       (object_reference
                                         (identifier))
                                       (term
-                                        (field
-                                          (identifier))))
+                                        (parameter)))
                                     (literal)))))))))
                     (identifier))))
               (procedure_if_statement
@@ -585,8 +572,7 @@ END;
                               (binary_expression
                                 (field
                                   (identifier))
-                                (field
-                                  (identifier)))
+                                (parameter))
                               (keyword_and)
                               (parenthesized_expression
                                 (binary_expression
@@ -602,8 +588,7 @@ END;
                                       (object_reference
                                         (identifier))
                                       (term
-                                        (field
-                                          (identifier))))
+                                        (parameter)))
                                     (keyword_escape))
                                   (keyword_or)
                                   (binary_expression
@@ -611,8 +596,7 @@ END;
                                       (object_reference
                                         (identifier))
                                       (term
-                                        (field
-                                          (identifier))))
+                                        (parameter)))
                                     (literal)))))
                             (keyword_and)
                             (binary_expression
@@ -665,8 +649,7 @@ END;
                                         (binary_expression
                                           (field
                                             (identifier))
-                                          (field
-                                            (identifier)))
+                                          (parameter))
                                         (keyword_and)
                                         (parenthesized_expression
                                           (binary_expression
@@ -682,8 +665,7 @@ END;
                                                 (object_reference
                                                   (identifier))
                                                 (term
-                                                  (field
-                                                    (identifier))))
+                                                  (parameter)))
                                               (keyword_escape))
                                             (keyword_or)
                                             (binary_expression
@@ -691,8 +673,7 @@ END;
                                                 (object_reference
                                                   (identifier))
                                                 (term
-                                                  (field
-                                                    (identifier))))
+                                                  (parameter)))
                                               (literal)))))
                                       (keyword_and)
                                       (binary_expression
@@ -741,8 +722,7 @@ END;
                                                 (binary_expression
                                                   (field
                                                     (identifier))
-                                                  (field
-                                                    (identifier)))
+                                                  (parameter))
                                                 (keyword_and)
                                                 (parenthesized_expression
                                                   (binary_expression
@@ -758,8 +738,7 @@ END;
                                                         (object_reference
                                                           (identifier))
                                                         (term
-                                                          (field
-                                                            (identifier))))
+                                                          (parameter)))
                                                       (keyword_escape))
                                                     (keyword_or)
                                                     (binary_expression
@@ -767,8 +746,7 @@ END;
                                                         (object_reference
                                                           (identifier))
                                                         (term
-                                                          (field
-                                                            (identifier))))
+                                                          (parameter)))
                                                       (literal)))))
                                               (keyword_and)
                                               (binary_expression
@@ -787,7 +765,7 @@ END;
                                             (literal)
                                             (literal)
                                             (literal))
-                                            (having
+                                          (having
                                             (keyword_having)
                                             (binary_expression
                                               (invocation
@@ -840,8 +818,7 @@ END;
                               (object_reference
                                 (identifier))
                               (identifier))
-                            (field
-                              (identifier)))
+                            (parameter))
                           (keyword_and)
                           (parenthesized_expression
                             (binary_expression
@@ -859,8 +836,7 @@ END;
                                   (object_reference
                                     (identifier))
                                   (term
-                                    (field
-                                      (identifier))))
+                                    (parameter)))
                                 (keyword_escape))
                               (keyword_or)
                               (binary_expression
@@ -868,8 +844,7 @@ END;
                                   (object_reference
                                     (identifier))
                                   (term
-                                    (field
-                                      (identifier))))
+                                    (parameter)))
                                 (literal))))))
                       (order_by
                         (keyword_order)
@@ -942,13 +917,11 @@ END;
                               (object_reference
                                 (identifier))
                               (term
-                                (field
-                                  (identifier)))))
+                                (parameter))))
                           (op_other)
                           (literal))
                         (op_other)
-                        (field
-                          (identifier)))
+                        (parameter))
                       (op_other)
                       (literal))))
                 (keyword_end)
@@ -961,6 +934,8 @@ END;
                     (identifier))
                   (literal)))
               (keyword_end))))))
+
+
 
 
 ================================================================================
@@ -1180,8 +1155,7 @@ END;
                 (keyword_into)
                 (select_expression
                   (term
-                    (field
-                      (identifier))))
+                    (parameter)))
                 (from
                   (keyword_from)
                   (relation
@@ -1195,8 +1169,7 @@ END;
                         (binary_expression
                           (field
                             (identifier))
-                          (field
-                            (identifier)))
+                          (parameter))
                         (keyword_and)
                         (parenthesized_expression
                           (binary_expression
@@ -1212,8 +1185,7 @@ END;
                                 (object_reference
                                   (identifier))
                                 (term
-                                  (field
-                                    (identifier))))
+                                  (parameter)))
                               (keyword_escape))
                             (keyword_or)
                             (binary_expression
@@ -1221,8 +1193,7 @@ END;
                                 (object_reference
                                   (identifier))
                                 (term
-                                  (field
-                                    (identifier))))
+                                  (parameter)))
                               (literal)))))
                       (keyword_and)
                       (binary_expression
@@ -1298,8 +1269,7 @@ END;
                           (binary_expression
                             (field
                               (identifier))
-                            (field
-                              (identifier)))
+                            (parameter))
                           (keyword_and)
                           (parenthesized_expression
                             (binary_expression
@@ -1315,8 +1285,7 @@ END;
                                   (object_reference
                                     (identifier))
                                   (term
-                                    (field
-                                      (identifier))))
+                                    (parameter)))
                                 (keyword_escape))
                               (keyword_or)
                               (binary_expression
@@ -1324,8 +1293,7 @@ END;
                                   (object_reference
                                     (identifier))
                                   (term
-                                    (field
-                                      (identifier))))
+                                    (parameter)))
                                 (literal)))))
                         (keyword_and)
                         (binary_expression
@@ -1514,13 +1482,11 @@ END;
                                 (object_reference
                                   (identifier))
                                 (term
-                                  (field
-                                    (identifier)))))
+                                  (parameter))))
                             (op_other)
                             (literal))
                           (op_other)
-                          (field
-                            (identifier)))
+                          (parameter))
                         (op_other)
                         (literal))))
                   (procedure_else_statement
@@ -1559,8 +1525,7 @@ END;
                                       (binary_expression
                                         (field
                                           (identifier))
-                                        (field
-                                          (identifier)))
+                                        (parameter))
                                       (keyword_and)
                                       (binary_expression
                                         (field
@@ -1577,34 +1542,22 @@ END;
                                     (binary_expression
                                       (field
                                         (identifier))
-                                      (field
-                                        (object_reference
-                                          (identifier))
-                                        (identifier))))
+                                      (cursor_parameter)))
                                   (keyword_and)
                                   (binary_expression
                                     (field
                                       (identifier))
-                                    (field
-                                      (object_reference
-                                        (identifier))
-                                      (identifier))))
+                                    (cursor_parameter)))
                                 (keyword_and)
                                 (binary_expression
                                   (field
                                     (identifier))
-                                  (field
-                                    (object_reference
-                                      (identifier))
-                                    (identifier))))
+                                  (cursor_parameter)))
                               (keyword_and)
                               (binary_expression
                                 (field
                                   (identifier))
-                                (field
-                                  (object_reference
-                                    (identifier))
-                                  (identifier)))))
+                                (cursor_parameter))))
                           (order_by
                             (keyword_order)
                             (keyword_by)
@@ -1705,13 +1658,11 @@ END;
                                   (object_reference
                                     (identifier))
                                   (term
-                                    (field
-                                      (identifier)))))
+                                    (parameter))))
                               (op_other)
                               (literal))
                             (op_other)
-                            (field
-                              (identifier)))
+                            (parameter))
                           (op_other)
                           (literal)))))
                   (keyword_end)
@@ -1727,4 +1678,6 @@ END;
                     (identifier))
                   (literal)))
               (keyword_end))))))
+
+
 

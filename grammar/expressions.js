@@ -18,7 +18,15 @@ module.exports = {
     ),
 
 
-    parameter: $ => /\?|(\$[0-9]+)/,
+  parameter: $ => /\?|(\$[0-9]+)|(:[A-Za-z_][A-Za-z0-9_]*)/,
+
+  cursor_parameter: $ => token(
+    seq(
+      /:[a-zA-Z_][0-9a-zA-Z_]*/,
+      '.',
+      /[a-zA-Z_][0-9a-zA-Z_]*/,
+    )
+  ),
 
     case: $ => seq(
       $.keyword_case,
@@ -328,6 +336,7 @@ module.exports = {
             $._qualified_field,
             $.field,
           ),
+          $.cursor_parameter,
           $.parameter,
           $.list,
           $.case,
@@ -687,11 +696,9 @@ module.exports = {
       $._identifier,
       $._double_quote_string,
       $._tsql_parameter,
-      $._macro_identifier,
     ),
     _tsql_parameter: $ => seq('@', $._identifier),
     _identifier: _ => /[a-zA-Z_][0-9a-zA-Z_]*/,
-    _macro_identifier: _ => /\:[a-zA-Z_][0-9a-zA-Z_]*/,
   //TODO reword identifier regex
     _interpolated_identifier2: _ => /[0-9a-zA-Z_]*\$\{[0-9a-zA-Z_]*\}[0-9a-zA-Z_]*/,
     _interpolated_identifier1: _ => /\$\{[a-zA-Z_][0-9a-zA-Z_]*\}/,

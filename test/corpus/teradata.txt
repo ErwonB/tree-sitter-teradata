@@ -340,6 +340,7 @@ abort 'condition x not met'
 where not exists (select 1 from db.table1 where field1 = :arg1);
 
 --------------------------------------------------------------------------------
+
     (program
       (statement
         (abort
@@ -368,8 +369,7 @@ where not exists (select 1 from db.table1 where field1 = :arg1);
                       (binary_expression
                         (field
                           (identifier))
-                        (field
-                          (identifier))))))))))))
+                        (parameter)))))))))))
 
 ================================================================================
 (title '')
@@ -449,7 +449,8 @@ insert db.table1 (STEP_NAME, TS, STATUS)
 
 
 --------------------------------------------------------------------------------
-    (program
+
+(program
       (statement
         (create_macro
           (keyword_replace)
@@ -488,12 +489,10 @@ insert db.table1 (STEP_NAME, TS, STATUS)
                   (identifier)))
               (keyword_values)
               (list
-                (field
-                  (identifier))
+                (parameter)
                 (invocation
                   (keyword_current_timestamp))
-                (field
-                  (identifier))))))))
+                (parameter)))))))
 
 ================================================================================
 period operator

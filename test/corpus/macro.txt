@@ -84,7 +84,9 @@ replace macro db1.macro1(field1 varchar(128), field2 integer) as (
 );
 
 --------------------------------------------------------------------------------
-    (program
+
+
+(program
       (statement
         (create_macro
           (keyword_replace)
@@ -108,34 +110,31 @@ replace macro db1.macro1(field1 varchar(128), field2 integer) as (
             (from
               (keyword_from)
               (relation
-                  (object_reference
-                    (identifier)
-                    (identifier)))
+                (object_reference
+                  (identifier)
+                  (identifier)))
               (where
                 (keyword_where)
                 (binary_expression
                   (field
                     (identifier))
                   (keyword_like)
-                  (field
-                    (identifier))))))
+                  (parameter)))))
           (statement
             (delete
               (keyword_delete))
             (from
               (keyword_from)
               (relation
-                  (object_reference
-                    (identifier)
-                    (identifier)))
+                (object_reference
+                  (identifier)
+                  (identifier)))
               (where
                 (keyword_where)
                 (binary_expression
                   (field
                     (identifier))
                   (keyword_like)
-                  (field
-                    (identifier)))))))))
-
+                  (parameter))))))))
 
 
