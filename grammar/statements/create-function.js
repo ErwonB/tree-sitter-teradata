@@ -8,39 +8,21 @@ module.exports = {
       $.keyword_returns,
       choice(
         $._type,
-        seq($.keyword_setof, $._type),
         seq($.keyword_table, $.column_definitions),
-        $.keyword_trigger,
       ),
       repeat(
         choice(
           $.function_language,
-          $.function_volatility,
+          $.function_sql_data_access,
           $.function_security,
           $.function_mandatory,
           $.function_strictness,
-          $.function_cost,
-          $.function_rows,
-          $.function_support,
           $.function_deterministic,
+          $.function_specific,
+          $.function_parameter_style,
         ),
       ),
-      // ensure that there's only one function body -- other specifiers are less
-      // variable but the body can have all manner of conflicting stuff
       $.function_body,
-      repeat(
-        choice(
-          $.function_language,
-          $.function_volatility,
-          $.function_security,
-          $.function_mandatory,
-          $.function_strictness,
-          $.function_cost,
-          $.function_rows,
-          $.function_support,
-          $.function_deterministic,
-        ),
-      ),
     ),
 
     _function_return: $ => seq(
@@ -48,64 +30,43 @@ module.exports = {
       $._expression,
     ),
 
-    _function_body_statement: $ => choice(
-      $.statement,
-      $._function_return,
+    function_body: $ => choice(
+      seq($._function_return, ';'),
+      $.function_external_name,
     ),
 
-    function_body: $ => choice(
-      seq(
-        $._function_return,
-        ';'
-      ),
-      seq(
-        $.keyword_begin,
-        $.keyword_atomic,
-        repeat1(
-          seq(
-            $._function_body_statement,
-            ';',
-          ),
-        ),
-        $.keyword_end,
-      ),
-      seq(
-        $.keyword_as,
-        alias(
-          choice(
-            $._single_quote_string,
-            $._double_quote_string,
-          ),
-          $.literal
-        ),
-      ),
+    function_external_name: $ => seq(
+      $.keyword_external,
+      $.keyword_name,
+      alias($._literal_string, $.literal),
     ),
 
     function_language: $ => seq(
       $.keyword_language,
       $.identifier,
-      optional(seq($.keyword_contains,
-              $.identifier,))
     ),
 
-    function_volatility: $ => choice(
-      $.keyword_immutable,
-      $.keyword_stable,
-      $.keyword_volatile,
+    function_sql_data_access: $ => choice(
+      seq($.keyword_contains, $.keyword_sql),
+      seq($.keyword_modifies, $.keyword_sql, $.keyword_data),
+      seq($.keyword_reads, $.keyword_sql, $.keyword_data),
+      seq($.keyword_no, $.keyword_sql),
     ),
 
     function_security: $ => seq(
-      optional($.keyword_external),
-      optional($.keyword_sql),
+      $.keyword_sql,
       $.keyword_security,
-      choice($.keyword_invoker, $.keyword_definer),
+      choice(
+        $.keyword_creator,
+        $.keyword_definer,
+        $.keyword_invoker,
+        $.keyword_owner,
+      ),
     ),
 
-    function_mandatory: $ => seq(
-      choice(
-        seq($.keyword_collation, $.keyword_invoker),
-        seq($.keyword_inline, $.keyword_type, '1')
-      )
+    function_mandatory: $ => choice(
+      seq($.keyword_collation, $.keyword_invoker),
+      seq($.keyword_inline, $.keyword_type, '1'),
     ),
 
     function_deterministic: $ => seq(
@@ -113,35 +74,27 @@ module.exports = {
       $.keyword_deterministic,
     ),
 
-    function_strictness: $ => choice(
-      seq(
-        choice(
-          $.keyword_called,
-          seq(
-            $.keyword_returns,
-            $.keyword_null,
-          ),
-        ),
-        $.keyword_on,
-        $.keyword_null,
-        $.keyword_input,
+    function_strictness: $ => seq(
+      choice(
+        $.keyword_called,
+        seq($.keyword_returns, $.keyword_null),
       ),
-      $.keyword_strict,
+      $.keyword_on,
+      $.keyword_null,
+      $.keyword_input,
     ),
 
-    function_cost: $ => seq(
-      $.keyword_cost,
-      $._natural_number,
+    // SPECIFIC [database.]function_name
+    function_specific: $ => seq(
+      $.keyword_specific,
+      $.object_reference,
     ),
 
-    function_rows: $ => seq(
-      $.keyword_rows,
-      $._natural_number,
-    ),
-
-    function_support: $ => seq(
-      $.keyword_support,
-      alias($._literal_string, $.literal),
+    // PARAMETER STYLE { SQL | TD_GENERAL | JAVA }
+    function_parameter_style: $ => seq(
+      $.keyword_parameter,
+      $.keyword_style,
+      choice($.keyword_sql, $.keyword_td_general, $.keyword_java),
     ),
 
 };

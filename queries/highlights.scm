@@ -79,10 +79,6 @@
  (keyword_preceding)
  (keyword_following)
  (keyword_first)
- (keyword_immutable)
- (keyword_atomic)
- (keyword_cost)
- (keyword_strict)
 ] @attribute
 
 [
@@ -234,9 +230,6 @@
   (keyword_return)
   (keyword_returns)
   (keyword_separator)
-  (keyword_setof)
-  (keyword_stable)
-  (keyword_support)
   (keyword_tblproperties)
   (keyword_trigger)
   (keyword_admin)

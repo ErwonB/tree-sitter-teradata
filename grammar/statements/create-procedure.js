@@ -18,20 +18,18 @@ module.exports = {
           $.procedure_external_name,
         ),
       ),
-      $.procedure_body, //TODO
+      $.procedure_body,
     ),
 
     procedure_body: $ => seq(
       $.compound_statement,
     ),
 
-    compound_statement: $ => choice(
-      seq(
-        optional(seq($.object_reference, ':')),
-        $.keyword_begin,
-        repeat1($._create_procedure_statement),
-        $.keyword_end,
-      ),
+    compound_statement: $ => seq(
+      optional(seq($.object_reference, ':')),
+      $.keyword_begin,
+      repeat1($._create_procedure_statement),
+      $.keyword_end,
     ),
 
     _create_procedure_statement: $ => seq(
@@ -39,11 +37,10 @@ module.exports = {
       ';'
     ),
 
-
     _procedure_body_statement: $ => choice(
       $.leave_statement,
       $.declare_statement,
-      $.procedure_if_statement, //TODO ELSEIF
+      $.procedure_if_statement,
       $.procedure_for_statement,
       $.statement,
       $.compound_statement,
@@ -61,8 +58,14 @@ module.exports = {
     procedure_if_statement: $ => seq(
       $.keyword_if, $._expression, $.keyword_then,
       repeat1($._create_procedure_statement),
+      repeat($.procedure_elseif_statement),
       optional($.procedure_else_statement),
       $.keyword_end, $.keyword_if,
+    ),
+
+    procedure_elseif_statement: $ => seq(
+      $.keyword_elseif, $._expression, $.keyword_then,
+      repeat1($._create_procedure_statement),
     ),
 
     procedure_else_statement: $ => seq(
@@ -79,47 +82,88 @@ module.exports = {
           $.identifier,
           $.keyword_condition,
           $.keyword_for,
-          choice($.keyword_sqlexception, $.keyword_sqlwarning, seq($.keyword_not, $.keyword_found), $.identifier, seq($.keyword_sqlstate, $._integer)),
+          choice(
+            $.keyword_sqlexception,
+            $.keyword_sqlwarning,
+            seq($.keyword_not, $.keyword_found),
+            $.identifier,
+            seq($.keyword_sqlstate, $._integer),
+          ),
         ),
         seq(
           $.keyword_declare,
           choice($.keyword_continue, $.keyword_exit),
           $.keyword_handler,
           $.keyword_for,
-          choice($.keyword_sqlexception, $.keyword_sqlwarning, seq($.keyword_not, $.keyword_found), $.identifier, seq($.keyword_sqlstate, $._integer)),
+          choice(
+            $.keyword_sqlexception,
+            $.keyword_sqlwarning,
+            seq($.keyword_not, $.keyword_found),
+            $.identifier,
+            seq($.keyword_sqlstate, $._integer),
+          ),
           $.compound_statement,
-        )
+        ),
       ),
 
+    procedure_external_name: $ => seq(
+      $.keyword_external, $.keyword_name, $.object_reference,
+    ),
 
-    procedure_external_name: $ => seq($.keyword_external, $.keyword_name, $.object_reference),
-    procedure_external_security: $ => seq($.keyword_external, $.keyword_security, choice($.keyword_invoker, seq($.keyword_definer, $.object_reference))),
-    procedure_glop: $ => seq($.keyword_using, $.keyword_glop, $.keyword_set, $.object_reference),
-    procedure_dynamic: $ => seq($.keyword_dynamic, $.keyword_result, $.keyword_sets, $._integer),
-    procedure_parameter_style_specification : $ => seq($.keyword_parameter, $.keyword_style, choice($.keyword_sql, $.keyword_td_general, $.keyword_java)),
+    procedure_external_security: $ => seq(
+      $.keyword_external,
+      $.keyword_security,
+      choice(
+        $.keyword_invoker,
+        seq($.keyword_definer, $.object_reference),
+      ),
+    ),
+
+    procedure_glop: $ => seq(
+      $.keyword_using, $.keyword_glop, $.keyword_set, $.object_reference,
+    ),
+
+    procedure_dynamic: $ => seq(
+      $.keyword_dynamic, $.keyword_result, $.keyword_sets, $._integer,
+    ),
+
+    procedure_parameter_style_specification: $ => seq(
+      $.keyword_parameter,
+      $.keyword_style,
+      choice($.keyword_sql, $.keyword_td_general, $.keyword_java),
+    ),
 
     procedure_security: $ => seq(
       $.keyword_sql,
       $.keyword_security,
-      choice($.keyword_invoker, $.keyword_definer, $.keyword_creator, $.keyword_owner),
+      choice(
+        $.keyword_creator,
+        $.keyword_definer,
+        $.keyword_invoker,
+        $.keyword_owner,
+      ),
     ),
 
     procedure_language_and_access_specification: $ => seq(
-      seq($.keyword_language, choice(
-            $.keyword_c,
-            $.keyword_cpp,
-            $.keyword_java)),
-      repeat(choice(
-              seq($.keyword_contains, $.keyword_sql),
-              seq(choice($.keyword_modifies, $.keyword_reads),
-                  $.keyword_sql, $.keyword_data),
-              seq($.keyword_no, $.keyword_sql),
-              )
-            ),
+      seq(
+        $.keyword_language,
+        choice($.keyword_c, $.keyword_cpp, $.keyword_java),
+      ),
+      repeat(
+        choice(
+          seq($.keyword_contains, $.keyword_sql),
+          seq(
+            choice($.keyword_modifies, $.keyword_reads),
+            $.keyword_sql, $.keyword_data,
+          ),
+          seq($.keyword_no, $.keyword_sql),
+        ),
+      ),
       optional(seq(
-                choice($.keyword_modifies, $.keyword_reads, $.keyword_no),
-                $.keyword_external,
-                $.keyword_data))
+        choice($.keyword_modifies, $.keyword_reads, $.keyword_no),
+        $.keyword_external,
+        $.keyword_data,
+      )),
     ),
 
     _proc_argmode: $ => choice(
@@ -129,7 +173,7 @@ module.exports = {
     ),
 
     procedure_argument: $ => seq(
-      $._argmode,
+      $._proc_argmode,
       $.identifier,
       $._type,
     ),
