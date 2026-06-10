@@ -84,10 +84,24 @@ module.exports = {
       field('name', $.identifier),
     ),
 
-    implicit_cast: $ => prec.dynamic(1, seq(
+  implicit_cast: $ => prec.dynamic(1, seq(
       $._expression,
-      wrapped_in_parenthesis($._castable_type)
+      wrapped_in_parenthesis(
+          seq(
+            $._castable_type,
+            repeat(seq(',', $.data_type_attribute)),
+        ),
+      ),
     )),
+
+    data_type_attribute: $ => choice(
+      seq($.keyword_format, $._literal_string),
+      seq($.keyword_title, $._literal_string),
+      seq($.keyword_named, $.identifier),
+      seq($.keyword_character, $.keyword_set, $.identifier),
+      seq(optional($.keyword_not), $.keyword_casespecific),
+      $.keyword_uppercase,
+    ),
 
     // Postgres syntax for intervals
     interval: $ => seq(

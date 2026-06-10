@@ -238,3 +238,43 @@ from db.table1
             (object_reference
               (identifier)
               (identifier))))))
+
+================================================================================
+Teradata data type attribute list (FORMAT) on a literal
+================================================================================
+
+SELECT
+  '2025-01-15' (DATE, FORMAT 'YYYY-MM-DD'),
+  '14:30:00' (TIME(0), FORMAT 'HH:MI:SS'),
+  '2025-01-15 14:30:00' (TIMESTAMP(6), FORMAT 'YYYY-MM-DDBHH:MI:SS')
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (select
+      (keyword_select)
+      (select_expression
+        (term
+          (cast
+            (literal)
+            (keyword_date)
+            (data_type_attribute
+              (keyword_format))))
+        (term
+          (cast
+            (literal)
+            (time
+              (keyword_time)
+              (literal))
+            (data_type_attribute
+              (keyword_format))))
+        (term
+          (cast
+            (literal)
+            (timestamp
+              (keyword_timestamp)
+              (literal))
+            (data_type_attribute
+              (keyword_format))))))))
+
