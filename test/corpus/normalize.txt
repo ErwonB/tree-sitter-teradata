@@ -1,0 +1,151 @@
+================================================================================
+Normalize
+================================================================================
+
+SELECT NORMALIZE id, duration
+FROM my_table;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (select
+      (keyword_select)
+      (normalize_clause
+        (keyword_normalize))
+      (select_expression
+        (term
+          value: (field
+            name: (identifier)))
+        (term
+          value: (field
+            name: (identifier)))))
+    (from
+      (keyword_from)
+      (relation
+        (object_reference
+          name: (identifier))))))
+
+================================================================================
+Normalize on meets
+================================================================================
+
+SELECT NORMALIZE ON MEETS id, duration
+FROM my_table;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (select
+      (keyword_select)
+      (normalize_clause
+        (keyword_normalize)
+        (keyword_on)
+        (keyword_meets))
+      (select_expression
+        (term
+          value: (field
+            name: (identifier)))
+        (term
+          value: (field
+            name: (identifier)))))
+    (from
+      (keyword_from)
+      (relation
+        (object_reference
+          name: (identifier))))))
+
+================================================================================
+Normalize on overlaps
+================================================================================
+
+SELECT NORMALIZE ON OVERLAPS id, duration
+FROM my_table;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (select
+      (keyword_select)
+      (normalize_clause
+        (keyword_normalize)
+        (keyword_on)
+        (keyword_overlaps))
+      (select_expression
+        (term
+          value: (field
+            name: (identifier)))
+        (term
+          value: (field
+            name: (identifier)))))
+    (from
+      (keyword_from)
+      (relation
+        (object_reference
+          name: (identifier))))))
+
+================================================================================
+Normalize on meets or overlaps
+================================================================================
+
+SELECT NORMALIZE ON MEETS OR OVERLAPS id, duration
+FROM my_table;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (select
+      (keyword_select)
+      (normalize_clause
+        (keyword_normalize)
+        (keyword_on)
+        (keyword_meets)
+        (keyword_or)
+        (keyword_overlaps))
+      (select_expression
+        (term
+          value: (field
+            name: (identifier)))
+        (term
+          value: (field
+            name: (identifier)))))
+    (from
+      (keyword_from)
+      (relation
+        (object_reference
+          name: (identifier))))))
+
+================================================================================
+Normalize on overlaps or meets
+================================================================================
+
+SELECT NORMALIZE ON OVERLAPS OR MEETS id, duration
+FROM my_table;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (select
+      (keyword_select)
+      (normalize_clause
+        (keyword_normalize)
+        (keyword_on)
+        (keyword_overlaps)
+        (keyword_or)
+        (keyword_meets))
+      (select_expression
+        (term
+          value: (field
+            name: (identifier)))
+        (term
+          value: (field
+            name: (identifier)))))
+    (from
+      (keyword_from)
+      (relation
+        (object_reference
+          name: (identifier))))))

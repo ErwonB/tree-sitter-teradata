@@ -63,12 +63,27 @@ module.exports = {
 
     select: $ => seq(
       $._select,
+      optional($.normalize_clause),
       choice(
         seq($.keyword_distinct, $.select_expression),
         seq($.top_clause, $.select_expression),
         $.select_expression
       ),
     ),
+
+   normalize_clause: $ => seq(
+      $.keyword_normalize,
+      optional(
+        seq(
+          $.keyword_on,
+          choice(
+            seq($.keyword_meets,    optional(seq($.keyword_or, $.keyword_overlaps))),
+            seq($.keyword_overlaps, optional(seq($.keyword_or, $.keyword_meets))),
+          ),
+        ),
+      ),
+    ),
+
 
     temporal_modifier: $ => choice(seq(
           choice($.keyword_current, $.keyword_nonsequenced),

@@ -327,6 +327,7 @@
     (keyword_immediately)
     (keyword_succeeds)
     (keyword_meets)
+    (keyword_normalize)
     (keyword_ldiff)
     (keyword_rdiff)
     (keyword_p_intersect)

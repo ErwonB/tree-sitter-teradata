@@ -415,6 +415,7 @@ module.exports = {
     keyword_immediately: _ => make_keyword("immediately"),
     keyword_succeeds: _ => make_keyword("succeeds"),
     keyword_meets: _ => make_keyword("meets"),
+    keyword_normalize: _ => make_keyword("normalize"),
     keyword_ldiff: _ => make_keyword("ldiff"),
     keyword_rdiff: _ => make_keyword("rdiff"),
     keyword_p_intersect: _ => make_keyword("p_intersect"),
