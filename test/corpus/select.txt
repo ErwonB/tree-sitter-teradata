@@ -2780,3 +2780,31 @@ select 1 where 'plop' = 'plop';
             (literal)))))
 
 
+================================================================================
+SELECT AND CONSUME
+================================================================================
+
+SELECT AND CONSUME TOP 1 * FROM my_queue;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (select
+      (keyword_select)
+      (and_consume
+        (keyword_and)
+        (keyword_consume))
+      (top_clause
+        (keyword_top)
+        top_value: (literal))
+      (select_expression
+        (term
+          value: (all_fields))))
+    (from
+      (keyword_from)
+      (relation
+        (object_reference
+          name: (identifier))))))
+
+

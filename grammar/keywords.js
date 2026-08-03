@@ -50,6 +50,7 @@ module.exports = {
     keyword_insert: _ => make_keyword("insert"),
     keyword_ins: _ => make_keyword("ins"),
     keyword_replace: _ => make_keyword("replace"),
+    keyword_consume: _ => make_keyword("consume"),
     keyword_update: _ => make_keyword("update"),
     keyword_upd: _ => make_keyword("upd"),
     keyword_merge: _ => make_keyword("merge"),

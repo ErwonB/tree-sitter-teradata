@@ -63,6 +63,7 @@ module.exports = {
 
     select: $ => seq(
       $._select,
+      optional($.and_consume),
       optional($.normalize_clause),
       choice(
         seq($.keyword_distinct, $.select_expression),
@@ -70,6 +71,11 @@ module.exports = {
         $.select_expression
       ),
     ),
+
+  and_consume: $ => seq(
+    $.keyword_and,
+    $.keyword_consume,
+  ),
 
    normalize_clause: $ => seq(
       $.keyword_normalize,
