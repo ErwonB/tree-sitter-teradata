@@ -285,6 +285,14 @@ module.exports = {
     keyword_execute: _ => make_keyword("execute"),
     keyword_procedure: _ => make_keyword("procedure"),
 
+    keyword_grant: _ => make_keyword("grant"),
+    keyword_revoke: _ => make_keyword("revoke"),
+    keyword_privileges: _ => make_keyword("privileges"),
+    keyword_public: _ => make_keyword("public"),
+    keyword_member: _ => make_keyword("member"),
+    keyword_profile: _ => make_keyword("profile"),
+    keyword_logon: _ => make_keyword("logon"),
+
     // Hive Keywords
     keyword_external: _ => make_keyword("external"),
     keyword_stored: _ => make_keyword("stored"),

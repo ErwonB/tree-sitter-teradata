@@ -337,6 +337,13 @@
     (keyword_isolated)
     (keyword_loading)
     (keyword_deferred)
+  (keyword_grant)
+  (keyword_revoke)
+  (keyword_privileges)
+  (keyword_public)
+  (keyword_member)
+  (keyword_profile)
+  (keyword_logon)
 ] @keyword
 
 [

@@ -18,6 +18,7 @@ const create_macro_rules     = require('./create-macro.js');
 const alter_rules     = require('./alter.js');
 const drop_rules      = require('./drop.js');
 const rename_rules    = require('./rename.js');
+const grant_rules     = require('./grant.js');
 
 module.exports = {
 
@@ -45,6 +46,7 @@ module.exports = {
     $._rename_statement,
     $._merge_statement,
     $._database_statement,
+    $._grant_statement,
     $.comment_statement,
     $.set_statement,
     $.reset_statement,
@@ -128,5 +130,6 @@ module.exports = {
   ...alter_rules,
   ...drop_rules,
   ...rename_rules,
+  ...grant_rules,
 
 };

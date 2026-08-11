@@ -1,0 +1,181 @@
+================================================================================
+Grant create function with grant option
+================================================================================
+
+GRANT CREATE FUNCTION ON edw_app TO dbc WITH GRANT OPTION;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (grant
+      (keyword_grant)
+      (privilege
+        (keyword_create)
+        (keyword_function))
+      (grant_on_clause
+        (keyword_on)
+        target: (object_reference
+          name: (identifier)))
+      (keyword_to)
+      (grantee
+        (object_reference
+          name: (identifier)))
+      (grant_option
+        (keyword_with)
+        (keyword_grant)
+        (keyword_option)))))
+
+================================================================================
+Grant multiple privileges on a table
+================================================================================
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON edw_fact.fact_sales TO analyst_role;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (grant
+      (keyword_grant)
+      (privilege
+        (keyword_select))
+      (privilege
+        (keyword_insert))
+      (privilege
+        (keyword_update))
+      (privilege
+        (keyword_delete))
+      (grant_on_clause
+        (keyword_on)
+        target: (object_reference
+          schema: (identifier)
+          name: (identifier)))
+      (keyword_to)
+      (grantee
+        (object_reference
+          name: (identifier))))))
+
+================================================================================
+Grant all privileges to public
+================================================================================
+
+GRANT ALL PRIVILEGES ON edw_dim TO PUBLIC;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (grant
+      (keyword_grant)
+      (privilege
+        (keyword_all)
+        (keyword_privileges))
+      (grant_on_clause
+        (keyword_on)
+        target: (object_reference
+          name: (identifier)))
+      (keyword_to)
+      (grantee
+        (keyword_public)))))
+
+================================================================================
+Grant role with admin option
+================================================================================
+
+GRANT analyst_role TO etl_user WITH ADMIN OPTION;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (grant
+      (keyword_grant)
+      (privilege
+        privilege: (identifier))
+      (keyword_to)
+      (grantee
+        (object_reference
+          name: (identifier)))
+      (grant_option
+        (keyword_with)
+        (keyword_admin)
+        (keyword_option)))))
+
+================================================================================
+Grant execute procedure
+================================================================================
+
+GRANT EXECUTE PROCEDURE ON PROCEDURE edw_app.load_sales TO etl_user;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (grant
+      (keyword_grant)
+      (privilege
+        (keyword_execute)
+        (keyword_procedure))
+      (grant_on_clause
+        (keyword_on)
+        (keyword_procedure)
+        target: (object_reference
+          schema: (identifier)
+          name: (identifier)))
+      (keyword_to)
+      (grantee
+        (object_reference
+          name: (identifier))))))
+
+================================================================================
+Revoke with grant option for
+================================================================================
+
+REVOKE GRANT OPTION FOR SELECT ON edw_fact.fact_sales FROM analyst_role;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (revoke
+      (keyword_revoke)
+      (keyword_grant)
+      (keyword_option)
+      (keyword_for)
+      (privilege
+        (keyword_select))
+      (grant_on_clause
+        (keyword_on)
+        target: (object_reference
+          schema: (identifier)
+          name: (identifier)))
+      (keyword_from)
+      (grantee
+        (object_reference
+          name: (identifier))))))
+
+================================================================================
+Grant logon
+================================================================================
+
+GRANT LOGON ON ALL TO etl_user WITH NULL PASSWORD;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (grant_logon
+      (keyword_grant)
+      (keyword_logon)
+      (keyword_on)
+      (keyword_all)
+      (keyword_to)
+      (grantee
+        (object_reference
+          name: (identifier)))
+      (keyword_with)
+      (keyword_null)
+      (keyword_password))))
+
+
