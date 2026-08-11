@@ -145,6 +145,8 @@
   (keyword_abort)
   (keyword_having)
   (keyword_qualify)
+  (keyword_expand)
+  (keyword_anchor)
   (keyword_top)
   (keyword_percent)
   (keyword_lock)

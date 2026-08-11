@@ -217,6 +217,8 @@ module.exports = {
     keyword_action: _ => make_keyword("action"),
     keyword_copy: _ => make_keyword("copy"),
     keyword_escape: _ => make_keyword("escape"),
+    keyword_expand: _ => make_keyword("expand"),
+    keyword_anchor: _ => make_keyword("anchor"),
 
     keyword_trigger: _ => make_keyword('trigger'),
     keyword_function: _ => make_keyword("function"),

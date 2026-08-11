@@ -1,0 +1,219 @@
+================================================================================
+EXPAND ON with interval and FOR period
+================================================================================
+
+SELECT  customer_id, plan_code, monthly_fee, m
+FROM    edw_fact.fact_subscription
+        EXPAND ON sub_period AS m BY INTERVAL '1' MONTH
+        FOR PERIOD(DATE '2025-01-01', DATE '2026-01-01');
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (select
+      (keyword_select)
+      (select_expression
+        (term
+          (field
+            (identifier)))
+        (term
+          (field
+            (identifier)))
+        (term
+          (field
+            (identifier)))
+        (term
+          (field
+            (identifier)))))
+    (from
+      (keyword_from)
+      (relation
+        (object_reference
+          (identifier)
+          (identifier)))
+      (expand_on_clause
+        (keyword_expand)
+        (keyword_on)
+        (field
+          (identifier))
+        (keyword_as)
+        (identifier)
+        (expand_by_clause
+          (keyword_by)
+          (interval
+            (keyword_interval)
+            (keyword_month)))
+        (expand_for_clause
+          (keyword_for)
+          (invocation
+            (object_reference
+              (identifier))
+            (term
+              (literal
+                (identifier)))
+            (term
+              (literal
+                (identifier)))))))))
+
+================================================================================
+EXPAND ON with anchor period
+================================================================================
+
+SELECT emp_id, expd
+FROM project
+EXPAND ON duration AS expd BY ANCHOR PERIOD MONTH_BEGIN;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (select
+      (keyword_select)
+      (select_expression
+        (term
+          (field
+            (identifier)))
+        (term
+          (field
+            (identifier)))))
+    (from
+      (keyword_from)
+      (relation
+        (object_reference
+          (identifier)))
+      (expand_on_clause
+        (keyword_expand)
+        (keyword_on)
+        (field
+          (identifier))
+        (keyword_as)
+        (identifier)
+        (expand_by_clause
+          (keyword_by)
+          (expand_anchor
+            (keyword_anchor)
+            (keyword_period)
+            (identifier)))))))
+
+================================================================================
+EXPAND ON with anchor point and implicit alias
+================================================================================
+
+SELECT id, ed FROM t EXPAND ON pd ed BY ANCHOR WEEK_BEGIN;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (select
+      (keyword_select)
+      (select_expression
+        (term
+          (field
+            (identifier)))
+        (term
+          (field
+            (identifier)))))
+    (from
+      (keyword_from)
+      (relation
+        (object_reference
+          (identifier)))
+      (expand_on_clause
+        (keyword_expand)
+        (keyword_on)
+        (field
+          (identifier))
+        (identifier)
+        (expand_by_clause
+          (keyword_by)
+          (expand_anchor
+            (keyword_anchor)
+            (identifier)))))))
+
+================================================================================
+EXPAND ON with anchored interval
+================================================================================
+
+SELECT id, ed FROM t EXPAND ON pd AS ed BY INTERVAL '7' DAY ANCHOR PERIOD MONDAY;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (select
+      (keyword_select)
+      (select_expression
+        (term
+          (field
+            (identifier)))
+        (term
+          (field
+            (identifier)))))
+    (from
+      (keyword_from)
+      (relation
+        (object_reference
+          (identifier)))
+      (expand_on_clause
+        (keyword_expand)
+        (keyword_on)
+        (field
+          (identifier))
+        (keyword_as)
+        (identifier)
+        (expand_by_clause
+          (keyword_by)
+          (interval
+            (keyword_interval)
+            (keyword_day))
+          (expand_anchor
+            (keyword_anchor)
+            (keyword_period)
+            (identifier)))))))
+
+================================================================================
+EXPAND ON followed by WHERE
+================================================================================
+
+SELECT a, ed
+FROM t
+EXPAND ON pd AS ed FOR coverage
+WHERE a = 1;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (select
+      (keyword_select)
+      (select_expression
+        (term
+          (field
+            (identifier)))
+        (term
+          (field
+            (identifier)))))
+    (from
+      (keyword_from)
+      (relation
+        (object_reference
+          (identifier)))
+      (expand_on_clause
+        (keyword_expand)
+        (keyword_on)
+        (field
+          (identifier))
+        (keyword_as)
+        (identifier)
+        (expand_for_clause
+          (keyword_for)
+          (field
+            (identifier))))
+      (where
+        (keyword_where)
+        (binary_expression
+          (field
+            (identifier))
+          (literal))))))

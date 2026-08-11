@@ -164,6 +164,45 @@ module.exports = {
     )
   ),
 
+  // EXPAND ON expand_expression [AS name]
+    //           [BY {interval_expr [ANCHOR [PERIOD] anchor_name]
+    //               | ANCHOR [PERIOD] anchor_name}]
+    //           [FOR period_expression]
+    expand_on_clause: $ => seq(
+      $.keyword_expand,
+      $.keyword_on,
+      field('expand_expression', $._expression),
+      optional($._alias),
+      optional($.expand_by_clause),
+      optional($.expand_for_clause),
+    ),
+
+    expand_by_clause: $ => seq(
+      $.keyword_by,
+      choice(
+        // interval expansion, optionally anchored
+        seq(
+          field('interval', $._expression),
+          optional($.expand_anchor),
+        ),
+        // pure anchor period / anchor point expansion
+        $.expand_anchor,
+      ),
+    ),
+
+    // ANCHOR PERIOD name -> anchor period expansion
+    // ANCHOR name        -> anchor point expansion
+    expand_anchor: $ => seq(
+      $.keyword_anchor,
+      optional($.keyword_period),
+      field('anchor_name', $.identifier),
+    ),
+
+    expand_for_clause: $ => seq(
+      $.keyword_for,
+      field('period', $._expression),
+    ),
+
 
     select_expression: $ => seq(
       $.term,
@@ -197,6 +236,7 @@ module.exports = {
         ),
       ),
       optional($.pivot),
+      optional($.expand_on_clause),
       optional($.where),
       optional($.group_by),
       optional($.having),
