@@ -397,6 +397,7 @@
   (keyword_union)
   (keyword_except)
   (keyword_intersect)
+  (keyword_minus)
 ] @keyword.operator
 
 [

@@ -21,15 +21,18 @@ module.exports = {
           field(
             "operation",
             choice(
-              seq($.keyword_union, optional($.keyword_all)),
-              $.keyword_except,
-              $.keyword_intersect,
+              seq($.keyword_union,     optional($._set_quantifier)),
+              seq($.keyword_intersect, optional($._set_quantifier)),
+              seq($.keyword_except,    optional($._set_quantifier)),
+              seq($.keyword_minus,     optional($._set_quantifier)),
             ),
           ),
           $._select_statement,
         ),
       ),
     ),
+
+    _set_quantifier: $ => choice($.keyword_all, $.keyword_distinct),
 
     //TODO refactor optional($.where) properly
     _select_statement: $ => choice(

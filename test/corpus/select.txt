@@ -2808,3 +2808,213 @@ SELECT AND CONSUME TOP 1 * FROM my_queue;
           name: (identifier))))))
 
 
+================================================================================
+Minus
+================================================================================
+
+SELECT a FROM one
+MINUS
+SELECT b FROM two;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (set_operation
+      (select
+        (keyword_select)
+        (select_expression
+          (term
+            value: (field
+              name: (identifier)))))
+      (from
+        (keyword_from)
+        (relation
+          (object_reference
+            name: (identifier))))
+      operation: (keyword_minus)
+      (select
+        (keyword_select)
+        (select_expression
+          (term
+            value: (field
+              name: (identifier)))))
+      (from
+        (keyword_from)
+        (relation
+          (object_reference
+            name: (identifier)))))))
+
+================================================================================
+Minus all
+================================================================================
+
+SELECT a FROM one
+MINUS ALL
+SELECT b FROM two;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (set_operation
+      (select
+        (keyword_select)
+        (select_expression
+          (term
+            value: (field
+              name: (identifier)))))
+      (from
+        (keyword_from)
+        (relation
+          (object_reference
+            name: (identifier))))
+      operation: (keyword_minus)
+      operation: (keyword_all)
+      (select
+        (keyword_select)
+        (select_expression
+          (term
+            value: (field
+              name: (identifier)))))
+      (from
+        (keyword_from)
+        (relation
+          (object_reference
+            name: (identifier)))))))
+
+================================================================================
+Intersect distinct
+================================================================================
+
+SELECT a FROM one
+INTERSECT DISTINCT
+SELECT b FROM two;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (set_operation
+      (select
+        (keyword_select)
+        (select_expression
+          (term
+            value: (field
+              name: (identifier)))))
+      (from
+        (keyword_from)
+        (relation
+          (object_reference
+            name: (identifier))))
+      operation: (keyword_intersect)
+      operation: (keyword_distinct)
+      (select
+        (keyword_select)
+        (select_expression
+          (term
+            value: (field
+              name: (identifier)))))
+      (from
+        (keyword_from)
+        (relation
+          (object_reference
+            name: (identifier)))))))
+
+================================================================================
+Except all
+================================================================================
+
+SELECT a FROM one
+EXCEPT ALL
+SELECT b FROM two;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (set_operation
+      (select
+        (keyword_select)
+        (select_expression
+          (term
+            value: (field
+              name: (identifier)))))
+      (from
+        (keyword_from)
+        (relation
+          (object_reference
+            name: (identifier))))
+      operation: (keyword_except)
+      operation: (keyword_all)
+      (select
+        (keyword_select)
+        (select_expression
+          (term
+            value: (field
+              name: (identifier)))))
+      (from
+        (keyword_from)
+        (relation
+          (object_reference
+            name: (identifier)))))))
+
+================================================================================
+Intersect then minus with predicates
+================================================================================
+
+SELECT a FROM one WHERE flag = 1
+INTERSECT
+SELECT b FROM two
+MINUS
+SELECT c FROM three;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (set_operation
+      (select
+        (keyword_select)
+        (select_expression
+          (term
+            value: (field
+              name: (identifier)))))
+      (from
+        (keyword_from)
+        (relation
+          (object_reference
+            name: (identifier)))
+        (where
+          (keyword_where)
+          predicate: (binary_expression
+            left: (field
+              name: (identifier))
+            right: (literal))))
+      operation: (keyword_intersect)
+      (select
+        (keyword_select)
+        (select_expression
+          (term
+            value: (field
+              name: (identifier)))))
+      (from
+        (keyword_from)
+        (relation
+          (object_reference
+            name: (identifier))))
+      operation: (keyword_minus)
+      (select
+        (keyword_select)
+        (select_expression
+          (term
+            value: (field
+              name: (identifier)))))
+      (from
+        (keyword_from)
+        (relation
+          (object_reference
+            name: (identifier)))))))
+
+
+
