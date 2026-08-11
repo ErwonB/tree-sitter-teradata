@@ -333,6 +333,10 @@
     (keyword_ldiff)
     (keyword_rdiff)
     (keyword_p_intersect)
+    (keyword_concurrent)
+    (keyword_isolated)
+    (keyword_loading)
+    (keyword_deferred)
 ] @keyword
 
 [

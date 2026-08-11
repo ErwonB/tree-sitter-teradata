@@ -672,3 +672,177 @@ group by 1,2,3
             (literal)
             (literal)))))
 
+================================================================================
+update with concurrent isolated loading
+================================================================================
+
+UPDATE WITH CONCURRENT ISOLATED LOADING db1.table1
+   SET field1 = 'USD'
+ WHERE field2 IS NULL;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (update
+      (keyword_update)
+      (isolated_loading_clause
+        (keyword_with)
+        (keyword_concurrent)
+        (keyword_isolated)
+        (keyword_loading))
+      (relation
+        (object_reference
+          (identifier)
+          (identifier)))
+      (keyword_set)
+      (assignment
+        (field
+          (identifier))
+        (literal))
+      (where
+        (keyword_where)
+        (binary_expression
+          (field
+            (identifier))
+          (keyword_is)
+          (literal
+            (keyword_null)))))))
+
+================================================================================
+update with no concurrent isolated loading
+================================================================================
+
+UPDATE WITH NO CONCURRENT ISOLATED LOADING db1.table1
+   SET field1 = 1
+ WHERE field2 IS NULL;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (update
+      (keyword_update)
+      (isolated_loading_clause
+        (keyword_with)
+        (keyword_no)
+        (keyword_concurrent)
+        (keyword_isolated)
+        (keyword_loading))
+      (relation
+        (object_reference
+          (identifier)
+          (identifier)))
+      (keyword_set)
+      (assignment
+        (field
+          (identifier))
+        (literal))
+      (where
+        (keyword_where)
+        (binary_expression
+          (field
+            (identifier))
+          (keyword_is)
+          (literal
+            (keyword_null)))))))
+
+================================================================================
+update all
+================================================================================
+
+UPDATE db1.table1 SET field1 = 1 ALL;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (update
+      (keyword_update)
+      (relation
+        (object_reference
+          (identifier)
+          (identifier)))
+      (keyword_set)
+      (assignment
+        (field
+          (identifier))
+        (literal))
+      (keyword_all))))
+
+================================================================================
+using request modifier
+================================================================================
+
+USING (in_from DATE, in_region VARCHAR(10))
+SELECT field1
+FROM   db1.table1
+WHERE  field2 = :in_region;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (using_request_modifier
+      (keyword_using)
+      (using_variable
+        (identifier)
+        (keyword_date))
+      (using_variable
+        (identifier)
+        (varchar
+          (keyword_varchar)
+          (literal))))
+    (select
+      (keyword_select)
+      (select_expression
+        (term
+          (field
+            (identifier)))))
+    (from
+      (keyword_from)
+      (relation
+        (object_reference
+          (identifier)
+          (identifier)))
+      (where
+        (keyword_where)
+        (binary_expression
+          (field
+            (identifier))
+          (parameter))))))
+
+================================================================================
+using request modifier with locator
+================================================================================
+
+USING (in_doc CLOB AS LOCATOR)
+INSERT INTO db1.table1 (field1) VALUES (:in_doc);
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (using_request_modifier
+      (keyword_using)
+      (using_variable
+        (identifier)
+        (object_reference
+          (identifier))
+        (keyword_as)
+        (keyword_locator)))
+    (insert
+      (keyword_insert)
+      (keyword_into)
+      (object_reference
+        (identifier)
+        (identifier))
+      (list
+        (column
+          (identifier)))
+      (keyword_values)
+      (list
+        (parameter)))))
+
+
+

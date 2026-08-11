@@ -222,6 +222,10 @@ module.exports = {
     keyword_escape: _ => make_keyword("escape"),
     keyword_expand: _ => make_keyword("expand"),
     keyword_anchor: _ => make_keyword("anchor"),
+    keyword_concurrent: _ => make_keyword("concurrent"),
+    keyword_isolated: _ => make_keyword("isolated"),
+    keyword_loading: _ => make_keyword("loading"),
+    keyword_deferred: _ => make_keyword("deferred"),
 
     keyword_trigger: _ => make_keyword('trigger'),
     keyword_function: _ => make_keyword("function"),

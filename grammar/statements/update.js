@@ -9,11 +9,18 @@ module.exports = {
 
   update: $ => seq(
     $._update,
+    optional($.isolated_loading_clause),
     choice(
       $._mysql_update_statement,
       $._postgres_update_statement,
       $._teradata_update_statement,
     ),
+  ),
+
+  // Teradata: the statement ends with either WHERE or ALL, never both.
+  _update_qualifier: $ => choice(
+    $.where,
+    $.keyword_all,
   ),
 
   _teradata_update_statement: $ => prec(0,
@@ -23,16 +30,16 @@ module.exports = {
       comma_list($.relation, true),
       repeat($.join),
       $._set_values,
-      optional($.where),
+      optional($._update_qualifier),
     ),
-    ),
+  ),
 
   _mysql_update_statement: $ => prec(1,
     seq(
       comma_list($.relation, true),
       repeat($.join),
       $._set_values,
-      optional($.where),
+      optional($._update_qualifier),
     ),
   ),
 

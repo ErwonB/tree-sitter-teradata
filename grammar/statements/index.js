@@ -23,6 +23,7 @@ module.exports = {
 
   statement: $ => choice(
     seq(
+      optional($.using_request_modifier),
       optional(seq(
         $.keyword_explain,
       )),

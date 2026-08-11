@@ -26,4 +26,29 @@ module.exports = {
     optional(choice($.where, $.from)),
   ),
 
+  isolated_loading_clause: $ => seq(
+    $.keyword_with,
+    optional($.keyword_no),
+    $.keyword_concurrent,
+    $.keyword_isolated,
+    $.keyword_loading,
+  ),
+
+  using_request_modifier: $ => seq(
+    $.keyword_using,
+    wrapped_in_parenthesis(comma_list($.using_variable, true)),
+  ),
+
+  using_variable: $ => seq(
+    field('name', $.identifier),
+    $._type,
+    optional(seq(
+      $.keyword_as,
+      choice(
+        seq($.keyword_deferred, optional(seq($.keyword_by, $.keyword_name))),
+        $.keyword_locator,
+      ),
+    )),
+  ),
+
 };
