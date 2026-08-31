@@ -134,6 +134,8 @@
   (keyword_order)
   (keyword_partition)
   (keyword_group)
+  (keyword_grouping)
+  (keyword_sets)
   (keyword_error)
   (keyword_with)
   (keyword_without)

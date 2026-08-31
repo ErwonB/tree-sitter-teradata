@@ -392,7 +392,25 @@ module.exports = {
     group_by: $ => seq(
       $.keyword_group,
       $.keyword_by,
-      comma_list($._expression, true),
+      comma_list($._group_by_target, true),
+    ),
+
+  // GROUP BY elements. ROLLUP(...) and CUBE(...) are intentionally absent:
+    // they are function-call shaped and already parse via $._expression as
+    // $.invocation, so giving them dedicated rules would duplicate that path
+    // and change every existing tree that contains them.
+    _group_by_target: $ => choice(
+      $.grouping_sets,
+      $._expression,
+    ),
+
+    // GROUPING SETS ( grouping_set [,...] ), recursive per the spec: a
+    // grouping set may itself be a GROUPING SETS specification, a ROLLUP or
+    // CUBE list, a parenthesized column list, or ().
+    grouping_sets: $ => seq(
+      $.keyword_grouping,
+      $.keyword_sets,
+      wrapped_in_parenthesis(comma_list($._group_by_target, true)),
     ),
 
     having: $ => seq(

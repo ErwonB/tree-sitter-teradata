@@ -214,3 +214,153 @@ having cnt >= 3
               (field
                 (identifier))
               (literal))))))
+
+
+================================================================================
+Group by grouping sets
+================================================================================
+
+SELECT region, segment, COUNT(amount)
+FROM edw_fact.fact_sales
+GROUP BY GROUPING SETS (region, segment, ());
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (select
+      (keyword_select)
+      (select_expression
+        (term
+          value: (field
+            name: (identifier)))
+        (term
+          value: (field
+            name: (identifier)))
+        (term
+          value: (invocation
+            (object_reference
+              name: (identifier))
+            parameter: (term
+              value: (field
+                name: (identifier)))))))
+    (from
+      (keyword_from)
+      (relation
+        (object_reference
+          schema: (identifier)
+          name: (identifier)))
+      (group_by
+        (keyword_group)
+        (keyword_by)
+        (grouping_sets
+          (keyword_grouping)
+          (keyword_sets)
+          (field
+            name: (identifier))
+          (field
+            name: (identifier))
+          (list))))))
+
+================================================================================
+Group by grouping sets with rollup and cube
+================================================================================
+
+SELECT region, segment, COUNT(amount)
+FROM edw_fact.fact_sales
+GROUP BY GROUPING SETS (ROLLUP(segment), CUBE(region, segment));
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (select
+      (keyword_select)
+      (select_expression
+        (term
+          value: (field
+            name: (identifier)))
+        (term
+          value: (field
+            name: (identifier)))
+        (term
+          value: (invocation
+            (object_reference
+              name: (identifier))
+            parameter: (term
+              value: (field
+                name: (identifier)))))))
+    (from
+      (keyword_from)
+      (relation
+        (object_reference
+          schema: (identifier)
+          name: (identifier)))
+      (group_by
+        (keyword_group)
+        (keyword_by)
+        (grouping_sets
+          (keyword_grouping)
+          (keyword_sets)
+          (invocation
+            (object_reference
+              name: (identifier))
+            parameter: (term
+              value: (field
+                name: (identifier))))
+          (invocation
+            (object_reference
+              name: (identifier))
+            parameter: (term
+              value: (field
+                name: (identifier)))
+            parameter: (term
+              value: (field
+                name: (identifier)))))))))
+
+================================================================================
+Group by nested grouping sets
+================================================================================
+
+SELECT region, COUNT(amount)
+FROM edw_fact.fact_sales
+GROUP BY GROUPING SETS (GROUPING SETS (region), ());
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (select
+      (keyword_select)
+      (select_expression
+        (term
+          value: (field
+            name: (identifier)))
+        (term
+          value: (invocation
+            (object_reference
+              name: (identifier))
+            parameter: (term
+              value: (field
+                name: (identifier)))))))
+    (from
+      (keyword_from)
+      (relation
+        (object_reference
+          schema: (identifier)
+          name: (identifier)))
+      (group_by
+        (keyword_group)
+        (keyword_by)
+        (grouping_sets
+          (keyword_grouping)
+          (keyword_sets)
+          (grouping_sets
+            (keyword_grouping)
+            (keyword_sets)
+            (field
+              name: (identifier)))
+          (list))))))
+
+
+
