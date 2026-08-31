@@ -82,6 +82,14 @@ module.exports = {
       $.keyword_rows
     ),
 
+    _post_query_table_settings: $ => choice(
+      $.primary_index_clause,
+      $.index_clause,
+      $.partition_by_clause,
+      seq($.keyword_no, $.keyword_primary, $.keyword_index),
+      $._table_preservation,
+    ),
+
     // left precedence because 'quoted' table options otherwise conflict with
     // `create function` string bodies; if you remove this precedence you will
     // have to also disable the `_literal_string` choice for the `name` field
@@ -113,18 +121,19 @@ module.exports = {
               ),
             )
           ),
-          seq(
+          prec.right(0, seq(
             repeat($._table_settings),
-            seq(
-              $.keyword_as,
-              $.create_query,
-              optional($.with_data_clause)
-            ),
-          ),
-          seq($.keyword_as,
+            $.keyword_as,
+            $.create_query,
+            optional($.with_data_clause),
+            repeat($._post_query_table_settings),
+          )),
+          prec.right(0, seq(
+            $.keyword_as,
             $.object_reference,
             optional($.with_data_clause),
-          )
+            repeat($._post_query_table_settings),
+          )),
         ),
       ),
     ),

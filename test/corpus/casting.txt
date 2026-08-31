@@ -278,3 +278,55 @@ SELECT
             (data_type_attribute
               (keyword_format))))))))
 
+================================================================================
+Interval qualifier with precision on year and month
+================================================================================
+
+SELECT (CURRENT_DATE - signup_date) MONTH(4),
+       (CURRENT_DATE - signup_date) YEAR(4) TO MONTH,
+       (ts1 - ts2) MINUTE(4) TO SECOND(6)
+FROM   edw_dim.dim_customer;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (select
+      (keyword_select)
+      (select_expression
+        (term
+          (parenthesized_expression
+            (binary_expression
+              (invocation
+                (keyword_current_date))
+              (field
+                (identifier))))
+          (keyword_month))
+        (term
+          (parenthesized_expression
+            (binary_expression
+              (invocation
+                (keyword_current_date))
+              (field
+                (identifier))))
+          (keyword_year)
+          (keyword_to)
+          (keyword_month))
+        (term
+          (parenthesized_expression
+            (binary_expression
+              (field
+                (identifier))
+              (field
+                (identifier))))
+          (keyword_minute)
+          (keyword_to)
+          (keyword_second))))
+    (from
+      (keyword_from)
+      (relation
+        (object_reference
+          (identifier)
+          (identifier))))))
+
+

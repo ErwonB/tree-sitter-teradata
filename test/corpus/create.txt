@@ -2227,3 +2227,93 @@ CREATE TABLE target_table AS (
             (keyword_with)
             (keyword_data)))))
 
+================================================================================
+Create table as select with no data and primary index
+================================================================================
+
+CREATE MULTISET TABLE edw_stg.stg_sales_template AS (
+    SELECT * FROM edw_fact.fact_sales
+) WITH NO DATA
+PRIMARY INDEX (product_id);
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (create_table
+      (keyword_create)
+      (keyword_multiset)
+      (keyword_table)
+      (object_reference
+        (identifier)
+        (identifier))
+      (keyword_as)
+      (create_query
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (all_fields))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)
+              (identifier)))))
+      (with_data_clause
+        (keyword_with)
+        (keyword_no)
+        (keyword_data))
+      (primary_index_clause
+        (keyword_primary)
+        (keyword_index)
+        (field
+          (identifier))))))
+
+================================================================================
+Create volatile table as select with data, primary index and on commit
+================================================================================
+
+CREATE VOLATILE TABLE tmp_sales AS (
+    SELECT * FROM edw_fact.fact_sales
+) WITH DATA
+PRIMARY INDEX (customer_id)
+ON COMMIT PRESERVE ROWS;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (create_table
+      (keyword_create)
+      (keyword_volatile)
+      (keyword_table)
+      (object_reference
+        (identifier))
+      (keyword_as)
+      (create_query
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (all_fields))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)
+              (identifier)))))
+      (with_data_clause
+        (keyword_with)
+        (keyword_data))
+      (primary_index_clause
+        (keyword_primary)
+        (keyword_index)
+        (field
+          (identifier)))
+      (keyword_on)
+      (keyword_commit)
+      (keyword_preserve)
+      (keyword_rows))))
+
+
