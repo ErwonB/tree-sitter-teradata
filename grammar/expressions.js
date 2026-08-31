@@ -5,6 +5,8 @@ const {
   wrapped_in_parenthesis,
 } = require('./helpers.js');
 
+const interval_precision = $ => optional(wrapped_in_parenthesis($._integer));
+
 module.exports = {
 
     all_fields: $ => seq(
@@ -460,24 +462,22 @@ module.exports = {
         field('temporal_qualifier', $._temporal_qualifier),
     ),
 
-    //TODO refactor
-    _temporal_qualifier: $ => choice(
-      $.keyword_year,
-      prec.right(1, seq($.keyword_year, optional(wrapped_in_parenthesis($._integer)), $.keyword_to, $.keyword_month)),
-
-      $.keyword_month,
-
-      seq($.keyword_day, optional(wrapped_in_parenthesis($._integer))),
-      prec.right(1, seq($.keyword_day, optional(wrapped_in_parenthesis($._integer)), $.keyword_to, choice($.keyword_hour, $.keyword_minute, seq($.keyword_second, optional(wrapped_in_parenthesis($._integer)))))),
-
-      seq($.keyword_hour, optional(wrapped_in_parenthesis($._integer))),
-      prec.right(1, seq($.keyword_hour, optional(wrapped_in_parenthesis($._integer)), $.keyword_to, choice($.keyword_minute, seq($.keyword_second, optional(wrapped_in_parenthesis($._integer)))))),
-
-      seq($.keyword_minute, optional(wrapped_in_parenthesis($._integer))),
-      prec.right(1, seq($.keyword_minute, optional(wrapped_in_parenthesis($._integer)), $.keyword_to, seq($.keyword_second, optional(wrapped_in_parenthesis($._integer))))),
-
-      prec.right(1, seq($.keyword_second, optional(wrapped_in_parenthesis(seq($._integer, optional(seq(',', $._integer))))))),
+  _temporal_qualifier: $ => choice(
+      prec.right(1, seq($.keyword_year, interval_precision($), optional(seq($.keyword_to, $.keyword_month)))),
+      prec.right(1, seq($.keyword_month, interval_precision($))),
+      prec.right(1, seq($.keyword_day, interval_precision($), optional(seq($.keyword_to, choice($.keyword_hour, $.keyword_minute, $._second_qualifier))))),
+      prec.right(1, seq($.keyword_hour, interval_precision($), optional(seq($.keyword_to, choice($.keyword_minute, $._second_qualifier))))),
+      prec.right(1, seq($.keyword_minute, interval_precision($), optional(seq($.keyword_to, $._second_qualifier)))),
+      prec.right(1, $._second_qualifier),
     ),
+
+    // SECOND [(precision [, fractional_precision])]
+    _second_qualifier: $ => prec.right(1, seq(
+        $.keyword_second,
+        optional(wrapped_in_parenthesis(
+          seq($._integer, optional(seq(',', $._integer))),
+        )),
+      )),
 
     parenthesized_expression: $ => prec(2,
       wrapped_in_parenthesis($._expression)
