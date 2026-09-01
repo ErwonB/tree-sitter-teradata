@@ -479,3 +479,491 @@ ALTER ROLE rapunzel SUPERUSER NOLOGIN ;
       (identifier)
       (identifier)
       )))
+
+================================================================================
+Alter table with fallback table option
+================================================================================
+
+ALTER TABLE edw_stg.stg_sales, FALLBACK;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (alter_table
+      (keyword_alter)
+      (keyword_table)
+      (object_reference
+        schema: (identifier)
+        name: (identifier))
+        (pre_table_option_spec
+          (keyword_fallback)))))
+
+================================================================================
+Alter table with no fallback table option
+================================================================================
+
+ALTER TABLE edw_stg.stg_sales, NO FALLBACK;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (alter_table
+      (keyword_alter)
+      (keyword_table)
+      (object_reference
+        schema: (identifier)
+        name: (identifier))
+        (pre_table_option_spec
+          (keyword_no)
+          (keyword_fallback)))))
+
+================================================================================
+Alter table with multiple table options
+================================================================================
+
+ALTER TABLE edw_stg.stg_sales, NO FALLBACK, CHECKSUM = DEFAULT, FREESPACE = 10 PERCENT;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (alter_table
+      (keyword_alter)
+      (keyword_table)
+      (object_reference
+        schema: (identifier)
+        name: (identifier))
+        (pre_table_option_spec
+          (keyword_no)
+          (keyword_fallback))
+        (pre_table_option_spec
+          (keyword_checksum)
+          (keyword_default))
+        (pre_table_option_spec
+          (keyword_freespace)
+          (keyword_percent)))))
+
+================================================================================
+Alter table with table option then alter option
+================================================================================
+
+ALTER TABLE edw_stg.stg_sales, NO FALLBACK, ADD load_ts DATE;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (alter_table
+      (keyword_alter)
+      (keyword_table)
+      (object_reference
+        schema: (identifier)
+        name: (identifier))
+        (pre_table_option_spec
+          (keyword_no)
+          (keyword_fallback))
+      (add_column
+        (keyword_add)
+        (column_definition
+          name: (identifier)
+          type: (keyword_date))))))
+
+================================================================================
+Alter table with map and colocation
+================================================================================
+
+ALTER TABLE edw_stg.stg_sales, MAP = TD_MAP2 COLOCATE USING cg1;
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (alter_table
+          (keyword_alter)
+          (keyword_table)
+          (object_reference
+            (identifier)
+            (identifier))
+          (pre_table_option_spec
+            (keyword_map)
+            (identifier)
+            (keyword_colocate)
+            (keyword_using)
+            (identifier)))))
+
+
+================================================================================
+Alter table modify primary index
+================================================================================
+
+ALTER TABLE edw_stg.stg_sales MODIFY UNIQUE PRIMARY INDEX (product_id);
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (alter_table
+          (keyword_alter)
+          (keyword_table)
+          (object_reference
+            (identifier)
+            (identifier))
+          (modify_primary_index
+            (keyword_modify)
+            (keyword_unique)
+            (keyword_primary)
+            (keyword_index)
+            (field
+              (identifier))))))
+
+================================================================================
+Alter table modify no primary index not partitioned
+================================================================================
+
+ALTER TABLE edw_stg.stg_sales MODIFY NO PRIMARY INDEX NOT PARTITIONED;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (alter_table
+      (keyword_alter)
+      (keyword_table)
+      (object_reference
+        schema: (identifier)
+        name: (identifier))
+      (modify_primary_index
+        (keyword_modify)
+        (keyword_no)
+        (keyword_primary)
+        (keyword_index)
+        (keyword_not)
+        (keyword_partitioned)))))
+
+================================================================================
+Alter table modify partitioning
+================================================================================
+
+ALTER TABLE edw_fact.fact_sales MODIFY PARTITION BY (sale_date);
+
+--------------------------------------------------------------------------------
+
+    (program
+      (statement
+        (alter_table
+          (keyword_alter)
+          (keyword_table)
+          (object_reference
+            (identifier)
+            (identifier))
+          (alter_partitioning
+            (keyword_modify)
+            (keyword_partition)
+            (keyword_by)
+            (field
+              (identifier))))))
+
+================================================================================
+Alter table rename column with AS
+================================================================================
+
+ALTER TABLE edw_stg.stg_sales RENAME val3 AS valthree;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (alter_table
+      (keyword_alter)
+      (keyword_table)
+      (object_reference
+        schema: (identifier)
+        name: (identifier))
+      (rename_column
+        (keyword_rename)
+        old_name: (identifier)
+        (keyword_as)
+        new_name: (identifier)))))
+
+================================================================================
+Alter table drop column identity and inconsistent references
+================================================================================
+
+ALTER TABLE edw_stg.stg_sales DROP val3 IDENTITY, DROP INCONSISTENT REFERENCES;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (alter_table
+      (keyword_alter)
+      (keyword_table)
+      (object_reference
+        schema: (identifier)
+        name: (identifier))
+      (drop_column
+        (keyword_drop)
+        name: (identifier)
+        (keyword_identity))
+      (drop_column
+        (keyword_drop)
+        (keyword_inconsistent)
+        (keyword_references)))))
+
+================================================================================
+Alter table add period and normalize
+================================================================================
+
+ALTER TABLE edw_dim.dim_customer
+  ADD PERIOD FOR valid_period (valid_from, valid_to);
+
+--------------------------------------------------------------------------------
+
+(program
+      (statement
+        (alter_table
+          (keyword_alter)
+          (keyword_table)
+          (object_reference
+            (identifier)
+            (identifier))
+          (keyword_add)
+          (keyword_period)
+          (keyword_for)
+          (identifier)
+          (identifier)
+          (identifier))))
+
+================================================================================
+Alter table add normalize on meets or overlaps
+================================================================================
+
+ALTER TABLE edw_dim.dim_customer
+  ADD NORMALIZE ON valid_period ON MEETS OR OVERLAPS;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (alter_table
+      (keyword_alter)
+      (keyword_table)
+      (object_reference
+        schema: (identifier)
+        name: (identifier))
+      (add_normalize
+        (keyword_add)
+        (keyword_normalize)
+        (keyword_on)
+        column: (identifier)
+        (keyword_on)
+        (keyword_meets)
+        (keyword_or)
+        (keyword_overlaps)))))
+
+================================================================================
+Alter table set down
+================================================================================
+
+ALTER TABLE edw_fact.fact_sales SET DOWN;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (alter_table
+      (keyword_alter)
+      (keyword_table)
+      (object_reference
+        schema: (identifier)
+        name: (identifier))
+      (down_state
+        (keyword_set)
+        (keyword_down)))))
+
+================================================================================
+Alter join index add column partition
+================================================================================
+
+ALTER TABLE ji_sales ADD COLUMN (product_id, region) NO AUTO COMPRESS;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (alter_table
+      (keyword_alter)
+      (keyword_table)
+      (object_reference
+        name: (identifier))
+      (add_column_partition
+        (keyword_add)
+        (keyword_column)
+        (identifier)
+        (identifier)
+        (keyword_no)
+        (keyword_auto)
+        (keyword_compress)))))
+
+================================================================================
+Alter table revalidate with insert
+================================================================================
+
+ALTER TABLE edw_fact.fact_sales REVALIDATE WITH INSERT INTO edw_stg.save_rows;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (alter_table
+      (keyword_alter)
+      (keyword_table)
+      (object_reference
+        schema: (identifier)
+        name: (identifier))
+      (revalidate_clause
+        (keyword_revalidate)
+        (keyword_with)
+        (keyword_insert)
+        (keyword_into)
+        save_table: (object_reference
+          schema: (identifier)
+          name: (identifier))))))
+
+================================================================================
+Alter table release deleted rows and reset load identity
+================================================================================
+
+ALTER TABLE edw_fact.fact_sales RELEASE DELETED ROWS AND RESET LOAD IDENTITY;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (alter_table
+      (keyword_alter)
+      (keyword_table)
+      (object_reference
+        schema: (identifier)
+        name: (identifier))
+      (release_rows_clause
+        (keyword_release)
+        (keyword_deleted)
+        (keyword_rows)
+        (keyword_and)
+        (keyword_reset)
+        (keyword_load)
+        (keyword_identity)))))
+
+================================================================================
+Alter table to current with delete
+================================================================================
+
+ALTER TABLE edw_fact.fact_sales TO CURRENT WITH DELETE;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (alter_table
+      (keyword_alter)
+      (keyword_table)
+      (object_reference
+        schema: (identifier)
+        name: (identifier))
+      (to_current_clause
+        (keyword_to)
+        (keyword_current)
+        (keyword_with)
+        (keyword_delete)))))
+
+================================================================================
+Alter table to current bare with
+================================================================================
+
+ALTER TABLE ji_sales TO CURRENT WITH;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (alter_table
+      (keyword_alter)
+      (keyword_table)
+      (object_reference
+        name: (identifier))
+      (to_current_clause
+        (keyword_to)
+        (keyword_current)
+        (keyword_with)))))
+
+================================================================================
+Alter foreign table external security
+================================================================================
+
+ALTER FOREIGN TABLE edw_ext.nos_sales, NO FALLBACK,
+  EXTERNAL SECURITY DEFINER TRUSTED edw_app.nos_auth;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (alter_foreign_table
+      (keyword_alter)
+      (keyword_foreign)
+      (keyword_table)
+      (object_reference
+        schema: (identifier)
+        name: (identifier))
+        (pre_table_option_spec
+          (keyword_no)
+          (keyword_fallback))
+      (external_security_clause
+        (keyword_external)
+        (keyword_security)
+        (keyword_definer)
+        (keyword_trusted)
+        authorization: (object_reference
+          schema: (identifier)
+          name: (identifier))))))
+
+================================================================================
+Alter foreign table update and modify partition by
+================================================================================
+
+ALTER FOREIGN TABLE edw_ext.nos_sales
+  UPDATE LOCATION ('/s3/bucket/sales') STOREDAS ('PARQUET')
+  MODIFY PARTITION BY (COLUMN, sale_year INTEGER);
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (alter_foreign_table
+      (keyword_alter)
+      (keyword_foreign)
+      (keyword_table)
+      (object_reference
+        schema: (identifier)
+        name: (identifier))
+      (keyword_update)
+      (foreign_update_specification
+        (foreign_table_option
+          name: (identifier)
+          value: (literal))
+        (foreign_table_option
+          name: (identifier)
+          value: (literal)))
+      (modify_partition_by
+        (keyword_modify)
+        (keyword_partition)
+        (keyword_by)
+        (keyword_column)
+        (partition_column_spec
+          name: (identifier)
+          (int
+            (keyword_int)))))))
+
+

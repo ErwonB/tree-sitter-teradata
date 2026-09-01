@@ -431,6 +431,16 @@ module.exports = {
     keyword_constructor: _ => make_keyword("constructor"),
     keyword_instance: _ => make_keyword("instance"),
 
+    // Teradata alter table
+    keyword_inconsistent: _ => make_keyword("inconsistent"),
+    keyword_down: _ => make_keyword("down"),
+    keyword_but: _ => make_keyword("but"),
+    keyword_timedatewzcontrol: _ => make_keyword("timedatewzcontrol"),
+    keyword_revalidate: _ => make_keyword("revalidate"),
+    keyword_deleted: _ => make_keyword("deleted"),
+    keyword_auto: _ => make_keyword("auto"),
+    keyword_trusted: _ => make_keyword("trusted"),
+
     // Period operators
     keyword_overlaps: _ => make_keyword("overlaps"),
     keyword_equals: _ => make_keyword("equals"),

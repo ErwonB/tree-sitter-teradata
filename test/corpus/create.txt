@@ -2102,9 +2102,7 @@ NO FALLBACK, NO BEFORE JOURNAL,
           (pre_table_option
             (pre_table_option_spec
               (keyword_map)
-              (literal
-                (identifier)
-                (MISSING "_single_quote_string_token1")))
+              (identifier))
             (pre_table_option_spec
               (keyword_no)
               (keyword_fallback))

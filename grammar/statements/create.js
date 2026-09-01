@@ -221,8 +221,12 @@ module.exports = {
           seq(
             $.keyword_map,
             '=',
-            $.literal,
-            optional(seq($.keyword_colocate, $.keyword_using, $.literal)),
+            field('map', $.identifier),
+            optional(seq(
+              $.keyword_colocate,
+              $.keyword_using,
+              field('colocation', $.identifier),
+            )),
           ),
           seq(optional($.keyword_no), $.keyword_fallback, optional($.keyword_protection)),
           seq($.keyword_checksum, '=', choice($.keyword_on, $.keyword_default, $.keyword_off)),
@@ -788,7 +792,16 @@ _database_attribute: $ => choice(
 
     pre_table_option_spec: $ =>
       choice(
-        seq($.keyword_map, '=', $.literal, optional(seq($.keyword_colocate, $.keyword_using, $.literal))),
+        seq(
+          $.keyword_map,
+          '=',
+          field('map', $.identifier),
+          optional(seq(
+            $.keyword_colocate,
+            $.keyword_using,
+            field('colocation', $.identifier),
+          )),
+        ),
         seq(optional($.keyword_no), $.keyword_fallback, optional($.keyword_protection)),
         $.keyword_queue,
         seq($.keyword_with, $.keyword_journal, $.keyword_table, '=', $.literal),
