@@ -21,7 +21,7 @@ module.exports = {
   ),
 
   abort: $ => seq(
-    $.keyword_abort,
+    choice($.keyword_abort, $.keyword_rollback),
     field('abort_message', alias($._literal_string, $.literal)),
     optional(choice($.where, $.from)),
   ),

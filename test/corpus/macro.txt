@@ -6,14 +6,13 @@ exec ZDP_DVL_H1_PM_ACQ.mymacro;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (macro
-          (keyword_exec)
-          (object_reference
-            (identifier)
-            (identifier)))))
-
+(program
+  (statement
+    (macro
+      (keyword_exec)
+      (object_reference
+        (identifier)
+        (identifier)))))
 
 ================================================================================
 exec macro with param
@@ -23,16 +22,16 @@ exec ZDP_DVL_H1_PM_ACQ.mymacro(2, 'plop', 1);
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (macro
-          (keyword_exec)
-          (object_reference
-            (identifier)
-            (identifier))
-          (literal)
-          (literal)
-          (literal))))
+(program
+  (statement
+    (macro
+      (keyword_exec)
+      (object_reference
+        (identifier)
+        (identifier))
+      (literal)
+      (literal)
+      (literal))))
 
 ================================================================================
 Create macro without parameters
@@ -45,34 +44,33 @@ replace macro db1.macro1 as (
 
 --------------------------------------------------------------------------------
 
-    (program
+(program
+  (statement
+    (create_macro
+      (keyword_replace)
+      (keyword_macro)
+      (object_reference
+        (identifier)
+        (identifier))
+      (keyword_as)
       (statement
-        (create_macro
-          (keyword_replace)
-          (keyword_macro)
-          (object_reference
-            (identifier)
-            (identifier))
-          (keyword_as)
-          (statement
-            (delete
-              (keyword_delete))
-            (from
-              (keyword_from)
-                  (relation
-                  (object_reference
-                    (identifier)
-                    (identifier)))))
-          (statement
-            (delete
-              (keyword_delete))
-            (from
-              (keyword_from)
-                (relation
-                  (object_reference
-                    (identifier)
-                    (identifier))))))))
-
+        (delete
+          (keyword_delete))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)
+              (identifier)))))
+      (statement
+        (delete
+          (keyword_delete))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)
+              (identifier))))))))
 
 ================================================================================
 Create macro with parameters
@@ -85,56 +83,129 @@ replace macro db1.macro1(field1 varchar(128), field2 integer) as (
 
 --------------------------------------------------------------------------------
 
+(program
+  (statement
+    (create_macro
+      (keyword_replace)
+      (keyword_macro)
+      (object_reference
+        (identifier)
+        (identifier))
+      (column_definition
+        (identifier)
+        (varchar
+          (keyword_varchar)
+          (literal)))
+      (column_definition
+        (identifier)
+        (int
+          (keyword_int)))
+      (keyword_as)
+      (statement
+        (delete
+          (keyword_delete))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)
+              (identifier)))
+          (where
+            (keyword_where)
+            (binary_expression
+              (field
+                (identifier))
+              (keyword_like)
+              (parameter)))))
+      (statement
+        (delete
+          (keyword_delete))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)
+              (identifier)))
+          (where
+            (keyword_where)
+            (binary_expression
+              (field
+                (identifier))
+              (keyword_like)
+              (parameter))))))))
+
+================================================================================
+Create macro with conditional rollback
+================================================================================
+
+replace macro db1.macro1(jobId integer, sttmdt date, alimMode char(1)) as (
+
+    rollback 'Found error tables'
+    where
+        exists (
+            select 1
+            from dbc.TablesV
+            where tablename in ('T_E1', 'T_E2')
+                and databasename = 'DB_STG'
+        )
+    ;
+);
+
+--------------------------------------------------------------------------------
 
 (program
+  (statement
+    (create_macro
+      (keyword_replace)
+      (keyword_macro)
+      (object_reference
+        (identifier)
+        (identifier))
+      (column_definition
+        (identifier)
+        (int
+          (keyword_int)))
+      (column_definition
+        (identifier)
+        (keyword_date))
+      (column_definition
+        (identifier)
+        (char
+          (keyword_char)
+          (literal)))
+      (keyword_as)
       (statement
-        (create_macro
-          (keyword_replace)
-          (keyword_macro)
-          (object_reference
-            (identifier)
-            (identifier))
-          (column_definition
-            (identifier)
-            (varchar
-              (keyword_varchar)
-              (literal)))
-          (column_definition
-            (identifier)
-            (int
-              (keyword_int)))
-          (keyword_as)
-          (statement
-            (delete
-              (keyword_delete))
-            (from
-              (keyword_from)
-              (relation
-                (object_reference
-                  (identifier)
-                  (identifier)))
-              (where
-                (keyword_where)
-                (binary_expression
-                  (field
-                    (identifier))
-                  (keyword_like)
-                  (parameter)))))
-          (statement
-            (delete
-              (keyword_delete))
-            (from
-              (keyword_from)
-              (relation
-                (object_reference
-                  (identifier)
-                  (identifier)))
-              (where
-                (keyword_where)
-                (binary_expression
-                  (field
-                    (identifier))
-                  (keyword_like)
-                  (parameter))))))))
-
-
+        (abort
+          (keyword_rollback)
+          (literal)
+          (where
+            (keyword_where)
+            (exists
+              (keyword_exists)
+              (subquery
+                (select
+                  (keyword_select)
+                  (select_expression
+                    (term
+                      (literal))))
+                (from
+                  (keyword_from)
+                  (relation
+                    (object_reference
+                      (identifier)
+                      (identifier)))
+                  (where
+                    (keyword_where)
+                    (binary_expression
+                      (binary_expression
+                        (field
+                          (identifier))
+                        (keyword_in)
+                        (list
+                          (literal)
+                          (literal)))
+                      (keyword_and)
+                      (binary_expression
+                        (field
+                          (identifier))
+                        (literal)))))))))))))
