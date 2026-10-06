@@ -52,6 +52,11 @@ module.exports = {
   // ------------------------------------------------------------------
   // USING clause
   // ------------------------------------------------------------------
+  _collect_numeric: $ => choice(
+    $._integer,
+    $._decimal_number,
+  ),
+
   collect_using_clause: $ => seq(
     $.keyword_using,
     $.collect_using_option,
@@ -66,7 +71,7 @@ module.exports = {
       // SAMPLE n PERCENT
       seq(
         $.keyword_sample,
-        field('sample_value', alias($._integer, $.literal)),
+        field('sample_value', alias($._collect_numeric, $.literal)),
         $.keyword_percent,
       ),
       // SYSTEM SAMPLE
@@ -84,7 +89,7 @@ module.exports = {
       // THRESHOLD n [PERCENT | DAYS]
       seq(
         $.keyword_threshold,
-        field('threshold_value', alias($._integer, $.literal)),
+        field('threshold_value', alias($._collect_numeric, $.literal)),
         optional(choice($.keyword_percent, $.keyword_days)),
       ),
       // NO THRESHOLD [PERCENT | DAYS]

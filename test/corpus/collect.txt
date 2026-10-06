@@ -6,15 +6,14 @@ COLLECT STATISTICS ON db.tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (keyword_on)
-        (object_reference
-          (identifier)
-          (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (keyword_on)
+    (object_reference
+      (identifier)
+      (identifier))))
 
 ================================================================================
 collect stats — short keyword
@@ -24,14 +23,13 @@ collect stats ON tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_stats)
-        (keyword_on)
-        (object_reference
-          (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_stats)
+    (keyword_on)
+    (object_reference
+      (identifier))))
 
 ================================================================================
 collect summary statistics
@@ -41,16 +39,15 @@ COLLECT SUMMARY STATISTICS ON db.tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_summary)
-        (keyword_statistics)
-        (keyword_on)
-        (object_reference
-          (identifier)
-          (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_summary)
+    (keyword_statistics)
+    (keyword_on)
+    (object_reference
+      (identifier)
+      (identifier))))
 
 ================================================================================
 collect stats on temporary table
@@ -60,16 +57,15 @@ COLLECT STATISTICS ON TEMPORARY db.tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (keyword_on)
-        (keyword_temporary)
-        (object_reference
-          (identifier)
-          (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (keyword_on)
+    (keyword_temporary)
+    (object_reference
+      (identifier)
+      (identifier))))
 
 ================================================================================
 collect stats — column with parens (Optimizer Form)
@@ -79,20 +75,22 @@ COLLECT STATISTICS COLUMN (field1, field3), COLUMN (field2) ON db.tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (keyword_column)
-        (object_reference (identifier))
-        (object_reference (identifier))
-        (keyword_column)
-        (object_reference (identifier))
-        (keyword_on)
-        (object_reference
-          (identifier)
-          (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (keyword_column)
+    (object_reference
+      (identifier))
+    (object_reference
+      (identifier))
+    (keyword_column)
+    (object_reference
+      (identifier))
+    (keyword_on)
+    (object_reference
+      (identifier)
+      (identifier))))
 
 ================================================================================
 collect stats — bare column name
@@ -102,15 +100,16 @@ COLLECT STATISTICS COLUMN col1 ON tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (keyword_column)
-        (object_reference (identifier))
-        (keyword_on)
-        (object_reference (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (keyword_column)
+    (object_reference
+      (identifier))
+    (keyword_on)
+    (object_reference
+      (identifier))))
 
 ================================================================================
 collect stats — column with AS statistics_name
@@ -120,18 +119,20 @@ COLLECT STATISTICS COLUMN (c1, c2) AS my_stat ON tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (keyword_column)
-        (object_reference (identifier))
-        (object_reference (identifier))
-        (keyword_as)
-        (identifier)
-        (keyword_on)
-        (object_reference (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (keyword_column)
+    (object_reference
+      (identifier))
+    (object_reference
+      (identifier))
+    (keyword_as)
+    (identifier)
+    (keyword_on)
+    (object_reference
+      (identifier))))
 
 ================================================================================
 collect stats — column with implicit AS (no AS keyword)
@@ -141,16 +142,17 @@ COLLECT STATISTICS COLUMN col1 my_stat ON tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (keyword_column)
-        (object_reference (identifier))
-        (identifier)
-        (keyword_on)
-        (object_reference (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (keyword_column)
+    (object_reference
+      (identifier))
+    (identifier)
+    (keyword_on)
+    (object_reference
+      (identifier))))
 
 ================================================================================
 collect stats — column PARTITION
@@ -160,15 +162,15 @@ COLLECT STATISTICS COLUMN PARTITION ON tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (keyword_column)
-        (keyword_partition)
-        (keyword_on)
-        (object_reference (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (keyword_column)
+    (keyword_partition)
+    (keyword_on)
+    (object_reference
+      (identifier))))
 
 ================================================================================
 collect stats — column list including PARTITION
@@ -178,17 +180,19 @@ COLLECT STATISTICS COLUMN (PARTITION, col1, col2) ON tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (keyword_column)
-        (keyword_partition)
-        (object_reference (identifier))
-        (object_reference (identifier))
-        (keyword_on)
-        (object_reference (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (keyword_column)
+    (keyword_partition)
+    (object_reference
+      (identifier))
+    (object_reference
+      (identifier))
+    (keyword_on)
+    (object_reference
+      (identifier))))
 
 ================================================================================
 collect stats — INDEX with column list
@@ -198,16 +202,16 @@ COLLECT STATISTICS INDEX (col1, col2) ON tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (keyword_index)
-        (identifier)
-        (identifier)
-        (keyword_on)
-        (object_reference (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (keyword_index)
+    (identifier)
+    (identifier)
+    (keyword_on)
+    (object_reference
+      (identifier))))
 
 ================================================================================
 collect stats — UNIQUE INDEX with name
@@ -217,17 +221,17 @@ COLLECT STATISTICS UNIQUE INDEX idx1 (col1) ON tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (keyword_unique)
-        (keyword_index)
-        (identifier)
-        (identifier)
-        (keyword_on)
-        (object_reference (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (keyword_unique)
+    (keyword_index)
+    (identifier)
+    (identifier)
+    (keyword_on)
+    (object_reference
+      (identifier))))
 
 ================================================================================
 collect stats — INDEX named only (no columns)
@@ -237,15 +241,15 @@ COLLECT STATISTICS INDEX idx1 ON tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (keyword_index)
-        (identifier)
-        (keyword_on)
-        (object_reference (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (keyword_index)
+    (identifier)
+    (keyword_on)
+    (object_reference
+      (identifier))))
 
 ================================================================================
 collect stats — INDEX ALL with order by HASH
@@ -255,23 +259,23 @@ COLLECT STATISTICS INDEX idx2 ALL (c1, c2) ORDER BY HASH (c1) ON tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (keyword_index)
-        (identifier)
-        (keyword_all)
-        (identifier)
-        (identifier)
-        (collect_index_order_by
-          (keyword_order)
-          (keyword_by)
-          (keyword_hash)
-          (identifier))
-        (keyword_on)
-        (object_reference (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (keyword_index)
+    (identifier)
+    (keyword_all)
+    (identifier)
+    (identifier)
+    (collect_index_order_by
+      (keyword_order)
+      (keyword_by)
+      (keyword_hash)
+      (identifier))
+    (keyword_on)
+    (object_reference
+      (identifier))))
 
 ================================================================================
 collect stats — INDEX with order by VALUES
@@ -281,20 +285,20 @@ COLLECT STATISTICS INDEX (c1) ORDER BY VALUES (c1) ON tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (keyword_index)
-        (identifier)
-        (collect_index_order_by
-          (keyword_order)
-          (keyword_by)
-          (keyword_values)
-          (identifier))
-        (keyword_on)
-        (object_reference (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (keyword_index)
+    (identifier)
+    (collect_index_order_by
+      (keyword_order)
+      (keyword_by)
+      (keyword_values)
+      (identifier))
+    (keyword_on)
+    (object_reference
+      (identifier))))
 
 ================================================================================
 collect stats — mixed COLUMN and INDEX targets
@@ -304,22 +308,23 @@ COLLECT STATISTICS COLUMN c1, INDEX (c2, c3), COLUMN (c4) ON db.tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (keyword_column)
-        (object_reference (identifier))
-        (keyword_index)
-        (identifier)
-        (identifier)
-        (keyword_column)
-        (object_reference (identifier))
-        (keyword_on)
-        (object_reference
-          (identifier)
-          (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (keyword_column)
+    (object_reference
+      (identifier))
+    (keyword_index)
+    (identifier)
+    (identifier)
+    (keyword_column)
+    (object_reference
+      (identifier))
+    (keyword_on)
+    (object_reference
+      (identifier)
+      (identifier))))
 
 ================================================================================
 collect stats — USING SAMPLE
@@ -329,17 +334,17 @@ COLLECT STATISTICS USING SAMPLE ON tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (collect_using_clause
-          (keyword_using)
-          (collect_using_option
-            (keyword_sample)))
-        (keyword_on)
-        (object_reference (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (collect_using_clause
+      (keyword_using)
+      (collect_using_option
+        (keyword_sample)))
+    (keyword_on)
+    (object_reference
+      (identifier))))
 
 ================================================================================
 collect stats — USING SAMPLE 10 PERCENT
@@ -349,19 +354,19 @@ COLLECT STATISTICS USING SAMPLE 10 PERCENT ON tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (collect_using_clause
-          (keyword_using)
-          (collect_using_option
-            (keyword_sample)
-            (literal)
-            (keyword_percent)))
-        (keyword_on)
-        (object_reference (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (collect_using_clause
+      (keyword_using)
+      (collect_using_option
+        (keyword_sample)
+        (literal)
+        (keyword_percent)))
+    (keyword_on)
+    (object_reference
+      (identifier))))
 
 ================================================================================
 collect stats — USING SYSTEM SAMPLE
@@ -371,18 +376,18 @@ COLLECT STATISTICS USING SYSTEM SAMPLE ON tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (collect_using_clause
-          (keyword_using)
-          (collect_using_option
-            (keyword_system)
-            (keyword_sample)))
-        (keyword_on)
-        (object_reference (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (collect_using_clause
+      (keyword_using)
+      (collect_using_option
+        (keyword_system)
+        (keyword_sample)))
+    (keyword_on)
+    (object_reference
+      (identifier))))
 
 ================================================================================
 collect stats — USING NO SAMPLE
@@ -392,18 +397,18 @@ COLLECT STATISTICS USING NO SAMPLE ON tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (collect_using_clause
-          (keyword_using)
-          (collect_using_option
-            (keyword_no)
-            (keyword_sample)))
-        (keyword_on)
-        (object_reference (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (collect_using_clause
+      (keyword_using)
+      (collect_using_option
+        (keyword_no)
+        (keyword_sample)))
+    (keyword_on)
+    (object_reference
+      (identifier))))
 
 ================================================================================
 collect stats — USING THRESHOLD 5 PERCENT
@@ -413,19 +418,19 @@ COLLECT STATISTICS USING THRESHOLD 5 PERCENT ON tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (collect_using_clause
-          (keyword_using)
-          (collect_using_option
-            (keyword_threshold)
-            (literal)
-            (keyword_percent)))
-        (keyword_on)
-        (object_reference (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (collect_using_clause
+      (keyword_using)
+      (collect_using_option
+        (keyword_threshold)
+        (literal)
+        (keyword_percent)))
+    (keyword_on)
+    (object_reference
+      (identifier))))
 
 ================================================================================
 collect stats — USING THRESHOLD 7 DAYS
@@ -435,19 +440,19 @@ COLLECT STATISTICS USING THRESHOLD 7 DAYS ON tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (collect_using_clause
-          (keyword_using)
-          (collect_using_option
-            (keyword_threshold)
-            (literal)
-            (keyword_days)))
-        (keyword_on)
-        (object_reference (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (collect_using_clause
+      (keyword_using)
+      (collect_using_option
+        (keyword_threshold)
+        (literal)
+        (keyword_days)))
+    (keyword_on)
+    (object_reference
+      (identifier))))
 
 ================================================================================
 collect stats — USING SYSTEM THRESHOLD
@@ -457,18 +462,18 @@ COLLECT STATISTICS USING SYSTEM THRESHOLD ON tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (collect_using_clause
-          (keyword_using)
-          (collect_using_option
-            (keyword_system)
-            (keyword_threshold)))
-        (keyword_on)
-        (object_reference (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (collect_using_clause
+      (keyword_using)
+      (collect_using_option
+        (keyword_system)
+        (keyword_threshold)))
+    (keyword_on)
+    (object_reference
+      (identifier))))
 
 ================================================================================
 collect stats — USING NO THRESHOLD
@@ -478,18 +483,18 @@ COLLECT STATISTICS USING NO THRESHOLD ON tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (collect_using_clause
-          (keyword_using)
-          (collect_using_option
-            (keyword_no)
-            (keyword_threshold)))
-        (keyword_on)
-        (object_reference (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (collect_using_clause
+      (keyword_using)
+      (collect_using_option
+        (keyword_no)
+        (keyword_threshold)))
+    (keyword_on)
+    (object_reference
+      (identifier))))
 
 ================================================================================
 collect stats — USING MAXINTERVALS 200
@@ -499,18 +504,18 @@ COLLECT STATISTICS USING MAXINTERVALS 200 ON tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (collect_using_clause
-          (keyword_using)
-          (collect_using_option
-            (keyword_maxintervals)
-            (literal)))
-        (keyword_on)
-        (object_reference (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (collect_using_clause
+      (keyword_using)
+      (collect_using_option
+        (keyword_maxintervals)
+        (literal)))
+    (keyword_on)
+    (object_reference
+      (identifier))))
 
 ================================================================================
 collect stats — USING SYSTEM MAXINTERVALS
@@ -520,18 +525,18 @@ COLLECT STATISTICS USING SYSTEM MAXINTERVALS ON tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (collect_using_clause
-          (keyword_using)
-          (collect_using_option
-            (keyword_system)
-            (keyword_maxintervals)))
-        (keyword_on)
-        (object_reference (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (collect_using_clause
+      (keyword_using)
+      (collect_using_option
+        (keyword_system)
+        (keyword_maxintervals)))
+    (keyword_on)
+    (object_reference
+      (identifier))))
 
 ================================================================================
 collect stats — USING MAXVALUELENGTH 25
@@ -541,18 +546,18 @@ COLLECT STATISTICS USING MAXVALUELENGTH 25 ON tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (collect_using_clause
-          (keyword_using)
-          (collect_using_option
-            (keyword_maxvaluelength)
-            (literal)))
-        (keyword_on)
-        (object_reference (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (collect_using_clause
+      (keyword_using)
+      (collect_using_option
+        (keyword_maxvaluelength)
+        (literal)))
+    (keyword_on)
+    (object_reference
+      (identifier))))
 
 ================================================================================
 collect stats — USING SYSTEM MAXVALUELENGTH
@@ -562,18 +567,18 @@ COLLECT STATISTICS USING SYSTEM MAXVALUELENGTH ON tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (collect_using_clause
-          (keyword_using)
-          (collect_using_option
-            (keyword_system)
-            (keyword_maxvaluelength)))
-        (keyword_on)
-        (object_reference (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (collect_using_clause
+      (keyword_using)
+      (collect_using_option
+        (keyword_system)
+        (keyword_maxvaluelength)))
+    (keyword_on)
+    (object_reference
+      (identifier))))
 
 ================================================================================
 collect stats — USING with FOR CURRENT
@@ -583,21 +588,21 @@ COLLECT STATISTICS USING SAMPLE 10 PERCENT FOR CURRENT ON tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (collect_using_clause
-          (keyword_using)
-          (collect_using_option
-            (keyword_sample)
-            (literal)
-            (keyword_percent)
-            (keyword_for)
-            (keyword_current)))
-        (keyword_on)
-        (object_reference (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (collect_using_clause
+      (keyword_using)
+      (collect_using_option
+        (keyword_sample)
+        (literal)
+        (keyword_percent)
+        (keyword_for)
+        (keyword_current)))
+    (keyword_on)
+    (object_reference
+      (identifier))))
 
 ================================================================================
 collect stats — USING multiple options joined by AND
@@ -612,34 +617,33 @@ COLLECT STATISTICS
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (collect_using_clause
-          (keyword_using)
-          (collect_using_option
-            (keyword_sample)
-            (literal)
-            (keyword_percent))
-          (keyword_and)
-          (collect_using_option
-            (keyword_maxintervals)
-            (literal))
-          (keyword_and)
-          (collect_using_option
-            (keyword_maxvaluelength)
-            (literal))
-          (keyword_and)
-          (collect_using_option
-            (keyword_threshold)
-            (literal)
-            (keyword_days)))
-        (keyword_on)
-        (object_reference
-          (identifier)
-          (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (collect_using_clause
+      (keyword_using)
+      (collect_using_option
+        (keyword_sample)
+        (literal)
+        (keyword_percent))
+      (keyword_and)
+      (collect_using_option
+        (keyword_maxintervals)
+        (literal))
+      (keyword_and)
+      (collect_using_option
+        (keyword_maxvaluelength)
+        (literal))
+      (keyword_and)
+      (collect_using_option
+        (keyword_threshold)
+        (literal)
+        (keyword_days)))
+    (keyword_on)
+    (object_reference
+      (identifier)
+      (identifier))))
 
 ================================================================================
 collect stats — USING + multiple targets
@@ -654,35 +658,37 @@ COLLECT STATISTICS
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (collect_using_clause
-          (keyword_using)
-          (collect_using_option
-            (keyword_sample)
-            (literal)
-            (keyword_percent))
-          (keyword_and)
-          (collect_using_option
-            (keyword_maxintervals)
-            (literal)))
-        (keyword_column)
-        (object_reference (identifier))
-        (keyword_index)
-        (identifier)
-        (identifier)
-        (keyword_column)
-        (object_reference (identifier))
-        (object_reference (identifier))
-        (keyword_as)
-        (identifier)
-        (keyword_on)
-        (object_reference
-          (identifier)
-          (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (collect_using_clause
+      (keyword_using)
+      (collect_using_option
+        (keyword_sample)
+        (literal)
+        (keyword_percent))
+      (keyword_and)
+      (collect_using_option
+        (keyword_maxintervals)
+        (literal)))
+    (keyword_column)
+    (object_reference
+      (identifier))
+    (keyword_index)
+    (identifier)
+    (identifier)
+    (keyword_column)
+    (object_reference
+      (identifier))
+    (object_reference
+      (identifier))
+    (keyword_as)
+    (identifier)
+    (keyword_on)
+    (object_reference
+      (identifier)
+      (identifier))))
 
 ================================================================================
 collect stats — FROM clause
@@ -692,20 +698,21 @@ COLLECT STATISTICS COLUMN c1 ON db.tab FROM other_tab;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (keyword_column)
-        (object_reference (identifier))
-        (keyword_on)
-        (object_reference
-          (identifier)
-          (identifier))
-        (collect_from_clause
-          (keyword_from)
-          (object_reference (identifier)))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (keyword_column)
+    (object_reference
+      (identifier))
+    (keyword_on)
+    (object_reference
+      (identifier)
+      (identifier))
+    (collect_from_clause
+      (keyword_from)
+      (object_reference
+        (identifier)))))
 
 ================================================================================
 collect stats — FROM with TEMPORARY and COLUMN list
@@ -715,24 +722,25 @@ COLLECT STATISTICS COLUMN c1 ON tab FROM TEMPORARY db.src COLUMN (c1, c2);
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (keyword_column)
-        (object_reference (identifier))
-        (keyword_on)
-        (object_reference (identifier))
-        (collect_from_clause
-          (keyword_from)
-          (keyword_temporary)
-          (object_reference
-            (identifier)
-            (identifier))
-          (keyword_column)
-          (identifier)
-          (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (keyword_column)
+    (object_reference
+      (identifier))
+    (keyword_on)
+    (object_reference
+      (identifier))
+    (collect_from_clause
+      (keyword_from)
+      (keyword_temporary)
+      (object_reference
+        (identifier)
+        (identifier))
+      (keyword_column)
+      (identifier)
+      (identifier))))
 
 ================================================================================
 collect stats — FROM with COLUMN PARTITION
@@ -742,20 +750,22 @@ COLLECT STATISTICS COLUMN c1 ON tab FROM src COLUMN PARTITION;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (keyword_column)
-        (object_reference (identifier))
-        (keyword_on)
-        (object_reference (identifier))
-        (collect_from_clause
-          (keyword_from)
-          (object_reference (identifier))
-          (keyword_column)
-          (keyword_partition))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (keyword_column)
+    (object_reference
+      (identifier))
+    (keyword_on)
+    (object_reference
+      (identifier))
+    (collect_from_clause
+      (keyword_from)
+      (object_reference
+        (identifier))
+      (keyword_column)
+      (keyword_partition))))
 
 ================================================================================
 collect stats — FROM with bare COLUMN single name
@@ -765,20 +775,22 @@ COLLECT STATISTICS COLUMN c1 ON tab FROM src COLUMN c1;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (keyword_column)
-        (object_reference (identifier))
-        (keyword_on)
-        (object_reference (identifier))
-        (collect_from_clause
-          (keyword_from)
-          (object_reference (identifier))
-          (keyword_column)
-          (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (keyword_column)
+    (object_reference
+      (identifier))
+    (keyword_on)
+    (object_reference
+      (identifier))
+    (collect_from_clause
+      (keyword_from)
+      (object_reference
+        (identifier))
+      (keyword_column)
+      (identifier))))
 
 ================================================================================
 collect stats — full kitchen-sink Optimizer Form
@@ -795,60 +807,62 @@ COLLECT SUMMARY STATISTICS
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_summary)
-        (keyword_statistics)
-        (collect_using_clause
-          (keyword_using)
-          (collect_using_option
-            (keyword_sample)
-            (literal)
-            (keyword_percent))
-          (keyword_and)
-          (collect_using_option
-            (keyword_threshold)
-            (literal)
-            (keyword_days)
-            (keyword_for)
-            (keyword_current)))
-        (keyword_unique)
-        (keyword_index)
+(program
+  (statement
+    (keyword_collect)
+    (keyword_summary)
+    (keyword_statistics)
+    (collect_using_clause
+      (keyword_using)
+      (collect_using_option
+        (keyword_sample)
+        (literal)
+        (keyword_percent))
+      (keyword_and)
+      (collect_using_option
+        (keyword_threshold)
+        (literal)
+        (keyword_days)
+        (keyword_for)
+        (keyword_current)))
+    (keyword_unique)
+    (keyword_index)
+    (identifier)
+    (identifier)
+    (keyword_index)
+    (identifier)
+    (keyword_all)
+    (identifier)
+    (identifier)
+    (collect_index_order_by
+      (keyword_order)
+      (keyword_by)
+      (keyword_hash)
+      (identifier))
+    (keyword_column)
+    (keyword_partition)
+    (object_reference
+      (identifier))
+    (object_reference
+      (identifier))
+    (keyword_as)
+    (identifier)
+    (keyword_column)
+    (object_reference
+      (identifier))
+    (keyword_on)
+    (keyword_temporary)
+    (object_reference
+      (identifier)
+      (identifier))
+    (collect_from_clause
+      (keyword_from)
+      (object_reference
         (identifier)
-        (identifier)
-        (keyword_index)
-        (identifier)
-        (keyword_all)
-        (identifier)
-        (identifier)
-        (collect_index_order_by
-          (keyword_order)
-          (keyword_by)
-          (keyword_hash)
-          (identifier))
-        (keyword_column)
-        (keyword_partition)
-        (object_reference (identifier))
-        (object_reference (identifier))
-        (keyword_as)
-        (identifier)
-        (keyword_column)
-        (object_reference (identifier))
-        (keyword_on)
-        (keyword_temporary)
-        (object_reference
-          (identifier)
-          (identifier))
-        (collect_from_clause
-          (keyword_from)
-          (object_reference
-            (identifier)
-            (identifier))
-          (keyword_column)
-          (identifier)
-          (identifier))))
-
+        (identifier))
+      (keyword_column)
+      (identifier)
+      (identifier))))
 
 ================================================================================
 collect stats — legacy form: ON tab COLUMN col
@@ -858,17 +872,17 @@ collect stats on db.table1 column(field1);
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_stats)
-        (keyword_on)
-        (object_reference
-          (identifier)
-          (identifier))
-        (keyword_column)
-        (object_reference (identifier))))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_stats)
+    (keyword_on)
+    (object_reference
+      (identifier)
+      (identifier))
+    (keyword_column)
+    (object_reference
+      (identifier))))
 
 ================================================================================
 collect stats — legacy form: ON tab COLUMN(PARTITION)
@@ -878,17 +892,16 @@ COLLECT STATISTICS ON db1.field1 COLUMN(PARTITION);
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (keyword_on)
-        (object_reference
-          (identifier)
-          (identifier))
-        (keyword_column)
-        (keyword_partition)))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (keyword_on)
+    (object_reference
+      (identifier)
+      (identifier))
+    (keyword_column)
+    (keyword_partition)))
 
 ================================================================================
 collect stats — legacy form: ON tab COLUMN PARTITION (no parens)
@@ -898,17 +911,16 @@ COLLECT STATISTICS ON db1.field1 COLUMN PARTITION;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_statistics)
-        (keyword_on)
-        (object_reference
-          (identifier)
-          (identifier))
-        (keyword_column)
-        (keyword_partition)))
-
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (keyword_on)
+    (object_reference
+      (identifier)
+      (identifier))
+    (keyword_column)
+    (keyword_partition)))
 
 ================================================================================
 collect stats — legacy form: multiple COLUMN clauses after ON
@@ -918,15 +930,150 @@ collect stats on db.table1 column field1, column field2;
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (keyword_collect)
-        (keyword_stats)
-        (keyword_on)
-        (object_reference
-          (identifier)
-          (identifier))
-        (keyword_column)
-        (object_reference (identifier))
-        (keyword_column)
-        (object_reference (identifier))))
+(program
+  (statement
+    (keyword_collect)
+    (keyword_stats)
+    (keyword_on)
+    (object_reference
+      (identifier)
+      (identifier))
+    (keyword_column)
+    (object_reference
+      (identifier))
+    (keyword_column)
+    (object_reference
+      (identifier))))
+
+================================================================================
+collect stats — USING SAMPLE 3.00 PERCENT (decimal)
+================================================================================
+
+COLLECT STATISTICS USING SAMPLE 3.00 PERCENT ON tab;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (collect_using_clause
+      (keyword_using)
+      (collect_using_option
+        (keyword_sample)
+        (literal)
+        (keyword_percent)))
+    (keyword_on)
+    (object_reference
+      (identifier))))
+
+================================================================================
+collect stats — USING SAMPLE 2.5 PERCENT and .5 PERCENT
+================================================================================
+
+COLLECT STATISTICS USING SAMPLE 2.5 PERCENT ON tab;
+COLLECT STATISTICS USING SAMPLE .5 PERCENT ON tab;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (collect_using_clause
+      (keyword_using)
+      (collect_using_option
+        (keyword_sample)
+        (literal)
+        (keyword_percent)))
+    (keyword_on)
+    (object_reference
+      (identifier)))
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (collect_using_clause
+      (keyword_using)
+      (collect_using_option
+        (keyword_sample)
+        (literal)
+        (keyword_percent)))
+    (keyword_on)
+    (object_reference
+      (identifier))))
+
+================================================================================
+collect stats — decimal SAMPLE with NO THRESHOLD DAYS/PERCENT and multi-column targets
+================================================================================
+
+COLLECT STATISTICS
+    USING SAMPLE 3.00 PERCENT
+      AND NO THRESHOLD DAYS
+      AND NO THRESHOLD PERCENT
+    COLUMN ( PARTITION,AGMT_ID,STTM_DT,ENT_ID,END_TT ) ,
+    COLUMN ( STTM_DT,STTM_TYPE_CD,ENT_ID ) ,
+    COLUMN ( AGMT_ID,STTM_DT,ENT_ID ) ,
+    COLUMN ( AGMT_ID,STTM_DT ) ,
+    COLUMN ( SRC_CD,HOST_SUB_AGMT_NUM )
+    ON db.tab;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (keyword_collect)
+    (keyword_statistics)
+    (collect_using_clause
+      (keyword_using)
+      (collect_using_option
+        (keyword_sample)
+        (literal)
+        (keyword_percent))
+      (keyword_and)
+      (collect_using_option
+        (keyword_no)
+        (keyword_threshold)
+        (keyword_days))
+      (keyword_and)
+      (collect_using_option
+        (keyword_no)
+        (keyword_threshold)
+        (keyword_percent)))
+    (keyword_column)
+    (keyword_partition)
+    (object_reference
+      (identifier))
+    (object_reference
+      (identifier))
+    (object_reference
+      (identifier))
+    (object_reference
+      (identifier))
+    (keyword_column)
+    (object_reference
+      (identifier))
+    (object_reference
+      (identifier))
+    (object_reference
+      (identifier))
+    (keyword_column)
+    (object_reference
+      (identifier))
+    (object_reference
+      (identifier))
+    (object_reference
+      (identifier))
+    (keyword_column)
+    (object_reference
+      (identifier))
+    (object_reference
+      (identifier))
+    (keyword_column)
+    (object_reference
+      (identifier))
+    (object_reference
+      (identifier))
+    (keyword_on)
+    (object_reference
+      (identifier)
+      (identifier))))
