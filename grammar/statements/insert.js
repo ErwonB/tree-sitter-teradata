@@ -32,6 +32,7 @@ module.exports = {
       $._insert_values,
       $._set_values,
     ),
+    optional($.logging_errors_clause),
   ),
 
   assignment_list: $ => seq(
@@ -59,6 +60,77 @@ module.exports = {
   _column: $ => choice(
     $.identifier,
     alias($._literal_string, $.literal),
+  ),
+
+  // LOGGING [ALL] ERRORS [WITH {NO LIMIT | LIMIT OF n}]
+  logging_errors_clause: $ => seq(
+    $.keyword_logging,
+    optional($.keyword_all),
+    $.keyword_errors,
+    optional(seq(
+      $.keyword_with,
+      choice(
+        seq($.keyword_no, $.keyword_limit),
+        seq(
+          $.keyword_limit,
+          $.keyword_of,
+          field('error_limit', alias($._integer, $.literal)),
+        ),
+      ),
+    )),
+  ),
+
+  // INSERT EXPLAIN [stats options] INTO qcd [AS name] [LIMIT ...] [FOR n] [CHECK STATISTICS] <dml>
+  insert_explain: $ => seq(
+    $._insert,
+    $.keyword_explain,
+    optional($._insert_explain_stats),
+    $.keyword_into,
+    field('qcd', $.object_reference),
+    optional(seq(
+      $.keyword_as,
+      field('query_plan_name', choice($.identifier, alias($._literal_string, $.literal))),
+    )),
+    optional(seq(
+      $.keyword_limit,
+      optional(seq(
+        $.keyword_sql,
+        optional(seq('=', field('limit_value', alias($._integer, $.literal)))),
+      )),
+    )),
+    optional(seq(
+      $.keyword_for,
+      field('frequency', alias($._integer, $.literal)),
+    )),
+    optional(seq($.keyword_check, $._stats)),
+    choice($._dml_read, $._dml_write),
+  ),
+
+  _insert_explain_stats: $ => choice(
+    // WITH NO STATISTICS [FOR table [,...]]
+    seq(
+      $.keyword_with, $.keyword_no, $._stats,
+      optional($._insert_explain_for_tables),
+    ),
+    // WITH STATISTICS [USING SAMPLE [n PERCENT]] [AND DEMOGRAPHICS] [FOR table [,...]]
+    seq(
+      $.keyword_with, $._stats,
+      optional(seq(
+        $.keyword_using,
+        $.keyword_sample,
+        optional(seq(
+          field('sample_percent', alias($._integer, $.literal)),
+          $.keyword_percent,
+        )),
+      )),
+      optional(seq($.keyword_and, $.keyword_demographics)),
+      optional($._insert_explain_for_tables),
+    ),
+  ),
+
+  _insert_explain_for_tables: $ => seq(
+    $.keyword_for,
+    comma_list($.object_reference, true),
   ),
 
 };

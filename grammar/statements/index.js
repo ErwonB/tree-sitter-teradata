@@ -34,6 +34,7 @@ module.exports = {
         optional_parenthesis($._dml_read),
       ),
     ),
+    $.insert_explain,
     $._show_statement,
     $._collect_statement,
   ),

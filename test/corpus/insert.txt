@@ -165,8 +165,6 @@ INSERT INTO some_table
           name: (identifier))
         right: (literal)))))
 
-
-
 ================================================================================
 Simple insert with ignore
 ================================================================================
@@ -347,7 +345,6 @@ INSERT INTO some_table
             (term
               (literal))))))))
 
-
 ================================================================================
 insert with new_expression
 ================================================================================
@@ -356,26 +353,470 @@ INSERT INTO edw_fact.fact_events VALUES (1, TIMESTAMP '2025-01-10 09:15:00.00000
 
 --------------------------------------------------------------------------------
 
-    (program
-      (statement
-        (insert
-          (keyword_insert)
-          (keyword_into)
+(program
+  (statement
+    (insert
+      (keyword_insert)
+      (keyword_into)
+      (object_reference
+        (identifier)
+        (identifier))
+      (keyword_values)
+      (list
+        (literal)
+        (literal
+          (identifier))
+        (literal
+          (identifier))
+        (literal)
+        (literal)
+        (literal)
+        (literal)
+        (new_expression
+          (keyword_new)
+          (keyword_json)
+          (literal))))))
+
+================================================================================
+INSERT EXPLAIN minimal
+================================================================================
+
+INSERT EXPLAIN INTO qcd SELECT * FROM d1.t1;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (insert_explain
+      (keyword_insert)
+      (keyword_explain)
+      (keyword_into)
+      (object_reference
+        (identifier))
+      (select
+        (keyword_select)
+        (select_expression
+          (term
+            (all_fields))))
+      (from
+        (keyword_from)
+        (relation
+          (object_reference
+            (identifier)
+            (identifier)))))))
+
+================================================================================
+INSERT EXPLAIN with statistics, plan name, frequency
+================================================================================
+
+INSERT EXPLAIN WITH STATISTICS INTO QCD AS Q_SALES_BY_CUST FOR 1
+SELECT s.customer_id, SUM(s.amount)
+FROM   edw_fact.fact_sales s
+WHERE  s.sale_date BETWEEN DATE '2025-01-01' AND DATE '2025-12-31'
+GROUP BY s.customer_id;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (insert_explain
+      (keyword_insert)
+      (keyword_explain)
+      (keyword_with)
+      (keyword_statistics)
+      (keyword_into)
+      (object_reference
+        (identifier))
+      (keyword_as)
+      (identifier)
+      (keyword_for)
+      (literal)
+      (select
+        (keyword_select)
+        (select_expression
+          (term
+            (field
+              (object_reference
+                (identifier))
+              (identifier)))
+          (term
+            (invocation
+              (object_reference
+                (identifier))
+              (term
+                (field
+                  (object_reference
+                    (identifier))
+                  (identifier)))))))
+      (from
+        (keyword_from)
+        (relation
           (object_reference
             (identifier)
             (identifier))
-          (keyword_values)
-          (list
-            (literal)
+          (identifier))
+        (where
+          (keyword_where)
+          (between_expression
+            (field
+              (object_reference
+                (identifier))
+              (identifier))
+            (keyword_between)
             (literal
               (identifier))
+            (keyword_and)
             (literal
+              (identifier))))
+        (group_by
+          (keyword_group)
+          (keyword_by)
+          (field
+            (object_reference
               (identifier))
-            (literal)
-            (literal)
-            (literal)
-            (literal)
-            (new_expression
-              (keyword_new)
-              (keyword_json)
-              (literal))))))
+            (identifier)))))))
+
+================================================================================
+INSERT EXPLAIN all options
+================================================================================
+
+INSERT EXPLAIN WITH STATISTICS USING SAMPLE 10 PERCENT AND DEMOGRAPHICS FOR db.t1, db.t2
+INTO qcd AS 'my plan' LIMIT SQL = 500 FOR 3 CHECK STATISTICS
+SELECT * FROM db.t1;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (insert_explain
+      (keyword_insert)
+      (keyword_explain)
+      (keyword_with)
+      (keyword_statistics)
+      (keyword_using)
+      (keyword_sample)
+      (literal)
+      (keyword_percent)
+      (keyword_and)
+      (keyword_demographics)
+      (keyword_for)
+      (object_reference
+        (identifier)
+        (identifier))
+      (object_reference
+        (identifier)
+        (identifier))
+      (keyword_into)
+      (object_reference
+        (identifier))
+      (keyword_as)
+      (literal)
+      (keyword_limit)
+      (keyword_sql)
+      (literal)
+      (keyword_for)
+      (literal)
+      (keyword_check)
+      (keyword_statistics)
+      (select
+        (keyword_select)
+        (select_expression
+          (term
+            (all_fields))))
+      (from
+        (keyword_from)
+        (relation
+          (object_reference
+            (identifier)
+            (identifier)))))))
+
+================================================================================
+INSERT EXPLAIN with no statistics and bare LIMIT
+================================================================================
+
+INSERT EXPLAIN WITH NO STATISTICS INTO qcd LIMIT SELECT * FROM db.t1;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (insert_explain
+      (keyword_insert)
+      (keyword_explain)
+      (keyword_with)
+      (keyword_no)
+      (keyword_statistics)
+      (keyword_into)
+      (object_reference
+        (identifier))
+      (keyword_limit)
+      (select
+        (keyword_select)
+        (select_expression
+          (term
+            (all_fields))))
+      (from
+        (keyword_from)
+        (relation
+          (object_reference
+            (identifier)
+            (identifier)))))))
+
+================================================================================
+INSERT EXPLAIN wrapping a DML write
+================================================================================
+
+INSERT EXPLAIN INTO qcd INSERT INTO db.t1 SELECT * FROM db.t2;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (insert_explain
+      (keyword_insert)
+      (keyword_explain)
+      (keyword_into)
+      (object_reference
+        (identifier))
+      (insert
+        (keyword_insert)
+        (keyword_into)
+        (object_reference
+          (identifier)
+          (identifier))
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (all_fields))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)
+              (identifier))))))))
+
+================================================================================
+INSERT ... SELECT with LOGGING ALL ERRORS WITH LIMIT OF
+================================================================================
+
+INSERT INTO edw_dim.dim_customer
+    (customer_id, customer_name, region, country, segment,
+     credit_score, signup_date, status)
+SELECT  customer_id, customer_name, region, country, segment,
+        credit_score, signup_date, status
+FROM    edw_stg.stg_customer
+WHERE   customer_id NOT IN (SELECT customer_id FROM edw_dim.dim_customer)
+LOGGING ALL ERRORS WITH LIMIT OF 100;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (insert
+      (keyword_insert)
+      (keyword_into)
+      (object_reference
+        (identifier)
+        (identifier))
+      (list
+        (column
+          (identifier))
+        (column
+          (identifier))
+        (column
+          (identifier))
+        (column
+          (identifier))
+        (column
+          (identifier))
+        (column
+          (identifier))
+        (column
+          (identifier))
+        (column
+          (identifier)))
+      (select
+        (keyword_select)
+        (select_expression
+          (term
+            (field
+              (identifier)))
+          (term
+            (field
+              (identifier)))
+          (term
+            (field
+              (identifier)))
+          (term
+            (field
+              (identifier)))
+          (term
+            (field
+              (identifier)))
+          (term
+            (field
+              (identifier)))
+          (term
+            (field
+              (identifier)))
+          (term
+            (field
+              (identifier)))))
+      (from
+        (keyword_from)
+        (relation
+          (object_reference
+            (identifier)
+            (identifier)))
+        (where
+          (keyword_where)
+          (binary_expression
+            (field
+              (identifier))
+            (not_in
+              (keyword_not)
+              (keyword_in))
+            (subquery
+              (select
+                (keyword_select)
+                (select_expression
+                  (term
+                    (field
+                      (identifier)))))
+              (from
+                (keyword_from)
+                (relation
+                  (object_reference
+                    (identifier)
+                    (identifier))))))))
+      (logging_errors_clause
+        (keyword_logging)
+        (keyword_all)
+        (keyword_errors)
+        (keyword_with)
+        (keyword_limit)
+        (keyword_of)
+        (literal)))))
+
+================================================================================
+LOGGING ERRORS
+================================================================================
+
+INSERT INTO t SELECT * FROM s LOGGING ERRORS;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (insert
+      (keyword_insert)
+      (keyword_into)
+      (object_reference
+        (identifier))
+      (select
+        (keyword_select)
+        (select_expression
+          (term
+            (all_fields))))
+      (from
+        (keyword_from)
+        (relation
+          (object_reference
+            (identifier))))
+      (logging_errors_clause
+        (keyword_logging)
+        (keyword_errors)))))
+
+================================================================================
+LOGGING ERRORS WITH NO LIMIT
+================================================================================
+
+INSERT INTO t SELECT * FROM s LOGGING ERRORS WITH NO LIMIT;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (insert
+      (keyword_insert)
+      (keyword_into)
+      (object_reference
+        (identifier))
+      (select
+        (keyword_select)
+        (select_expression
+          (term
+            (all_fields))))
+      (from
+        (keyword_from)
+        (relation
+          (object_reference
+            (identifier))))
+      (logging_errors_clause
+        (keyword_logging)
+        (keyword_errors)
+        (keyword_with)
+        (keyword_no)
+        (keyword_limit)))))
+
+================================================================================
+LOGGING ALL ERRORS
+================================================================================
+
+INSERT INTO t SELECT * FROM s LOGGING ALL ERRORS;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (insert
+      (keyword_insert)
+      (keyword_into)
+      (object_reference
+        (identifier))
+      (select
+        (keyword_select)
+        (select_expression
+          (term
+            (all_fields))))
+      (from
+        (keyword_from)
+        (relation
+          (object_reference
+            (identifier))))
+      (logging_errors_clause
+        (keyword_logging)
+        (keyword_all)
+        (keyword_errors)))))
+
+================================================================================
+Regression new keywords as identifiers
+================================================================================
+
+SELECT logging, errors, limit, demographics FROM errors_tbl;
+
+--------------------------------------------------------------------------------
+
+(program
+  (statement
+    (select
+      (keyword_select)
+      (select_expression
+        (term
+          (field
+            (identifier)))
+        (term
+          (field
+            (identifier)))
+        (term
+          (field
+            (identifier)))
+        (term
+          (field
+            (identifier)))))
+    (from
+      (keyword_from)
+      (relation
+        (object_reference
+          (identifier))))))

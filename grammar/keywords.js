@@ -402,6 +402,12 @@ module.exports = {
     keyword_queue: _ => make_keyword("queue"),
     keyword_colocate: _ => make_keyword("colocate"),
 
+    // Teradata INSERT EXPLAIN / LOGGING ERRORS
+    keyword_logging: _ => make_keyword("logging"),
+    keyword_errors: _ => make_keyword("errors"),
+    keyword_limit: _ => make_keyword("limit"),
+    keyword_demographics: _ => make_keyword("demographics"),
+
     // Teradata copy
     keyword_dictionary: _ => make_keyword("dictionary"),
     keyword_archive: _ => make_keyword("archive"),
